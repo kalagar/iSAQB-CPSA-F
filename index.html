@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr" data-fa-available="true">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="A 10-day, exam-oriented iSAQB CPSA-F study guide with a Staff Engineer perspective on every lesson." />
   <title>iSAQB CPSA-F — 10-Day Study Guide</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <script src="lang-switch.js" defer></script>
   <style>
     :root {
       --bg: #f7f8fb;
@@ -211,11 +212,20 @@
     @media (max-width: 640px) {
       .strip { grid-template-columns: 1fr 1fr; }
     }
+
+    .lang-switch { display: flex; gap: 6px; justify-content: center; margin-bottom: 14px; }
+    .lang-link { text-decoration: none; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); background: #fff; }
+    .lang-link.active { background: var(--accent-soft); color: #274bc9; border-color: #cfd8ff; }
+    .lang-link.disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="wrap">
+      <nav class="lang-switch" aria-label="Language">
+        <a href="index.html" data-lang-switch="en" class="lang-link active">EN</a>
+        <a href="index.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+      </nav>
       <span class="eyebrow">iSAQB CPSA-F · Foundation Level</span>
       <h1>A 10-day path to the CPSA-F — with a Staff Engineer lens</h1>
       <p class="subtitle">
