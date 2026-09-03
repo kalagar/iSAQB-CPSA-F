@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr" data-fa-available="false">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,11 +71,20 @@
     .day { position: relative; }
     .day.done { background: #f4fbf7; }
     .day.done::after { content: "✓"; position: absolute; top: 50%; right: 16px; transform: translateY(-50%); color: var(--success); font-weight: 800; }
+    .lang-switch { display:flex; gap:6px; justify-content:flex-end; margin-bottom:10px; }
+    .lang-link { text-decoration:none; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:999px; border:1px solid var(--border); color:var(--muted); }
+    .lang-link.active { background:var(--accent-soft); color:#274bc9; border-color:#cfd8ff; }
+    .lang-link.disabled { opacity:0.45; cursor:not-allowed; pointer-events:none; }
   </style>
 
+  <script src="lang-switch.js" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-05.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <span class="lang-link disabled" aria-disabled="true" title="Farsi — not yet translated">FA</span>
+  </nav>
   <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
       <span class="eyebrow">iSAQB CPSA-F · Day 05</span>
   <h1>Requirements, Quality Attributes & Constraints</h1>

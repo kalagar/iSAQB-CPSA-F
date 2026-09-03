@@ -23,7 +23,7 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Create the one new shared asset every page will load.
 
-- [ ] T001 Create `lang-switch.js` at the repository root with two pure helpers per `data-model.md`: `getPref()` / `setPref(lang)` (read/write the `isaqb-cpsaf-lang` value in `localStorage`, wrapped in try/catch so a blocked/unavailable store never throws) and `siblingUrl(lang)` (derive the counterpart filename for the current page by adding/removing the `.fa` suffix per `contracts/page-variant-contract.md` naming convention)
+- [X] T001 Create `lang-switch.js` at the repository root with two pure helpers per `data-model.md`: `getPref()` / `setPref(lang)` (read/write the `isaqb-cpsaf-lang` value in `localStorage`, wrapped in try/catch so a blocked/unavailable store never throws) and `siblingUrl(lang)` (derive the counterpart filename for the current page by adding/removing the `.fa` suffix per `contracts/page-variant-contract.md` naming convention)
 
 ---
 
@@ -33,7 +33,7 @@ description: "Task list template for feature implementation"
 
 **⚠️ CRITICAL**: No user story task below can be verified until this phase is complete.
 
-- [ ] T002 Extend `lang-switch.js` with `bindSwitcher()`, run on `DOMContentLoaded`: wire click handlers on `[data-lang-switch="en"]` / `[data-lang-switch="fa"]` elements to call `setPref(lang)` then navigate to `siblingUrl(lang)`; for the Farsi control specifically, if the current page's `data-fa-available` attribute is `"false"`, render it disabled with a "Farsi — coming soon" label instead of binding a click handler, per `contracts/page-variant-contract.md` (depends on T001)
+- [X] T002 Extend `lang-switch.js` with `bindSwitcher()`, run on `DOMContentLoaded`: wire click handlers on `[data-lang-switch="en"]` / `[data-lang-switch="fa"]` elements to call `setPref(lang)` then navigate to `siblingUrl(lang)`; for the Farsi control specifically, if the current page's `data-fa-available` attribute is `"false"`, render it disabled with a "Farsi — coming soon" label instead of binding a click handler, per `contracts/page-variant-contract.md` (depends on T001)
 
 **Checkpoint**: Shared script is ready — page-level wiring for each user story can now begin.
 
@@ -47,12 +47,12 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T003 [P] [US1] In `index.html`: set `<html lang="en" dir="ltr">`, add `data-fa-available="true"`, include `<script src="lang-switch.js" defer></script>`, and add the switcher control markup (`data-lang-switch="en"`, `data-lang-switch="fa"`) per `contracts/page-variant-contract.md`
-- [ ] T004 [P] [US1] In `isaqb-cpsa-f-day-01.html`: apply the same wiring as T003 with `data-fa-available="true"`
-- [ ] T005 [P] [US1] In each of `isaqb-cpsa-f-day-02.html`, `isaqb-cpsa-f-day-03.html`, `isaqb-cpsa-f-day-04.html`, `isaqb-cpsa-f-day-05.html`, `isaqb-cpsa-f-day-06.html`, `isaqb-cpsa-f-day-07.html`, `isaqb-cpsa-f-day-08.html`, `isaqb-cpsa-f-day-09.html`, `isaqb-cpsa-f-day-10.html`: apply the same wiring as T003 but with `data-fa-available="false"`, so the Farsi option shows the disabled "not yet translated" state per FR-007
-- [ ] T006 [US1] Author `index.fa.html`: complete Farsi translation of `index.html`'s learner-facing text (title, headings, body copy, nav labels, progress-tracker UI labels); `<html lang="fa" dir="rtl">`, `data-fa-available="true"`; switcher's English control points back to `index.html`; keep the `data-day` attributes and the `isaqb-cpsaf-progress` tracker script byte-identical to `index.html` (translate labels only, not logic); day-card links point to `isaqb-cpsa-f-day-01.fa.html` for Day 1 and to the plain English files for Days 2–10 (depends on T001, T002, T003, T004)
-- [ ] T007 [US1] Author `isaqb-cpsa-f-day-01.fa.html`: complete Farsi translation of `isaqb-cpsa-f-day-01.html`'s learner-facing text; `<html lang="fa" dir="rtl">`, `data-fa-available="true"`; switcher's English control points back to `isaqb-cpsa-f-day-01.html`; keep `data-day` attributes and any tracker-related script identical; nav sidebar links to `index.fa.html` and to the plain English files for Days 2–10 (depends on T001, T002, T004, T006)
-- [ ] T008 [US1] Manual validation: run `quickstart.md` Scenarios 1, 3, and 6 against `index.html`/`index.fa.html` and `isaqb-cpsa-f-day-01.html`/`isaqb-cpsa-f-day-01.fa.html`
+- [X] T003 [P] [US1] In `index.html`: set `<html lang="en" dir="ltr">`, add `data-fa-available="true"`, include `<script src="lang-switch.js" defer></script>`, and add the switcher control markup (`data-lang-switch="en"`, `data-lang-switch="fa"`) per `contracts/page-variant-contract.md`
+- [X] T004 [P] [US1] In `isaqb-cpsa-f-day-01.html`: apply the same wiring as T003 with `data-fa-available="true"`
+- [X] T005 [P] [US1] In each of `isaqb-cpsa-f-day-02.html`, `isaqb-cpsa-f-day-03.html`, `isaqb-cpsa-f-day-04.html`, `isaqb-cpsa-f-day-05.html`, `isaqb-cpsa-f-day-06.html`, `isaqb-cpsa-f-day-07.html`, `isaqb-cpsa-f-day-08.html`, `isaqb-cpsa-f-day-09.html`, `isaqb-cpsa-f-day-10.html`: apply the same wiring as T003 but with `data-fa-available="false"`, so the Farsi option shows the disabled "not yet translated" state per FR-007
+- [X] T006 [US1] Author `index.fa.html`: complete Farsi translation of `index.html`'s learner-facing text (title, headings, body copy, nav labels, progress-tracker UI labels); `<html lang="fa" dir="rtl">`, `data-fa-available="true"`; switcher's English control points back to `index.html`; keep the `data-day` attributes and the `isaqb-cpsaf-progress` tracker script byte-identical to `index.html` (translate labels only, not logic); day-card links point to `isaqb-cpsa-f-day-01.fa.html` for Day 1 and to the plain English files for Days 2–10 (depends on T001, T002, T003, T004)
+- [X] T007 [US1] Author `isaqb-cpsa-f-day-01.fa.html`: complete Farsi translation of `isaqb-cpsa-f-day-01.html`'s learner-facing text; `<html lang="fa" dir="rtl">`, `data-fa-available="true"`; switcher's English control points back to `isaqb-cpsa-f-day-01.html`; keep `data-day` attributes and any tracker-related script identical; nav sidebar links to `index.fa.html` and to the plain English files for Days 2–10 (depends on T001, T002, T004, T006)
+- [X] T008 [US1] Manual validation: run `quickstart.md` Scenarios 1, 3, and 6 against `index.html`/`index.fa.html` and `isaqb-cpsa-f-day-01.html`/`isaqb-cpsa-f-day-01.fa.html`
 
 **Checkpoint**: User Story 1 is fully functional and testable on its own — a learner can switch index.html and Day 1 between English and Farsi.
 
@@ -66,8 +66,8 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Extend `lang-switch.js` with `redirectToPreferred()`, called before `bindSwitcher()` inside the same `DOMContentLoaded` handler: compare `getPref()` to the current page's `<html lang>`; if they differ and the target variant exists (the `fa` target requires `data-fa-available="true"`; the `en` target always exists), call `location.replace(siblingUrl(pref))` exactly once (depends on T001, T002)
-- [ ] T010 [US2] Manual validation: run `quickstart.md` Scenario 2 (preference follows navigation and survives a reload) and Scenario 5 (switcher still works for the current view when `localStorage` is blocked, without errors)
+- [X] T009 [US2] Extend `lang-switch.js` with `redirectToPreferred()`, called before `bindSwitcher()` inside the same `DOMContentLoaded` handler: compare `getPref()` to the current page's `<html lang>`; if they differ and the target variant exists (the `fa` target requires `data-fa-available="true"`; the `en` target always exists), call `location.replace(siblingUrl(pref))` exactly once (depends on T001, T002)
+- [X] T010 [US2] Manual validation: run `quickstart.md` Scenario 2 (preference follows navigation and survives a reload) and Scenario 5 (switcher still works for the current view when `localStorage` is blocked, without errors)
 
 **Checkpoint**: User Stories 1 and 2 both work — switching persists across pages and visits.
 
@@ -81,8 +81,8 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T011 [US3] Verify `index.fa.html` and `isaqb-cpsa-f-day-01.fa.html` (from T006, T007) use `data-day` values and an `isaqb-cpsaf-progress` tracker script/key identical to their English sources — fix any drift so completion state is shared across both languages (depends on T006, T007)
-- [ ] T012 [US3] Manual validation: run `quickstart.md` Scenario 4 (mark a day done, switch language, confirm state is preserved in both directions)
+- [X] T011 [US3] Verify `index.fa.html` and `isaqb-cpsa-f-day-01.fa.html` (from T006, T007) use `data-day` values and an `isaqb-cpsaf-progress` tracker script/key identical to their English sources — fix any drift so completion state is shared across both languages (depends on T006, T007)
+- [X] T012 [US3] Manual validation: run `quickstart.md` Scenario 4 (mark a day done, switch language, confirm state is preserved in both directions)
 
 **Checkpoint**: All three user stories are independently functional.
 
@@ -92,9 +92,9 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Final, whole-feature verification once all stories are complete.
 
-- [ ] T013 Run the complete `quickstart.md` checklist end-to-end across all 11 page families
-- [ ] T014 Have a native Farsi reader review `index.fa.html` and `isaqb-cpsa-f-day-01.fa.html` for reading order, grammar, and terminology (SC-004); correct any issues found
-- [ ] T015 [P] Re-check every page family against the `contracts/page-variant-contract.md` compliance checklist (attributes, switcher state, script inclusion, shared identifiers)
+- [X] T013 Run the complete `quickstart.md` checklist end-to-end across all 11 page families
+- [ ] T014 Have a native Farsi reader review `index.fa.html` and `isaqb-cpsa-f-day-01.fa.html` for reading order, grammar, and terminology (SC-004); correct any issues found — **requires a human reviewer, not completed by this implementation pass**
+- [X] T015 [P] Re-check every page family against the `contracts/page-variant-contract.md` compliance checklist (attributes, switcher state, script inclusion, shared identifiers)
 
 ---
 
