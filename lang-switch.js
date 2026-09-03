@@ -19,10 +19,12 @@
   }
 
   function siblingUrl(lang) {
-    var file = location.pathname.split("/").pop();
-    var isFa = /\.fa\.html$/.test(file);
-    if (lang === "fa") return isFa ? file : file.replace(/\.html$/, ".fa.html");
-    return isFa ? file.replace(/\.fa\.html$/, ".html") : file;
+    var path = location.pathname;
+    var isFa = /\.fa\.html$/.test(path);
+    if (lang === "fa") {
+      return isFa ? path : path.replace(/\/EN\//, "/FA/").replace(/\.html$/, ".fa.html");
+    }
+    return isFa ? path.replace(/\/FA\//, "/EN/").replace(/\.fa\.html$/, ".html") : path;
   }
 
   function bindSwitcher() {

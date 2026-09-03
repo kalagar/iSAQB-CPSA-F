@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۸ دوره iSAQB CPSA-F: رویکردها و اکتشاف‌های توسعه معماری" />
+  <title>iSAQB CPSA-F — روز ۸: رویکردها و اکتشاف‌های توسعه معماری</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-2: #f1f4f8;
+      --text: #172033;
+      --muted: #637083;
+      --border: #dbe2ea;
+      --accent: #315efb;
+      --accent-soft: #eaf0ff;
+      --success: #16794f;
+      --warning: #8a5a00;
+      --danger: #a12a2a;
+      --code-bg: #111827;
+      --code-text: #e5e7eb;
+      --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
+      --radius: 16px;
+      --content: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: IRANSans, Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a { color: var(--accent); }
+    img { max-width: 100%; }
+
+    .wrap {
+      width: min(100% - 32px, var(--content));
+      margin: 0 auto;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top left, rgba(49, 94, 251, 0.14), transparent 34%),
+        linear-gradient(180deg, #ffffff, #f7f9ff);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 0 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid #cfd8ff;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #274bc9;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.25;
+      margin: 18px 0 14px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 28px;
+      padding: 34px 0 56px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .toc strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .toc a {
+      display: block;
+      text-decoration: none;
+      color: var(--muted);
+      padding: 6px 0;
+      font-size: 0.92rem;
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 4vw, 42px);
+      min-width: 0;
+    }
+
+    section { scroll-margin-top: 24px; }
+    section + section { margin-top: 42px; }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.55rem;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 1.15rem;
+    }
+
+    p { margin: 10px 0 16px; }
+
+    .lead {
+      font-size: 1.08rem;
+      color: #2d394d;
+    }
+
+    .callout {
+      border: 1px solid var(--border);
+      border-right-width: 4px;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 18px 0;
+      background: var(--surface-2);
+    }
+
+    .callout strong { display: block; margin-bottom: 6px; }
+    .callout.info { border-right-color: var(--accent); background: #f7f9ff; }
+    .callout.exam { border-right-color: var(--warning); background: #fffaf0; }
+    .callout.staff { border-right-color: var(--success); background: #f4fbf7; }
+
+    pre {
+      overflow-x: auto;
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 16px 18px;
+      border-radius: 12px;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      border: 1px solid #263247;
+      direction: ltr;
+      text-align: left;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: #fff;
+    }
+
+    .card h3 { margin-top: 0; }
+
+    ul, ol { padding-right: 1.3rem; padding-left: 0; }
+    li + li { margin-top: 8px; }
+
+    .terms {
+      display: grid;
+      gap: 12px;
+    }
+
+    .term {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .term:last-child { border-bottom: 0; }
+    .term b { color: #273653; }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      margin-top: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .progress {
+      display: flex;
+      flex-direction: column;
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .day {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      padding: 14px 16px;
+      color: var(--text);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .progress .day:last-child { border-bottom: 0; }
+
+    .day.active {
+      background: var(--accent-soft);
+    }
+
+    .day.disabled {
+      opacity: 0.48;
+      pointer-events: none;
+    }
+
+    .day small {
+      display: inline-block;
+      flex: 0 0 68px;
+      color: var(--muted);
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+
+    .day b { flex: 1 1 auto; font-weight: 600; }
+
+    .resource {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: #fbfcfe;
+    }
+
+    .resource a {
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+
+    .navrow { display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    .navbtn { text-decoration:none; border:1px solid var(--border); padding:10px 14px; border-radius:10px; background:#fff; color:var(--text); font-weight:700; }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 0 0 38px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .term { grid-template-columns: 1fr; gap: 4px; }
+    }
+
+    @media (max-width: 480px) {
+      .wrap { width: min(100% - 20px, var(--content)); }
+      .hero { padding-top: 34px; }
+      main { padding: 22px 18px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .hero { padding: 20px 0; }
+      .layout { display: block; }
+      .toc { display: none; }
+      main {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+      }
+      a { color: inherit; text-decoration: none; }
+      .progress, .navrow { display: none; }
+    }
+
+    .complete-row { margin-top: 22px; }
+    .btn-complete { cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text); font-weight: 700; padding: 10px 18px; border-radius: 10px; font-size: 0.95rem; }
+    .btn-complete.done { background: var(--success); border-color: var(--success); color: #fff; }
+    .day { position: relative; }
+    .day.done { background: #f4fbf7; }
+    .day.done::after { content: "✓"; position: absolute; top: 50%; left: 16px; transform: translateY(-50%); color: var(--success); font-weight: 800; }
+
+    .lang-switch { display: flex; gap: 6px; justify-content: flex-start; margin-bottom: 10px; }
+    .lang-link { text-decoration: none; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+    .lang-link.active { background: var(--accent-soft); color: #274bc9; border-color: #cfd8ff; }
+    .lang-link.disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-08.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-08.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۰۸</span>
+      <h1>رویکردها و اکتشاف‌های توسعه معماری</h1>
+      <p class="subtitle">
+        درسی عملی و متمرکز بر آزمون که هم برای دانش CPSA-F و هم برای مهارت‌های معماری در سطح Staff Engineer طراحی شده است.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> بالا به پایین، پایین به بالا، دیدگاه‌محور، تکراری</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1</span>
+      </div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#topdown">توسعه بالا به پایین</a>
+      <a href="#bottomup">توسعه پایین به بالا</a>
+      <a href="#combine">بیشتر سیستم‌های واقعی هر دو را ترکیب می‌کنند</a>
+      <a href="#views">توسعه دیدگاه‌محور</a>
+      <a href="#iterative">طراحی تکراری و ریسک‌محور</a>
+      <a href="#exam">تله‌های آزمون</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین</a>
+      <a href="#review">پرسش‌های مرور</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس، باید بتوانید ایده‌های اصلی پشت <b>بالا به پایین، پایین به بالا، دیدگاه‌محور، تکراری</b> را هم در پرسش‌های آزمون و هم در بحث‌های واقعی معماری توضیح دهید و به‌کار ببرید.</p>
+        <div class="callout info"><strong>هم‌راستایی رسمی</strong>LG 03-03 — رویکردها و اکتشاف‌های توسعه معماری.</div>
+      </section>
+
+      <section id="topdown">
+        <h2>توسعه بالا به پایین (Top-down)</h2>
+        <p>از اهداف کسب‌وکار، نیازمندی‌ها و ویژگی‌های کیفی شروع کنید و سپس ساختار را به‌تدریج دقیق‌تر کنید.</p>
+        <pre><code>Business goals → Requirements → Qualities → Subsystems → Components</code></pre>
+      </section>
+
+      <section id="bottomup">
+        <h2>توسعه پایین به بالا (Bottom-up)</h2>
+        <p>از واقعیت فنی موجود شروع کنید: سیستم‌های قدیمی (legacy)، APIها، پایگاه‌های داده، زیرساخت، کامپوننت‌های قابل‌استفاده مجدد و محدودیت‌های سازمانی.</p>
+      </section>
+
+      <section id="combine">
+        <h2>بیشتر سیستم‌های واقعی هر دو رویکرد را ترکیب می‌کنند</h2>
+        <div class="callout staff"><strong>واقعیت عملی</strong>رویکرد بالا به پایین جهت مطلوب را مشخص می‌کند. رویکرد پایین به بالا محدودیت‌ها و دارایی‌های موجود را آشکار می‌سازد. معماری از مذاکره میان این دو شکل می‌گیرد.</div>
+      </section>
+
+      <section id="views">
+        <h2>توسعه دیدگاه‌محور (View-based)</h2>
+        <p>از دیدگاه‌های مکمل برای استدلال درباره دغدغه‌های مختلف استفاده کنید.</p>
+        <ul>
+          <li>دیدگاه بلوک‌های سازنده (Building-block view) → ساختار ایستا.</li>
+          <li>دیدگاه زمان اجرا (Runtime view) → تعاملات و رفتار.</li>
+          <li>دیدگاه استقرار (Deployment view) → محل اجرای نرم‌افزار.</li>
+        </ul>
+      </section>
+
+      <section id="iterative">
+        <h2>طراحی تکراری و ریسک‌محور</h2>
+        <pre><code>Hypothesis → Prototype → Measure → Feedback → Refine</code></pre>
+        <p>ابتدا تصمیم‌هایی را اعتبارسنجی کنید که بیشترین عدم قطعیت و تأثیر بالقوه را دارند.</p>
+      </section>
+
+      <section id="exam">
+        <h2>تله‌های رایج آزمون CPSA-F</h2>
+        <ol>
+          <li><b>رویکرد بالا به پایین همیشه بهتر از پایین به بالا است.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+          <li><b>رویکرد پایین به بالا به این معناست که نیازمندی‌ها بی‌اهمیت‌اند.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+          <li><b>دیدگاه‌ها تنها مستنداتی هستند که پس از پایان طراحی تهیه می‌شوند.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+          <li><b>معماری تکاملی (Evolutionary architecture) به معنای نبود طراحی عمدی است.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+        </ol>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی برای به‌خاطرسپاری</h2>
+        <div class="terms">
+          <div class="term"><b>بالا به پایین (Top-down)</b><span>طراحی از اهداف و نیازمندی‌ها به‌سوی ساختار دقیق‌تر.</span></div>
+          <div class="term"><b>پایین به بالا (Bottom-up)</b><span>طراحی از عناصر فنی و محدودیت‌های موجود به‌سمت بالا.</span></div>
+          <div class="term"><b>طراحی دیدگاه‌محور (View-based design)</b><span>استفاده از دیدگاه‌های معماری مکمل در حین طراحی.</span></div>
+          <div class="term"><b>معماری تکاملی (Evolutionary architecture)</b><span>معماری‌ای که برای تغییر کنترل‌شده در طول زمان طراحی شده است.</span></div>
+        </div>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>یک پلتفرم بیمه ۱۵ ساله را نوسازی کنید: مونولیت جاوا، Oracle، یکپارچه‌سازی با SAP، ۲۰ کار دسته‌ای (batch job) و ۳ تیم. اهداف جدید: انتشار سریع‌تر، مقیاس‌پذیری انتخابی و مستقل، مهاجرت به کلاود، بدون بازنویسی کامل، و ضرورت باقی‌ماندن SAP.</p>
+        <p>مشخص کنید چه مواردی از تحلیل بالا به پایین به‌دست می‌آیند، چه مواردی از تحلیل پایین به بالا، و کدام سه دیدگاه معماری را ابتدا ایجاد می‌کنید.</p>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مرور</h2>
+        <details>
+          <summary>رویکرد بالا به پایین چه زمانی مفید است؟</summary>
+          <p>زمانی که نیازمندی‌ها و محرک‌های معماری می‌توانند تجزیه را هدایت کنند.</p>
+        </details>
+        <details>
+          <summary>رویکرد پایین به بالا چه زمانی اهمیت دارد؟</summary>
+          <p>زمانی که سیستم‌های موجود و محدودیت‌ها به‌شدت راه‌حل را شکل می‌دهند.</p>
+        </details>
+        <details>
+          <summary>آیا این دو رویکرد باید متقابلاً منحصربه‌فرد باشند؟</summary>
+          <p>خیر. بیشتر کارهای واقعی معماری این دو را ترکیب می‌کنند.</p>
+        </details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">از این به‌عنوان مرجع اصلی برای اهداف یادگیری و اصطلاحات استفاده کنید.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>منبع مکمل یوتیوب</b>
+            <div style="color:var(--muted)">جستجویی هدفمند برای موضوع امروز.</div>
+          </div>
+          <a href="https://www.youtube.com/results?search_query=Neal+Ford+evolutionary+architecture+tradeoffs" target="_blank" rel="noopener noreferrer">جستجو ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress">
+          <a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day active" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+        </div>
+        <div class="navrow">
+          <a class="navbtn" href="isaqb-cpsa-f-day-07.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-09.fa.html">روز بعد ←</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۰۸ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "08";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-fa-available="false">
+<html lang="en" dir="ltr" data-fa-available="true">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="iSAQB CPSA-F Day 10: Managing Dependencies & Designing Good Interfaces" />
-  <title>iSAQB CPSA-F — Day 10: Managing Dependencies & Designing Good Interfaces</title>
+  <meta name="description" content="iSAQB CPSA-F Day 5: Requirements, Quality Attributes & Constraints" />
+  <title>iSAQB CPSA-F — Day 5: Requirements, Quality Attributes & Constraints</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
 
   <style>
@@ -77,71 +77,72 @@
     .lang-link.disabled { opacity:0.45; cursor:not-allowed; pointer-events:none; }
   </style>
 
-  <script src="lang-switch.js" defer></script>
+  <script src="../../lang-switch.js" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <nav class="lang-switch" aria-label="Language">
-    <a href="isaqb-cpsa-f-day-10.html" data-lang-switch="en" class="lang-link active">EN</a>
-    <span class="lang-link disabled" aria-disabled="true" title="Farsi — not yet translated">FA</span>
+    <a href="isaqb-cpsa-f-day-05.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-05.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
   </nav>
   <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
-      <span class="eyebrow">iSAQB CPSA-F · Day 10</span>
-  <h1>Managing Dependencies & Designing Good Interfaces</h1>
+      <span class="eyebrow">iSAQB CPSA-F · Day 05</span>
+  <h1>Requirements, Quality Attributes & Constraints</h1>
   <p class="subtitle">A practical, exam-oriented lesson designed to build both CPSA-F knowledge and Staff Engineer architecture skills.</p>
-  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Interface design and dependency management</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Functional vs quality vs constraints</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
 <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
 </div></header>
 
 <div class="wrap layout">
 <aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
 <a href="#objectives">Learning objectives</a>
-<a href="#dependency">Dependencies are not automatically bad</a><a href="#temporal">Temporal coupling</a><a href="#data">Data and semantic coupling</a><a href="#contract">Interfaces are contracts</a><a href="#goodinterface">Characteristics of good interfaces</a><a href="#syncasync">Synchronous vs asynchronous</a><a href="#versioning">Versioning and backward compatibility</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+<a href="#types">Three categories you must distinguish</a><a href="#drivers">Why qualities drive architecture</a><a href="#scenarios">Quality scenarios</a><a href="#tradeoffs">Quality trade-offs</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
 </aside>
 
 <main>
 <section id="objectives">
 <h2>Learning objectives</h2>
-<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Interface design and dependency management</b> in both exam questions and real architecture discussions.</p>
-<div class="callout info"><strong>Official alignment</strong>LG 03-06 and LG 03-07.</div>
+<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Functional vs quality vs constraints</b> in both exam questions and real architecture discussions.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 02-02, LG 02-03, LG 02-04.</div>
 </section>
 
-<section id="dependency"><h2>Dependencies are not automatically bad</h2>
-<p>The right question is not “How do we remove every dependency?” but “Is this dependency necessary, and is the form of coupling appropriate?”</p>
-</section><section id="temporal"><h2>Temporal coupling</h2>
-<p>Synchronous calls require both parties and the network to be available at the same time.</p>
-<pre><code>Order → Payment (HTTP)</code></pre>
-<p>Queues can reduce temporal coupling but introduce eventual consistency, retries, duplication, and observability complexity.</p>
-</section><section id="data"><h2>Data and semantic coupling</h2>
-<p><b>Data coupling</b> occurs when consumers know more of a producer's data model than necessary. <b>Semantic coupling</b> occurs when components depend on shared meaning and behavior even if schemas are technically compatible.</p>
-</section><section id="contract"><h2>Interfaces are contracts</h2>
-<p>A useful interface contract covers more than endpoints or method names:</p>
-<ul><li>Inputs and outputs</li><li>Errors</li><li>Preconditions and postconditions</li><li>Timing expectations</li><li>Idempotency</li><li>Security</li><li>Semantics</li><li>Versioning expectations</li></ul>
-</section><section id="goodinterface"><h2>Characteristics of good interfaces</h2>
-<ul><li>Easy to learn, use, and extend.</li><li>Hard to misuse.</li><li>Functionally complete for consumers.</li></ul>
-</section><section id="syncasync"><h2>Synchronous vs asynchronous</h2>
-<div class="grid-2"><div class="card"><h3>Synchronous</h3><p>Immediate response, simpler control flow, but stronger temporal coupling and failure propagation.</p></div><div class="card"><h3>Asynchronous</h3><p>Buffering and looser availability coupling, but more consistency and operational complexity.</p></div></div>
-</section><section id="versioning"><h2>Versioning and backward compatibility</h2>
-<p>Stable contracts allow components to evolve independently. External interfaces typically require stronger compatibility guarantees and longer deprecation periods than internal ones.</p>
+<section id="types"><h2>Three categories you must distinguish</h2>
+<div class="grid-2">
+<div class="card"><h3>Functional requirement</h3><p>What the system must do: place an order, transfer money, search customers.</p></div>
+<div class="card"><h3>Quality requirement</h3><p>How well it must do it: latency, availability, security, modifiability.</p></div>
+</div>
+<div class="card" style="margin-top:16px"><h3>Constraint</h3><p>What limits the solution space: Java is mandatory, PostgreSQL must be used, GDPR applies, budget is fixed.</p></div>
+</section><section id="drivers"><h2>Why qualities drive architecture</h2>
+<p>Functional requirements describe capabilities. Quality requirements frequently determine the architecture needed to deliver them.</p>
+<pre><code>“View balance” → little architecture information
++ 99.99% availability
++ &lt;300ms p95 latency
++ strict authorization
+= major architecture implications</code></pre>
+</section><section id="scenarios"><h2>Quality scenarios</h2>
+<p>Vague qualities should be made measurable.</p>
+<pre><code>Context → Stimulus → Response → Measurement</code></pre>
+<p>Example: During normal production load, if one application instance fails, traffic is routed to healthy instances and service recovers within 30 seconds without losing confirmed orders.</p>
+</section><section id="tradeoffs"><h2>Quality trade-offs</h2>
+<p>Qualities interact. Security may reduce usability; availability may increase cost; performance can conflict with consistency; flexibility may increase complexity.</p>
 </section>
 
-<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Dynamic dependencies imply low coupling.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Async always reduces complexity.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Public and internal interfaces can evolve identically.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>A remote call has the same failure characteristics as a local call.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>All requirements are functional.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Constraints are just low-priority requirements.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>'Highly scalable' is a sufficient quality requirement.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Improving one quality cannot hurt another.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
 
-<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Temporal coupling</b><span>Components must be available or act at the same time.</span></div><div class="term"><b>Data coupling</b><span>A consumer depends on unnecessary details of another component's data model.</span></div><div class="term"><b>Semantic coupling</b><span>Components depend on shared meaning or behavior.</span></div><div class="term"><b>Interface</b><span>A contract through which components interact.</span></div><div class="term"><b>Backward compatibility</b><span>Existing consumers continue to work after interface evolution.</span></div></div></section>
+<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Functional requirement</b><span>What the system must do.</span></div><div class="term"><b>Quality requirement</b><span>How well the system should behave.</span></div><div class="term"><b>Constraint</b><span>A restriction on the solution space.</span></div><div class="term"><b>Quality scenario</b><span>A measurable description using context, stimulus, response, and measurement.</span></div></div></section>
 
 <section id="exercise"><h2>Practical exercise</h2>
-<p>Current order flow:</p><pre><code>Order → Customer → Inventory → Payment → Notification</code></pre>
-<p>Creating an order takes three seconds and fails whenever any downstream service is unavailable.</p>
-<ol><li>Which interactions truly require synchronous responses?</li><li>Should Notification failure block order creation?</li><li>How would you redesign that interaction?</li><li>Why does replacing every HTTP call with Kafka not automatically remove coupling?</li></ol>
+<p>Classify these statements:</p><ol><li>Users can buy and sell stocks.</li><li>99.99% availability.</li><li>Java 21 must be used.</li><li>Order placement should feel instantaneous.</li><li>EU customer data must remain in the EU.</li><li>Four backend developers.</li><li>50,000 concurrent users.</li></ol>
+<p>Then rewrite “Order placement should feel instantaneous” as a measurable quality scenario.</p>
 </section>
 
-<section id="review"><h2>Review questions</h2><details><summary>What is temporal coupling?</summary><p>A dependency that requires components to be available or act at the same time.</p></details><details><summary>Does replacing a compile-time dependency with HTTP automatically reduce coupling?</summary><p>No.</p></details><details><summary>What should a good interface be?</summary><p>Easy to learn/use/extend, hard to misuse, and functionally complete.</p></details><details><summary>Why are public interfaces harder to change?</summary><p>Because you do not control all consumers.</p></details></section>
+<section id="review"><h2>Review questions</h2><details><summary>What is the difference between a quality requirement and a constraint?</summary><p>A quality requirement describes a desired property; a constraint limits possible solutions.</p></details><details><summary>Why is “the system should be fast” weak?</summary><p>It lacks context and measurable criteria.</p></details><details><summary>What are the four scenario elements used here?</summary><p>Context, stimulus, response, measurement.</p></details></section>
 
 <section id="resources"><h2>Recommended resources</h2>
 <div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">Use this as the source of truth for learning goals and terminology.</div></div>
 <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
 <div class="resource" style="margin-top:12px"><div><b>YouTube supplement</b><div style="color:var(--muted)">A targeted search for today's topic.</div></div>
-<a href="https://www.youtube.com/results?search_query=Udi+Dahan+decoupled+services" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
+<a href="https://www.youtube.com/results?search_query=software+architecture+quality+attribute+scenarios" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
 </section>
 
 <section id="progress"><h2>Course progress</h2>
@@ -150,21 +151,21 @@
 <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
 <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
 <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders & Concerns</b></a>
-<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements & Constraints</b></a>
+<a class="day active" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements & Constraints</b></a>
 <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
 <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
 <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
 <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
-<a class="day active" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
-<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-09.html">← Previous day</a></div>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-04.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-06.html">Next day →</a></div>
 </section>
 </main>
 </div>
-<footer class="wrap">iSAQB CPSA-F Study Guide · Day 10 · Designed for local browser reading and printing</footer>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 05 · Designed for local browser reading and printing</footer>
 
 <script>
 (function(){
-  var DAY = "10";
+  var DAY = "05";
   var KEY = "isaqb-cpsaf-progress";
   function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
   function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }

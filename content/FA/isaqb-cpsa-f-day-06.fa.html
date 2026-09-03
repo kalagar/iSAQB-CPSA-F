@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۶ دوره iSAQB CPSA-F: مفروضات صریح، سناریوهای کیفی و محرک‌های معماری" />
+  <title>iSAQB CPSA-F — روز ۶: مفروضات صریح، سناریوهای کیفی و محرک‌های معماری</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-2: #f1f4f8;
+      --text: #172033;
+      --muted: #637083;
+      --border: #dbe2ea;
+      --accent: #315efb;
+      --accent-soft: #eaf0ff;
+      --success: #16794f;
+      --warning: #8a5a00;
+      --danger: #a12a2a;
+      --code-bg: #111827;
+      --code-text: #e5e7eb;
+      --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
+      --radius: 16px;
+      --content: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: IRANSans, Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a { color: var(--accent); }
+    img { max-width: 100%; }
+
+    .wrap {
+      width: min(100% - 32px, var(--content));
+      margin: 0 auto;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top left, rgba(49, 94, 251, 0.14), transparent 34%),
+        linear-gradient(180deg, #ffffff, #f7f9ff);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 0 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid #cfd8ff;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #274bc9;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.25;
+      margin: 18px 0 14px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 28px;
+      padding: 34px 0 56px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .toc strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .toc a {
+      display: block;
+      text-decoration: none;
+      color: var(--muted);
+      padding: 6px 0;
+      font-size: 0.92rem;
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 4vw, 42px);
+      min-width: 0;
+    }
+
+    section { scroll-margin-top: 24px; }
+    section + section { margin-top: 42px; }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.55rem;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 1.15rem;
+    }
+
+    p { margin: 10px 0 16px; }
+
+    .lead {
+      font-size: 1.08rem;
+      color: #2d394d;
+    }
+
+    .callout {
+      border: 1px solid var(--border);
+      border-right-width: 4px;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 18px 0;
+      background: var(--surface-2);
+    }
+
+    .callout strong { display: block; margin-bottom: 6px; }
+    .callout.info { border-right-color: var(--accent); background: #f7f9ff; }
+    .callout.exam { border-right-color: var(--warning); background: #fffaf0; }
+    .callout.staff { border-right-color: var(--success); background: #f4fbf7; }
+
+    pre {
+      overflow-x: auto;
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 16px 18px;
+      border-radius: 12px;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      border: 1px solid #263247;
+      direction: ltr;
+      text-align: left;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: #fff;
+    }
+
+    .card h3 { margin-top: 0; }
+
+    ul, ol { padding-right: 1.3rem; padding-left: 0; }
+    li + li { margin-top: 8px; }
+
+    .terms {
+      display: grid;
+      gap: 12px;
+    }
+
+    .term {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .term:last-child { border-bottom: 0; }
+    .term b { color: #273653; }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      margin-top: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .progress {
+      display: flex;
+      flex-direction: column;
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .day {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      padding: 14px 16px;
+      color: var(--text);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .progress .day:last-child { border-bottom: 0; }
+
+    .day.active {
+      background: var(--accent-soft);
+    }
+
+    .day.disabled {
+      opacity: 0.48;
+      pointer-events: none;
+    }
+
+    .day small {
+      display: inline-block;
+      flex: 0 0 68px;
+      color: var(--muted);
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+
+    .day b { flex: 1 1 auto; font-weight: 600; }
+
+    .resource {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: #fbfcfe;
+    }
+
+    .resource a {
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+
+    .navrow { display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    .navbtn { text-decoration:none; border:1px solid var(--border); padding:10px 14px; border-radius:10px; background:#fff; color:var(--text); font-weight:700; }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 0 0 38px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .term { grid-template-columns: 1fr; gap: 4px; }
+    }
+
+    @media (max-width: 480px) {
+      .wrap { width: min(100% - 20px, var(--content)); }
+      .hero { padding-top: 34px; }
+      main { padding: 22px 18px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .hero { padding: 20px 0; }
+      .layout { display: block; }
+      .toc { display: none; }
+      main {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+      }
+      a { color: inherit; text-decoration: none; }
+      .progress, .navrow { display: none; }
+    }
+
+    .complete-row { margin-top: 22px; }
+    .btn-complete { cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text); font-weight: 700; padding: 10px 18px; border-radius: 10px; font-size: 0.95rem; }
+    .btn-complete.done { background: var(--success); border-color: var(--success); color: #fff; }
+    .day { position: relative; }
+    .day.done { background: #f4fbf7; }
+    .day.done::after { content: "✓"; position: absolute; top: 50%; left: 16px; transform: translateY(-50%); color: var(--success); font-weight: 800; }
+
+    .lang-switch { display: flex; gap: 6px; justify-content: flex-start; margin-bottom: 10px; }
+    .lang-link { text-decoration: none; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+    .lang-link.active { background: var(--accent-soft); color: #274bc9; border-color: #cfd8ff; }
+    .lang-link.disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-06.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-06.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۰۶</span>
+      <h1>مفروضات صریح، سناریوهای کیفی و محرک‌های معماری</h1>
+      <p class="subtitle">
+        درسی عملی و متمرکز بر آزمون که هم برای دانش CPSA-F و هم برای مهارت‌های معماری در سطح Staff Engineer طراحی شده است.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> مفروضات، سنجه‌ها، محرک‌ها</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1</span>
+      </div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#assumptions">مفروضات را صریح کنید</a>
+      <a href="#analysis">نیازمندی‌های کیفی به روش‌های تحلیل نیاز دارند</a>
+      <a href="#goodhart">قانون گودهارت (Goodhart's Law)</a>
+      <a href="#drivers">محرک‌های معماری</a>
+      <a href="#exam">تله‌های آزمون</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین</a>
+      <a href="#review">پرسش‌های مرور</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس، باید بتوانید ایده‌های اصلی پشت <b>مفروضات، سنجه‌ها و محرک‌ها</b> را هم در پرسش‌های آزمون و هم در بحث‌های واقعی معماری توضیح دهید و به‌کار ببرید.</p>
+        <div class="callout info"><strong>هم‌راستایی رسمی</strong>LG 02-04، LG 02-05 و پل ارتباطی به LG 03-01.</div>
+      </section>
+
+      <section id="assumptions">
+        <h2>مفروضات را صریح کنید</h2>
+        <p>مفروضات ضمنی ریسک معماری ایجاد می‌کنند زیرا ممکن است ذی‌نفعان ندانند که طراحی به آن‌ها وابسته است.</p>
+        <pre><code>Assumption A-01
+The API will initially serve fewer than 1,000 requests/minute.
+If this changes, scalability requirements must be reassessed.</code></pre>
+      </section>
+
+      <section id="analysis">
+        <h2>نیازمندی‌های کیفی به روش‌های تحلیل نیاز دارند</h2>
+        <p>یک هدف قابل‌اندازه‌گیری زمانی بسیار مفیدتر می‌شود که نحوه راستی‌آزمایی آن را نیز تعریف کنید.</p>
+        <ul>
+          <li>کارایی (Performance) ← تست بار و اندازه‌گیری تأخیر p95.</li>
+          <li>امنیت ← بازبینی، تست‌های خودکار مجوزدهی، تست نفوذ.</li>
+          <li>در دسترس‌بودن (Availability) ← تست failover و اندازه‌گیری زمان بازیابی.</li>
+        </ul>
+      </section>
+
+      <section id="goodhart">
+        <h2>قانون گودهارت (Goodhart's Law)</h2>
+        <div class="callout exam"><strong>مفهوم آزمون</strong>زمانی که یک سنجه به یک هدف تبدیل می‌شود، ممکن است تیم‌ها به‌جای هدف اصلی، خودِ عدد را بهینه کنند. همیشه بپرسید که آیا این سنجه واقعاً همان کیفیتی را که برایتان اهمیت دارد نشان می‌دهد یا نه.</div>
+      </section>
+
+      <section id="drivers">
+        <h2>محرک‌های معماری</h2>
+        <p>یک محرک معماری، یک نیازمندی، ویژگی کیفی، دغدغه یا محدودیت است که تأثیر ساختاری قابل‌توجهی دارد.</p>
+        <pre><code>Requirement → Architecture driver → Decision → Improved quality → Trade-offs</code></pre>
+      </section>
+
+      <section id="exam">
+        <h2>تله‌های رایج آزمون CPSA-F</h2>
+        <ol>
+          <li><b>مفروضات نیازی به مستندسازی ندارند.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+          <li><b>هر سنجه‌ای به‌خودی‌خود مفید است.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+          <li><b>هر نیازمندی تأثیر معماری یکسانی دارد.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+          <li><b>تصمیمات معماری فقط کیفیت‌ها را بهبود می‌دهند و هیچ مصالحه‌ای (trade-off) ایجاد نمی‌کنند.</b> این را نادرست یا مشکوک در نظر بگیرید مگر آنکه زمینه صراحتاً از آن پشتیبانی کند.</li>
+        </ol>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی برای به‌خاطرسپاری</h2>
+        <div class="terms">
+          <div class="term"><b>مفروضه (Assumption)</b><span>باوری درباره زمینه یا محیط که ممکن است راستی‌آزمایی‌نشده باشد.</span></div>
+          <div class="term"><b>محرک معماری</b><span>نیازمندی، ویژگی کیفی، دغدغه یا محدودیتی با تأثیر معماری قوی.</span></div>
+          <div class="term"><b>روش تحلیل</b><span>راهی برای راستی‌آزمایی اینکه آیا یک هدف کیفی برآورده شده است یا نه.</span></div>
+          <div class="term"><b>قانون گودهارت (Goodhart's Law)</b><span>هشداری مبنی بر اینکه بهینه‌سازی یک سنجه می‌تواند هدف واقعی را مخدوش کند.</span></div>
+        </div>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>جملات مربوط به یک پلتفرم پرداخت:</p>
+        <ol>
+          <li>ترافیک احتمالاً هرگز از ۱٬۰۰۰ تراکنش در ثانیه (TPS) فراتر نخواهد رفت.</li>
+          <li>پرداخت‌ها پس از تأیید هرگز نباید از دست بروند.</li>
+          <li>پلتفرم باید بسیار سریع باشد.</li>
+          <li>استفاده از Java 21 اجباری است.</li>
+          <li>ارائه‌دهنده خدمات پرداخت معمولاً در دسترس است.</li>
+          <li>در دسترس‌بودن ۹۹٫۹۹٪.</li>
+          <li>توسعه‌دهندگان خواهان استقرار مستقل هستند.</li>
+        </ol>
+        <p>هر مورد را به‌عنوان نیازمندی، نیازمندی کیفی، محدودیت یا مفروضه دسته‌بندی کنید. سپس سه محرک معماری قوی‌تر را انتخاب کنید.</p>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مرور</h2>
+        <details>
+          <summary>چرا مفروضات باید صریح باشند؟</summary>
+          <p>زیرا مفروضات پنهان می‌توانند باعث سوءتفاهم و ریسک معماری شوند.</p>
+        </details>
+        <details>
+          <summary>محرک معماری چیست؟</summary>
+          <p>نیازمندی، دغدغه، ویژگی کیفی یا محدودیتی با تأثیر عمده بر معماری.</p>
+        </details>
+        <details>
+          <summary>قانون گودهارت درباره چه چیزی هشدار می‌دهد؟</summary>
+          <p>بهینه‌سازی یک سنجه می‌تواند هدف واقعی‌ای را که آن سنجه قرار بود نشان دهد، مخدوش کند.</p>
+        </details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">از این به‌عنوان مرجع اصلی برای اهداف یادگیری و اصطلاحات استفاده کنید.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>منبع مکمل یوتیوب</b>
+            <div style="color:var(--muted)">جستجویی هدفمند برای موضوع امروز.</div>
+          </div>
+          <a href="https://www.youtube.com/results?search_query=quality+attribute+scenarios+software+architecture" target="_blank" rel="noopener noreferrer">جستجو ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress">
+          <a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day active" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+        </div>
+        <div class="navrow">
+          <a class="navbtn" href="isaqb-cpsa-f-day-05.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-07.fa.html">روز بعد ←</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۰۶ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "06";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

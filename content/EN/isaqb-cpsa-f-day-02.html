@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-fa-available="false">
+<html lang="en" dir="ltr" data-fa-available="true">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="iSAQB CPSA-F Day 3: Long-term Impact of Architecture Decisions" />
-  <title>iSAQB CPSA-F — Day 3: Long-term Impact of Architecture Decisions</title>
+  <meta name="description" content="iSAQB CPSA-F Day 2: Tasks & Responsibilities of a Software Architect" />
+  <title>iSAQB CPSA-F — Day 2: Tasks & Responsibilities of a Software Architect</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
 
   <style>
@@ -77,70 +77,83 @@
     .lang-link.disabled { opacity:0.45; cursor:not-allowed; pointer-events:none; }
   </style>
 
-  <script src="lang-switch.js" defer></script>
+  <script src="../../lang-switch.js" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <nav class="lang-switch" aria-label="Language">
-    <a href="isaqb-cpsa-f-day-03.html" data-lang-switch="en" class="lang-link active">EN</a>
-    <span class="lang-link disabled" aria-disabled="true" title="Farsi — not yet translated">FA</span>
+    <a href="isaqb-cpsa-f-day-02.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-02.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
   </nav>
   <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
-      <span class="eyebrow">iSAQB CPSA-F · Day 03</span>
-  <h1>Long-term Impact of Architecture Decisions</h1>
+      <span class="eyebrow">iSAQB CPSA-F · Day 02</span>
+  <h1>Tasks & Responsibilities of a Software Architect</h1>
   <p class="subtitle">A practical, exam-oriented lesson designed to build both CPSA-F knowledge and Staff Engineer architecture skills.</p>
-  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Evolution, reversibility, consequences</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Architect role, responsibilities, collaboration</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
 <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
 </div></header>
 
 <div class="wrap layout">
 <aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
 <a href="#objectives">Learning objectives</a>
-<a href="#impact">Architecture decisions create future constraints</a><a href="#change">Requirements and environments change</a><a href="#reversibility">Reversibility as a decision heuristic</a><a href="#business">Architecture and business influence each other</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+<a href="#core">What architects are responsible for</a><a href="#responsibilities">Seven responsibilities to remember</a><a href="#boundaries">Architect vs. Project Manager</a><a href="#staff">Staff Engineer lens</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
 </aside>
 
 <main>
 <section id="objectives">
 <h2>Learning objectives</h2>
-<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Evolution, reversibility, consequences</b> in both exam questions and real architecture discussions.</p>
-<div class="callout info"><strong>Official alignment</strong>LG 01-03 — Long-term Impact of Architecture Decisions.</div>
+<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Architect role, responsibilities, collaboration</b> in both exam questions and real architecture discussions.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 01-04 — Tasks and Responsibilities of Software Architects.</div>
 </section>
 
-<section id="impact"><h2>Architecture decisions create future constraints</h2>
-<p>Important architecture decisions shape what becomes easy, difficult, cheap, or expensive later. A database strategy, deployment model, or service boundary can become a long-lived constraint.</p>
-<pre><code>Decision today → Dependencies → Future change cost → Long-term consequences</code></pre>
-</section><section id="change"><h2>Requirements and environments change</h2>
-<p>Architecture is affected by changes in requirements, technology, regulation, teams, traffic, and operating environments. A good architecture is not one that never changes; it is one that can evolve without uncontrolled cost.</p>
-</section><section id="reversibility"><h2>Reversibility as a decision heuristic</h2>
-<div class="callout staff"><strong>Useful Staff heuristic</strong>The more expensive a decision is to reverse, the more evidence and explicit reasoning it deserves.</div>
-<ul><li>Choosing a local helper library: usually easy to reverse.</li><li>Splitting a monolith into 40 services: expensive to reverse.</li><li>Choosing a company-wide identity model: extremely consequential.</li></ul>
-</section><section id="business"><h2>Architecture and business influence each other</h2>
-<p>Software architecture supports business processes, but software capabilities can also reshape business processes. Architects should therefore understand the business context, not only technical structure.</p>
+<section id="core"><h2>What architects are responsible for</h2>
+<p>Software architects do more than create diagrams. They clarify requirements and constraints, shape the system structure, define interfaces and dependencies, choose cross-cutting concepts, communicate decisions, and support implementation over time.</p>
+<pre><code>Clarify → Design → Communicate → Validate → Evolve</code></pre>
+<div class="callout info"><strong>Exam focus</strong>Remember the architect's role as a continuous responsibility across design, implementation, and evolution—not a one-time upfront activity.</div>
+</section><section id="responsibilities"><h2>Seven responsibilities to remember</h2>
+<ol>
+<li>Clarify functional requirements, quality requirements, and constraints.</li>
+<li>Decompose the system into meaningful building blocks.</li>
+<li>Define responsibilities, interfaces, and dependencies.</li>
+<li>Make decisions about cross-cutting concerns such as security, logging, persistence, caching, and monitoring.</li>
+<li>Document and communicate architecture to different stakeholders.</li>
+<li>Support implementation and incorporate feedback.</li>
+<li>Evaluate architecture, risks, trade-offs, and consequences.</li>
+</ol>
+</section><section id="boundaries"><h2>Architect vs. Project Manager</h2>
+<div class="grid-2">
+<div class="card"><h3>Architect</h3><p>Owns technical structure, quality trade-offs, architectural risks, and major technical decisions.</p></div>
+<div class="card"><h3>Project Manager</h3><p>Owns planning, schedule, budget, coordination, delivery tracking, and project organization.</p></div>
+</div>
+<p>There can be overlap in collaboration, but the responsibilities are not interchangeable.</p>
+</section><section id="staff"><h2>Staff Engineer lens</h2>
+<div class="callout staff"><strong>Practical Staff behavior</strong>A Staff Engineer often performs architectural responsibilities without necessarily having “Architect” in the job title: aligning teams, clarifying quality goals, identifying risks, and explaining decision consequences.</div>
 </section>
 
-<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Architectural decisions never need revisiting.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>The future can be predicted accurately enough to design for every possibility.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>A technically good decision has no business consequences.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Architects are only responsible for diagrams.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Architecture is completed before implementation starts.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Project management and architecture responsibilities are identical.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
 
-<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Reversibility</b><span>How easy or expensive a decision is to undo.</span></div><div class="term"><b>Architectural consequence</b><span>A positive or negative effect caused by an architecture decision.</span></div><div class="term"><b>Evolution</b><span>Controlled change of a software system over time.</span></div></div></section>
+<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Architectural responsibility</b><span>A duty related to shaping, communicating, validating, and evolving the system architecture.</span></div><div class="term"><b>Cross-cutting concern</b><span>A concern such as security, logging, monitoring, or persistence that affects many parts of the system.</span></div><div class="term"><b>Architecture risk</b><span>A technical uncertainty or weakness that may threaten important goals.</span></div></div></section>
 
 <section id="exercise"><h2>Practical exercise</h2>
-<p>A SaaS invoicing platform has 5,000 customers in Germany, runs in AWS eu-central-1, uses a modular monolith with PostgreSQL, and has 6 developers. The company may grow to 500,000 EU customers in three years. The CTO wants 30 microservices immediately.</p>
-<p>Identify:</p><ul><li>3 architecture decisions that may become problematic later,</li><li>3 decisions you would avoid making now,</li><li>1 decision that is highly reversible.</li></ul>
+<p>You are designing a banking app with these statements:</p>
+<ul><li>Users can transfer money.</li><li>Transfers must never be lost.</li><li>99.99% availability.</li><li>Every transaction is auditable.</li><li>Java and PostgreSQL are mandatory.</li><li>8 developers.</li><li>6-month deadline.</li></ul>
+<p>Classify each item as <b>functional requirement</b>, <b>quality requirement</b>, or <b>constraint</b>. Then identify three architecture risks the architect should investigate early.</p>
 </section>
 
-<section id="review"><h2>Review questions</h2><details><summary>Why do architecture decisions have long-term impact?</summary><p>They shape dependencies, quality attributes, and the cost of future change.</p></details><details><summary>Should architecture optimize for every possible future?</summary><p>No. Overdesign adds cost and complexity. Design for known drivers and credible risks.</p></details><details><summary>What is a useful heuristic for important decisions?</summary><p>Consider reversibility: expensive-to-reverse choices deserve stronger evidence.</p></details></section>
+<section id="review"><h2>Review questions</h2><details><summary>What are the architect's core responsibilities?</summary><p>Clarifying requirements, designing structure, defining interfaces and cross-cutting concepts, communicating architecture, supporting implementation, and evaluating risks and trade-offs.</p></details><details><summary>Does an architect stop working after the initial design?</summary><p>No. Architecture is iterative and architects support implementation and evolution.</p></details><details><summary>Is a project manager responsible for architecture decisions?</summary><p>Not primarily. The project manager owns delivery coordination; the architect owns major technical structure and decisions.</p></details></section>
 
 <section id="resources"><h2>Recommended resources</h2>
 <div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">Use this as the source of truth for learning goals and terminology.</div></div>
 <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
 <div class="resource" style="margin-top:12px"><div><b>YouTube supplement</b><div style="color:var(--muted)">A targeted search for today's topic.</div></div>
-<a href="https://www.youtube.com/results?search_query=Gregor+Hohpe+software+architect+risk+complexity" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
+<a href="https://www.youtube.com/results?search_query=Michael+Pogrebinsky+CPSA-F+software+architect+responsibilities" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
 </section>
 
 <section id="progress"><h2>Course progress</h2>
 <p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
 <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
-<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
-<a class="day active" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day active" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
 <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders & Concerns</b></a>
 <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements & Constraints</b></a>
 <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
@@ -148,15 +161,15 @@
 <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
 <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
 <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
-<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-02.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-04.html">Next day →</a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-01.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-03.html">Next day →</a></div>
 </section>
 </main>
 </div>
-<footer class="wrap">iSAQB CPSA-F Study Guide · Day 03 · Designed for local browser reading and printing</footer>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 02 · Designed for local browser reading and printing</footer>
 
 <script>
 (function(){
-  var DAY = "03";
+  var DAY = "02";
   var KEY = "isaqb-cpsaf-progress";
   function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
   function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }

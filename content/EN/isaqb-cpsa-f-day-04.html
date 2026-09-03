@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-fa-available="false">
+<html lang="en" dir="ltr" data-fa-available="true">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="iSAQB CPSA-F Day 7: Decomposition, Black/White Box & Stepwise Refinement" />
-  <title>iSAQB CPSA-F — Day 7: Decomposition, Black/White Box & Stepwise Refinement</title>
+  <meta name="description" content="iSAQB CPSA-F Day 4: Stakeholders, Concerns & Architecture Communication" />
+  <title>iSAQB CPSA-F — Day 4: Stakeholders, Concerns & Architecture Communication</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
 
   <style>
@@ -77,75 +77,65 @@
     .lang-link.disabled { opacity:0.45; cursor:not-allowed; pointer-events:none; }
   </style>
 
-  <script src="lang-switch.js" defer></script>
+  <script src="../../lang-switch.js" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <nav class="lang-switch" aria-label="Language">
-    <a href="isaqb-cpsa-f-day-07.html" data-lang-switch="en" class="lang-link active">EN</a>
-    <span class="lang-link disabled" aria-disabled="true" title="Farsi — not yet translated">FA</span>
+    <a href="isaqb-cpsa-f-day-04.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-04.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
   </nav>
   <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
-      <span class="eyebrow">iSAQB CPSA-F · Day 07</span>
-  <h1>Decomposition, Black/White Box & Stepwise Refinement</h1>
+      <span class="eyebrow">iSAQB CPSA-F · Day 04</span>
+  <h1>Stakeholders, Concerns & Architecture Communication</h1>
   <p class="subtitle">A practical, exam-oriented lesson designed to build both CPSA-F knowledge and Staff Engineer architecture skills.</p>
-  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Building blocks and refinement</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Stakeholders, views, rationale</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
 <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
 </div></header>
 
 <div class="wrap layout">
 <aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
 <a href="#objectives">Learning objectives</a>
-<a href="#decomposition">Decomposition into building blocks</a><a href="#cohesion">Cohesion and coupling</a><a href="#blackwhite">Black box vs white box</a><a href="#refinement">Stepwise refinement</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+<a href="#stakeholders">Stakeholders and concerns</a><a href="#views">Different stakeholders need different views</a><a href="#rationale">Communicate rationale, not just decisions</a><a href="#staff">Staff Engineer lens</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
 </aside>
 
 <main>
 <section id="objectives">
 <h2>Learning objectives</h2>
-<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Building blocks and refinement</b> in both exam questions and real architecture discussions.</p>
-<div class="callout info"><strong>Official alignment</strong>LG 03-01 and LG 03-02.</div>
+<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Stakeholders, views, rationale</b> in both exam questions and real architecture discussions.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 01-06 and LG 02-01 — Stakeholders and Concerns.</div>
 </section>
 
-<section id="decomposition"><h2>Decomposition into building blocks</h2>
-<p>Architecture design breaks a system into meaningful building blocks with clear responsibilities and controlled dependencies.</p>
-<pre><code>E-Commerce
-├── Catalog
-├── Ordering
-├── Payments
-├── Shipping
-└── Customer Management</code></pre>
-</section><section id="cohesion"><h2>Cohesion and coupling</h2>
-<p>Good decomposition aims for <b>high cohesion</b> inside building blocks and <b>controlled coupling</b> between them.</p>
-<div class="grid-2"><div class="card"><h3>High cohesion</h3><p>Responsibilities strongly belong together.</p></div><div class="card"><h3>Low/controlled coupling</h3><p>Dependencies are limited and intentional.</p></div></div>
-</section><section id="blackwhite"><h2>Black box vs white box</h2>
-<div class="grid-2"><div class="card"><h3>Black box</h3><p>External responsibility, interface, inputs, outputs, guarantees.</p></div><div class="card"><h3>White box</h3><p>Internal structure and subcomponents.</p></div></div>
-</section><section id="refinement"><h2>Stepwise refinement</h2>
-<pre><code>System
- ↓
-Major subsystems
- ↓
-Components
- ↓
-Subcomponents</code></pre>
-<p>Refine gradually instead of attempting to design every detail at once.</p>
+<section id="stakeholders"><h2>Stakeholders and concerns</h2>
+<p>A <b>stakeholder</b> is anyone with an interest in the system. A <b>concern</b> is something they care about.</p>
+<div class="grid-2"><div class="card"><h3>Stakeholder</h3><p>Developer, Product Owner, SRE, Security Officer, CFO, customer, regulator.</p></div><div class="card"><h3>Concern</h3><p>Maintainability, delivery speed, uptime, security, cost, compliance, usability.</p></div></div>
+<p>One stakeholder can have many concerns, and one concern can affect many stakeholders.</p>
+</section><section id="views"><h2>Different stakeholders need different views</h2>
+<p>The same architecture should be communicated differently depending on the audience.</p>
+<ul><li>Developers need component responsibilities and interfaces.</li><li>SREs need runtime and deployment behavior.</li><li>Management needs risks, costs, and strategic consequences.</li><li>Security needs trust boundaries, identities, and data flows.</li></ul>
+</section><section id="rationale"><h2>Communicate rationale, not just decisions</h2>
+<pre><code>Context → Options → Decision → Rationale → Consequences</code></pre>
+<p>A decision without rationale is difficult to evaluate later. Good architecture documentation preserves why a choice was made.</p>
+</section><section id="staff"><h2>Staff Engineer lens</h2>
+<div class="callout staff"><strong>Communication skill</strong>Staff Engineers frequently explain the same architecture at multiple abstraction levels—from code-level details to business impact.</div>
 </section>
 
-<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Architecture design should start with frameworks.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Black-box descriptions show internals.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Low coupling means no communication.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>High cohesion means many unrelated responsibilities in one place.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Every stakeholder needs the same view.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Concerns map one-to-one to stakeholders.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Technical correctness alone guarantees successful architecture communication.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
 
-<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Decomposition</b><span>Breaking a system into meaningful building blocks.</span></div><div class="term"><b>Black box</b><span>External view of a building block.</span></div><div class="term"><b>White box</b><span>Internal structure of a building block.</span></div><div class="term"><b>Stepwise refinement</b><span>Progressively decomposing architecture into finer structures.</span></div></div></section>
+<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Stakeholder</b><span>A person or group with an interest in the system.</span></div><div class="term"><b>Concern</b><span>Something a stakeholder cares about.</span></div><div class="term"><b>Architectural view</b><span>A representation tailored to a set of concerns.</span></div><div class="term"><b>Rationale</b><span>The reason why a decision was made.</span></div></div></section>
 
 <section id="exercise"><h2>Practical exercise</h2>
-<p>Design a food-delivery platform with Ordering, Restaurant, Delivery, Payment, and Notification concerns.</p>
-<ol><li>Decompose the system into 4–6 building blocks.</li><li>Define each block's responsibility.</li><li>Choose one block and write a black-box description.</li><li>Then create its white-box decomposition.</li></ol>
+<p>A healthcare platform plans to move from a monolith to microservices on Kubernetes. Stakeholders: Product Owner, Backend Developer, Security Officer, SRE, CFO.</p>
+<p>For each stakeholder, identify two likely concerns and the architectural view you would show them first.</p>
 </section>
 
-<section id="review"><h2>Review questions</h2><details><summary>What is decomposition?</summary><p>Breaking a system into meaningful architectural building blocks.</p></details><details><summary>What does a black-box view show?</summary><p>Externally relevant responsibilities and interfaces.</p></details><details><summary>What does a white-box view show?</summary><p>Internal structure.</p></details></section>
+<section id="review"><h2>Review questions</h2><details><summary>What is a stakeholder?</summary><p>A person or group with an interest in the system.</p></details><details><summary>What is a concern?</summary><p>A topic or quality a stakeholder cares about.</p></details><details><summary>Should every stakeholder receive the same architecture documentation?</summary><p>No. Different concerns require different views and levels of detail.</p></details></section>
 
 <section id="resources"><h2>Recommended resources</h2>
 <div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">Use this as the source of truth for learning goals and terminology.</div></div>
 <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
 <div class="resource" style="margin-top:12px"><div><b>YouTube supplement</b><div style="color:var(--muted)">A targeted search for today's topic.</div></div>
-<a href="https://www.youtube.com/results?search_query=software+architecture+decomposition+black+box+white+box+iSAQB" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
+<a href="https://www.youtube.com/results?search_query=Gregor+Hohpe+Architect+Elevator" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
 </section>
 
 <section id="progress"><h2>Course progress</h2>
@@ -153,22 +143,22 @@ Subcomponents</code></pre>
 <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
 <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
 <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
-<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders & Concerns</b></a>
+<a class="day active" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders & Concerns</b></a>
 <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements & Constraints</b></a>
 <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
-<a class="day active" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
 <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
 <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
 <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
-<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-06.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-08.html">Next day →</a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-03.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-05.html">Next day →</a></div>
 </section>
 </main>
 </div>
-<footer class="wrap">iSAQB CPSA-F Study Guide · Day 07 · Designed for local browser reading and printing</footer>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 04 · Designed for local browser reading and printing</footer>
 
 <script>
 (function(){
-  var DAY = "07";
+  var DAY = "04";
   var KEY = "isaqb-cpsaf-progress";
   function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
   function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }

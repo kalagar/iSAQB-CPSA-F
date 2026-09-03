@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-fa-available="false">
+<html lang="en" dir="ltr" data-fa-available="true">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="iSAQB CPSA-F Day 6: Explicit Assumptions, Quality Scenarios & Architecture Drivers" />
-  <title>iSAQB CPSA-F — Day 6: Explicit Assumptions, Quality Scenarios & Architecture Drivers</title>
+  <meta name="description" content="iSAQB CPSA-F Day 10: Managing Dependencies & Designing Good Interfaces" />
+  <title>iSAQB CPSA-F — Day 10: Managing Dependencies & Designing Good Interfaces</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
 
   <style>
@@ -77,66 +77,71 @@
     .lang-link.disabled { opacity:0.45; cursor:not-allowed; pointer-events:none; }
   </style>
 
-  <script src="lang-switch.js" defer></script>
+  <script src="../../lang-switch.js" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <nav class="lang-switch" aria-label="Language">
-    <a href="isaqb-cpsa-f-day-06.html" data-lang-switch="en" class="lang-link active">EN</a>
-    <span class="lang-link disabled" aria-disabled="true" title="Farsi — not yet translated">FA</span>
+    <a href="isaqb-cpsa-f-day-10.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-10.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
   </nav>
   <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
-      <span class="eyebrow">iSAQB CPSA-F · Day 06</span>
-  <h1>Explicit Assumptions, Quality Scenarios & Architecture Drivers</h1>
+      <span class="eyebrow">iSAQB CPSA-F · Day 10</span>
+  <h1>Managing Dependencies & Designing Good Interfaces</h1>
   <p class="subtitle">A practical, exam-oriented lesson designed to build both CPSA-F knowledge and Staff Engineer architecture skills.</p>
-  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Assumptions, metrics, drivers</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Interface design and dependency management</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
 <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
 </div></header>
 
 <div class="wrap layout">
 <aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
 <a href="#objectives">Learning objectives</a>
-<a href="#assumptions">Make assumptions explicit</a><a href="#analysis">Quality requirements need analysis methods</a><a href="#goodhart">Goodhart's Law</a><a href="#drivers">Architecture drivers</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+<a href="#dependency">Dependencies are not automatically bad</a><a href="#temporal">Temporal coupling</a><a href="#data">Data and semantic coupling</a><a href="#contract">Interfaces are contracts</a><a href="#goodinterface">Characteristics of good interfaces</a><a href="#syncasync">Synchronous vs asynchronous</a><a href="#versioning">Versioning and backward compatibility</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
 </aside>
 
 <main>
 <section id="objectives">
 <h2>Learning objectives</h2>
-<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Assumptions, metrics, drivers</b> in both exam questions and real architecture discussions.</p>
-<div class="callout info"><strong>Official alignment</strong>LG 02-04, LG 02-05 and bridge to LG 03-01.</div>
+<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Interface design and dependency management</b> in both exam questions and real architecture discussions.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 03-06 and LG 03-07.</div>
 </section>
 
-<section id="assumptions"><h2>Make assumptions explicit</h2>
-<p>Implicit assumptions create architecture risk because stakeholders may not know the design depends on them.</p>
-<pre><code>Assumption A-01
-The API will initially serve fewer than 1,000 requests/minute.
-If this changes, scalability requirements must be reassessed.</code></pre>
-</section><section id="analysis"><h2>Quality requirements need analysis methods</h2>
-<p>A measurable target becomes much more useful when you also define how to verify it.</p>
-<ul><li>Performance → load test and p95 latency measurement.</li><li>Security → review, automated authorization tests, penetration testing.</li><li>Availability → failover test and recovery-time measurement.</li></ul>
-</section><section id="goodhart"><h2>Goodhart's Law</h2>
-<div class="callout exam"><strong>Exam concept</strong>When a metric becomes a target, teams may optimize the number instead of the underlying goal. Always ask whether the metric truly represents the quality you care about.</div>
-</section><section id="drivers"><h2>Architecture drivers</h2>
-<p>An architecture driver is a requirement, quality, concern, or constraint with significant structural impact.</p>
-<pre><code>Requirement → Architecture driver → Decision → Improved quality → Trade-offs</code></pre>
+<section id="dependency"><h2>Dependencies are not automatically bad</h2>
+<p>The right question is not “How do we remove every dependency?” but “Is this dependency necessary, and is the form of coupling appropriate?”</p>
+</section><section id="temporal"><h2>Temporal coupling</h2>
+<p>Synchronous calls require both parties and the network to be available at the same time.</p>
+<pre><code>Order → Payment (HTTP)</code></pre>
+<p>Queues can reduce temporal coupling but introduce eventual consistency, retries, duplication, and observability complexity.</p>
+</section><section id="data"><h2>Data and semantic coupling</h2>
+<p><b>Data coupling</b> occurs when consumers know more of a producer's data model than necessary. <b>Semantic coupling</b> occurs when components depend on shared meaning and behavior even if schemas are technically compatible.</p>
+</section><section id="contract"><h2>Interfaces are contracts</h2>
+<p>A useful interface contract covers more than endpoints or method names:</p>
+<ul><li>Inputs and outputs</li><li>Errors</li><li>Preconditions and postconditions</li><li>Timing expectations</li><li>Idempotency</li><li>Security</li><li>Semantics</li><li>Versioning expectations</li></ul>
+</section><section id="goodinterface"><h2>Characteristics of good interfaces</h2>
+<ul><li>Easy to learn, use, and extend.</li><li>Hard to misuse.</li><li>Functionally complete for consumers.</li></ul>
+</section><section id="syncasync"><h2>Synchronous vs asynchronous</h2>
+<div class="grid-2"><div class="card"><h3>Synchronous</h3><p>Immediate response, simpler control flow, but stronger temporal coupling and failure propagation.</p></div><div class="card"><h3>Asynchronous</h3><p>Buffering and looser availability coupling, but more consistency and operational complexity.</p></div></div>
+</section><section id="versioning"><h2>Versioning and backward compatibility</h2>
+<p>Stable contracts allow components to evolve independently. External interfaces typically require stronger compatibility guarantees and longer deprecation periods than internal ones.</p>
 </section>
 
-<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Assumptions do not need documentation.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Every metric is automatically useful.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Every requirement has equal architectural impact.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Architecture decisions only improve qualities and introduce no trade-offs.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Dynamic dependencies imply low coupling.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Async always reduces complexity.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Public and internal interfaces can evolve identically.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>A remote call has the same failure characteristics as a local call.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
 
-<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Assumption</b><span>A belief about context or environment that may be unverified.</span></div><div class="term"><b>Architecture driver</b><span>A requirement, quality, concern, or constraint with strong architectural impact.</span></div><div class="term"><b>Analysis method</b><span>A way to verify whether a quality target is met.</span></div><div class="term"><b>Goodhart's Law</b><span>A warning that optimizing a metric can distort the real objective.</span></div></div></section>
+<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Temporal coupling</b><span>Components must be available or act at the same time.</span></div><div class="term"><b>Data coupling</b><span>A consumer depends on unnecessary details of another component's data model.</span></div><div class="term"><b>Semantic coupling</b><span>Components depend on shared meaning or behavior.</span></div><div class="term"><b>Interface</b><span>A contract through which components interact.</span></div><div class="term"><b>Backward compatibility</b><span>Existing consumers continue to work after interface evolution.</span></div></div></section>
 
 <section id="exercise"><h2>Practical exercise</h2>
-<p>Payment platform statements:</p><ol><li>Traffic will probably never exceed 1,000 TPS.</li><li>Payments must never be lost after confirmation.</li><li>The platform should be very fast.</li><li>Java 21 is mandatory.</li><li>The payment provider is usually available.</li><li>99.99% availability.</li><li>Developers want independent deployment.</li></ol>
-<p>Classify each as requirement, quality requirement, constraint, or assumption. Then choose the three strongest architecture drivers.</p>
+<p>Current order flow:</p><pre><code>Order → Customer → Inventory → Payment → Notification</code></pre>
+<p>Creating an order takes three seconds and fails whenever any downstream service is unavailable.</p>
+<ol><li>Which interactions truly require synchronous responses?</li><li>Should Notification failure block order creation?</li><li>How would you redesign that interaction?</li><li>Why does replacing every HTTP call with Kafka not automatically remove coupling?</li></ol>
 </section>
 
-<section id="review"><h2>Review questions</h2><details><summary>Why should assumptions be explicit?</summary><p>Because hidden assumptions create misunderstandings and architectural risk.</p></details><details><summary>What is an architecture driver?</summary><p>A requirement, concern, quality, or constraint with major influence on architecture.</p></details><details><summary>What does Goodhart's Law warn about?</summary><p>Optimizing a metric can distort the real objective the metric was supposed to represent.</p></details></section>
+<section id="review"><h2>Review questions</h2><details><summary>What is temporal coupling?</summary><p>A dependency that requires components to be available or act at the same time.</p></details><details><summary>Does replacing a compile-time dependency with HTTP automatically reduce coupling?</summary><p>No.</p></details><details><summary>What should a good interface be?</summary><p>Easy to learn/use/extend, hard to misuse, and functionally complete.</p></details><details><summary>Why are public interfaces harder to change?</summary><p>Because you do not control all consumers.</p></details></section>
 
 <section id="resources"><h2>Recommended resources</h2>
 <div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">Use this as the source of truth for learning goals and terminology.</div></div>
 <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
 <div class="resource" style="margin-top:12px"><div><b>YouTube supplement</b><div style="color:var(--muted)">A targeted search for today's topic.</div></div>
-<a href="https://www.youtube.com/results?search_query=quality+attribute+scenarios+software+architecture" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
+<a href="https://www.youtube.com/results?search_query=Udi+Dahan+decoupled+services" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
 </section>
 
 <section id="progress"><h2>Course progress</h2>
@@ -146,20 +151,20 @@ If this changes, scalability requirements must be reassessed.</code></pre>
 <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
 <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders & Concerns</b></a>
 <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements & Constraints</b></a>
-<a class="day active" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
 <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
 <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
 <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
-<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
-<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-05.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-07.html">Next day →</a></div>
+<a class="day active" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-09.html">← Previous day</a></div>
 </section>
 </main>
 </div>
-<footer class="wrap">iSAQB CPSA-F Study Guide · Day 06 · Designed for local browser reading and printing</footer>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 10 · Designed for local browser reading and printing</footer>
 
 <script>
 (function(){
-  var DAY = "06";
+  var DAY = "10";
   var KEY = "isaqb-cpsaf-progress";
   function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
   function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }

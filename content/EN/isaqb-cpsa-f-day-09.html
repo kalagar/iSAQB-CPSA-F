@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-fa-available="false">
+<html lang="en" dir="ltr" data-fa-available="true">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="iSAQB CPSA-F Day 8: Architecture Development Approaches & Heuristics" />
-  <title>iSAQB CPSA-F — Day 8: Architecture Development Approaches & Heuristics</title>
+  <meta name="description" content="iSAQB CPSA-F Day 9: Design Principles: Modularity, Abstraction, Coupling & Cohesion" />
+  <title>iSAQB CPSA-F — Day 9: Design Principles: Modularity, Abstraction, Coupling & Cohesion</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
 
   <style>
@@ -77,66 +77,66 @@
     .lang-link.disabled { opacity:0.45; cursor:not-allowed; pointer-events:none; }
   </style>
 
-  <script src="lang-switch.js" defer></script>
+  <script src="../../lang-switch.js" defer></script>
 </head>
 <body>
 <header class="hero"><div class="wrap">
   <nav class="lang-switch" aria-label="Language">
-    <a href="isaqb-cpsa-f-day-08.html" data-lang-switch="en" class="lang-link active">EN</a>
-    <span class="lang-link disabled" aria-disabled="true" title="Farsi — not yet translated">FA</span>
+    <a href="isaqb-cpsa-f-day-09.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-09.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
   </nav>
   <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
-      <span class="eyebrow">iSAQB CPSA-F · Day 08</span>
-  <h1>Architecture Development Approaches & Heuristics</h1>
+      <span class="eyebrow">iSAQB CPSA-F · Day 09</span>
+  <h1>Design Principles: Modularity, Abstraction, Coupling & Cohesion</h1>
   <p class="subtitle">A practical, exam-oriented lesson designed to build both CPSA-F knowledge and Staff Engineer architecture skills.</p>
-  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Top-down, bottom-up, view-based, iterative</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Modularity and dependency principles</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
 <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
 </div></header>
 
 <div class="wrap layout">
 <aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
 <a href="#objectives">Learning objectives</a>
-<a href="#topdown">Top-down development</a><a href="#bottomup">Bottom-up development</a><a href="#combine">Most real systems combine both</a><a href="#views">View-based development</a><a href="#iterative">Iterative and risk-driven design</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+<a href="#abstraction">Abstraction</a><a href="#modularity">Modularization</a><a href="#hiding">Information hiding vs encapsulation</a><a href="#coupling">Coupling categories</a><a href="#integrity">Conceptual integrity</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
 </aside>
 
 <main>
 <section id="objectives">
 <h2>Learning objectives</h2>
-<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Top-down, bottom-up, view-based, iterative</b> in both exam questions and real architecture discussions.</p>
-<div class="callout info"><strong>Official alignment</strong>LG 03-03 — Architecture Development Approaches and Heuristics.</div>
+<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Modularity and dependency principles</b> in both exam questions and real architecture discussions.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 03-04 and bridge to LG 03-06.</div>
 </section>
 
-<section id="topdown"><h2>Top-down development</h2>
-<p>Start from business goals, requirements, and qualities, then progressively refine structure.</p>
-<pre><code>Business goals → Requirements → Qualities → Subsystems → Components</code></pre>
-</section><section id="bottomup"><h2>Bottom-up development</h2>
-<p>Start from existing technical reality: legacy systems, APIs, databases, infrastructure, reusable components, and organizational constraints.</p>
-</section><section id="combine"><h2>Most real systems combine both</h2>
-<div class="callout staff"><strong>Practical reality</strong>Top-down gives the desired direction. Bottom-up exposes constraints and existing assets. Architecture emerges from the negotiation between the two.</div>
-</section><section id="views"><h2>View-based development</h2>
-<p>Use complementary views to reason about different concerns.</p>
-<ul><li>Building-block view → static structure.</li><li>Runtime view → interactions and behavior.</li><li>Deployment view → where software executes.</li></ul>
-</section><section id="iterative"><h2>Iterative and risk-driven design</h2>
-<pre><code>Hypothesis → Prototype → Measure → Feedback → Refine</code></pre>
-<p>Validate the decisions with the highest uncertainty and potential impact first.</p>
+<section id="abstraction"><h2>Abstraction</h2>
+<p>Depend on stable concepts rather than unnecessary implementation detail.</p>
+<pre><code>OrderService → PaymentGateway ← StripePaymentGateway</code></pre>
+<p>Abstraction is useful when it protects a meaningful variability or dependency—not simply because another interface is possible.</p>
+</section><section id="modularity"><h2>Modularization</h2>
+<p>Structure the system into coherent units with clear interfaces and hidden internal details. Core ideas include information hiding, encapsulation, separation of concerns, high cohesion, and loose but sufficient coupling.</p>
+</section><section id="hiding"><h2>Information hiding vs encapsulation</h2>
+<div class="grid-2"><div class="card"><h3>Information hiding</h3><p>Design decision: what should clients not know?</p></div><div class="card"><h3>Encapsulation</h3><p>Mechanism: how is access to details restricted?</p></div></div>
+</section><section id="coupling"><h2>Coupling categories</h2>
+<ul><li><b>Static:</b> source/build dependency.</li><li><b>Dynamic:</b> runtime dependency.</li><li><b>Afferent:</b> who depends on me?</li><li><b>Efferent:</b> what do I depend on?</li></ul>
+<p>Moving from a local call to HTTP does not automatically make a system loosely coupled.</p>
+</section><section id="integrity"><h2>Conceptual integrity</h2>
+<p>Similar problems should be solved consistently across the system: API naming, error handling, logging, authentication, and architectural conventions.</p>
 </section>
 
-<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Top-down is always better than bottom-up.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Bottom-up means requirements are irrelevant.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Views are only documentation after design is finished.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Evolutionary architecture means no intentional design.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Good architecture eliminates all coupling.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Dynamic coupling is always weaker than static coupling.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>More interfaces always means better architecture.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Dependency inversion is the same as dependency injection.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
 
-<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Top-down</b><span>Design from goals and requirements toward finer structure.</span></div><div class="term"><b>Bottom-up</b><span>Design from existing technical elements and constraints upward.</span></div><div class="term"><b>View-based design</b><span>Use complementary architectural perspectives during design.</span></div><div class="term"><b>Evolutionary architecture</b><span>Architecture designed for controlled change over time.</span></div></div></section>
+<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Abstraction</b><span>Expose essential concepts while hiding irrelevant details.</span></div><div class="term"><b>Modularization</b><span>Divide the system into coherent units with controlled dependencies.</span></div><div class="term"><b>Cohesion</b><span>How strongly responsibilities inside a module belong together.</span></div><div class="term"><b>Coupling</b><span>Degree of dependency between modules.</span></div><div class="term"><b>Dependency inversion</b><span>Depend on abstractions rather than concrete low-level implementations.</span></div></div></section>
 
 <section id="exercise"><h2>Practical exercise</h2>
-<p>Modernize a 15-year-old insurance platform: Java monolith, Oracle, SAP integration, 20 batch jobs, 3 teams. New goals: faster releases, selective independent scaling, cloud migration, no full rewrite, SAP must remain.</p>
-<p>Identify what comes from top-down analysis, what comes from bottom-up analysis, and which three architecture views you would create first.</p>
+<p>Review an OrderService that directly depends on PostgreSQLOrderRepository, StripeClient, CustomerDatabase, InventoryDatabase, EmailClient, and SAPClient.</p>
+<ol><li>Assess cohesion.</li><li>Identify at least three forms of coupling.</li><li>Apply dependency inversion to Stripe.</li><li>Identify responsibilities that should probably leave OrderService.</li></ol>
 </section>
 
-<section id="review"><h2>Review questions</h2><details><summary>When is top-down useful?</summary><p>When requirements and architectural drivers can guide decomposition.</p></details><details><summary>When is bottom-up important?</summary><p>When existing systems and constraints strongly shape the solution.</p></details><details><summary>Should the two approaches be mutually exclusive?</summary><p>No. Most real architecture work combines them.</p></details></section>
+<section id="review"><h2>Review questions</h2><details><summary>What is the difference between cohesion and coupling?</summary><p>Cohesion concerns relationships inside a module; coupling concerns dependencies between modules.</p></details><details><summary>Is all coupling bad?</summary><p>No. The goal is loose but functionally sufficient coupling.</p></details><details><summary>What does dependency inversion mean?</summary><p>High-level logic should depend on abstractions rather than concrete low-level implementations.</p></details></section>
 
 <section id="resources"><h2>Recommended resources</h2>
 <div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">Use this as the source of truth for learning goals and terminology.</div></div>
 <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
 <div class="resource" style="margin-top:12px"><div><b>YouTube supplement</b><div style="color:var(--muted)">A targeted search for today's topic.</div></div>
-<a href="https://www.youtube.com/results?search_query=Neal+Ford+evolutionary+architecture+tradeoffs" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
+<a href="https://www.youtube.com/results?search_query=software+architecture+coupling+cohesion+Udacity" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
 </section>
 
 <section id="progress"><h2>Course progress</h2>
@@ -148,18 +148,18 @@
 <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements & Constraints</b></a>
 <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
 <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
-<a class="day active" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
-<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day active" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
 <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
-<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-07.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-09.html">Next day →</a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-08.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-10.html">Next day →</a></div>
 </section>
 </main>
 </div>
-<footer class="wrap">iSAQB CPSA-F Study Guide · Day 08 · Designed for local browser reading and printing</footer>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 09 · Designed for local browser reading and printing</footer>
 
 <script>
 (function(){
-  var DAY = "08";
+  var DAY = "09";
   var KEY = "isaqb-cpsaf-progress";
   function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
   function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
