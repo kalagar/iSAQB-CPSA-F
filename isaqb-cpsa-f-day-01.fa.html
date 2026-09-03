@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱ دوره iSAQB CPSA-F: معماری نرم‌افزار چیست؟" />
+  <title>iSAQB CPSA-F — روز ۱: معماری نرم‌افزار چیست؟</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="fonts/iransans.css" />
+  <script src="lang-switch.js" defer></script>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-2: #f1f4f8;
+      --text: #172033;
+      --muted: #637083;
+      --border: #dbe2ea;
+      --accent: #315efb;
+      --accent-soft: #eaf0ff;
+      --success: #16794f;
+      --warning: #8a5a00;
+      --danger: #a12a2a;
+      --code-bg: #111827;
+      --code-text: #e5e7eb;
+      --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
+      --radius: 16px;
+      --content: 980px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: IRANSans, Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    a { color: var(--accent); }
+    img { max-width: 100%; }
+
+    .wrap {
+      width: min(100% - 32px, var(--content));
+      margin: 0 auto;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top left, rgba(49, 94, 251, 0.14), transparent 34%),
+        linear-gradient(180deg, #ffffff, #f7f9ff);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 0 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid #cfd8ff;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #274bc9;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.25;
+      margin: 18px 0 14px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 28px;
+      padding: 34px 0 56px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .toc strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .toc a {
+      display: block;
+      text-decoration: none;
+      color: var(--muted);
+      padding: 6px 0;
+      font-size: 0.92rem;
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 4vw, 42px);
+      min-width: 0;
+    }
+
+    section { scroll-margin-top: 24px; }
+    section + section { margin-top: 42px; }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.55rem;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 1.15rem;
+    }
+
+    p { margin: 10px 0 16px; }
+
+    .lead {
+      font-size: 1.08rem;
+      color: #2d394d;
+    }
+
+    .callout {
+      border: 1px solid var(--border);
+      border-right-width: 4px;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 18px 0;
+      background: var(--surface-2);
+    }
+
+    .callout strong { display: block; margin-bottom: 6px; }
+    .callout.info { border-right-color: var(--accent); background: #f7f9ff; }
+    .callout.exam { border-right-color: var(--warning); background: #fffaf0; }
+    .callout.staff { border-right-color: var(--success); background: #f4fbf7; }
+
+    pre {
+      overflow-x: auto;
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 16px 18px;
+      border-radius: 12px;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      border: 1px solid #263247;
+      direction: ltr;
+      text-align: left;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: #fff;
+    }
+
+    .card h3 { margin-top: 0; }
+
+    ul, ol { padding-right: 1.3rem; padding-left: 0; }
+    li + li { margin-top: 8px; }
+
+    .terms {
+      display: grid;
+      gap: 12px;
+    }
+
+    .term {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .term:last-child { border-bottom: 0; }
+    .term b { color: #273653; }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      margin-top: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .progress {
+      display: flex;
+      flex-direction: column;
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .day {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      padding: 14px 16px;
+      color: var(--text);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .progress .day:last-child { border-bottom: 0; }
+
+    .day.active {
+      background: var(--accent-soft);
+    }
+
+    .day.disabled {
+      opacity: 0.48;
+      pointer-events: none;
+    }
+
+    .day small {
+      display: inline-block;
+      flex: 0 0 68px;
+      color: var(--muted);
+      margin-bottom: 0;
+      font-weight: 700;
+    }
+
+    .day b { flex: 1 1 auto; font-weight: 600; }
+
+    .resource {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: #fbfcfe;
+    }
+
+    .resource a {
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+
+    .navrow { display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    .navbtn { text-decoration:none; border:1px solid var(--border); padding:10px 14px; border-radius:10px; background:#fff; color:var(--text); font-weight:700; }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 0 0 38px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .term { grid-template-columns: 1fr; gap: 4px; }
+    }
+
+    @media (max-width: 480px) {
+      .wrap { width: min(100% - 20px, var(--content)); }
+      .hero { padding-top: 34px; }
+      main { padding: 22px 18px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .hero { padding: 20px 0; }
+      .layout { display: block; }
+      .toc { display: none; }
+      main {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+      }
+      a { color: inherit; text-decoration: none; }
+      .progress, .navrow { display: none; }
+    }
+
+    .complete-row { margin-top: 22px; }
+    .btn-complete { cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text); font-weight: 700; padding: 10px 18px; border-radius: 10px; font-size: 0.95rem; }
+    .btn-complete.done { background: var(--success); border-color: var(--success); color: #fff; }
+    .day { position: relative; }
+    .day.done { background: #f4fbf7; }
+    .day.done::after { content: "✓"; position: absolute; top: 50%; left: 16px; transform: translateY(-50%); color: var(--success); font-weight: 800; }
+
+    .lang-switch { display: flex; gap: 6px; justify-content: flex-start; margin-bottom: 10px; }
+    .lang-link { text-decoration: none; font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+    .lang-link.active { background: var(--accent-soft); color: #274bc9; border-color: #cfd8ff; }
+    .lang-link.disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="isaqb-cpsa-f-day-01.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-01.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۰۱</span>
+      <h1>معماری نرم‌افزار چیست؟</h1>
+      <p class="subtitle">
+        مقدمه‌ای عملی و متمرکز بر آزمون درباره‌ی معماری نرم‌افزار — همراه با دیدگاه تکمیلی لازم
+        برای رشد به‌سوی مسئولیت‌های یک Staff Engineer.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> تعاریف، اهداف، مزایا</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1</span>
+      </div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#definition">۱. معماری یعنی چه</a>
+      <a href="#more-than-diagrams">۲. فراتر از دیاگرام‌ها</a>
+      <a href="#goals">۳. اهداف و مزایا</a>
+      <a href="#architecture-vs-code">۴. معماری در برابر پیاده‌سازی</a>
+      <a href="#tradeoffs">۵. مصالحه‌ها (Trade-offs)</a>
+      <a href="#staff">۶. نگاه یک Staff Engineer</a>
+      <a href="#exam">تله‌های آزمون</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین</a>
+      <a href="#review">پرسش‌های مرور</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس، باید بتوانید توضیح دهید معماری نرم‌افزار چیست، چرا اهمیت دارد، و معماری چه تفاوتی با تصمیمات معمولی پیاده‌سازی دارد.</p>
+        <div class="callout info">
+          <strong>هم‌راستایی رسمی</strong>
+          این درس عمدتاً از <b>LG 01-01: Understand Definitions of Software Architecture</b> و
+          <b>LG 01-02: Goals and Benefits of Software Architecture</b> پشتیبانی می‌کند.
+        </div>
+      </section>
+
+      <section id="definition">
+        <h2>۱. «معماری نرم‌افزار» واقعاً یعنی چه؟</h2>
+        <p>یک تعریف کاربردی از آن این است:</p>
+        <div class="callout">
+          <strong>معماری نرم‌افزار</strong>
+          ساختارهای بنیادین یک سیستم نرم‌افزاری، عناصری که این ساختارها را می‌سازند، روابط میان آن‌ها، و تصمیم‌ها و اصولی که طراحی و تکامل آن‌ها را هدایت می‌کند.
+        </div>
+
+        <p>این یعنی معماری فقط درباره‌ی مؤلفه‌ها نیست. معماری همچنین شامل موارد زیر است:</p>
+        <ul>
+          <li>بلوک‌های سازنده‌ی اصلی یک سیستم،</li>
+          <li>مسئولیت‌های آن‌ها،</li>
+          <li>رابط‌ها و وابستگی‌های آن‌ها،</li>
+          <li>مفاهیم فراگیر (cross-cutting) مانند امنیت، لاگ‌گیری، پایداری داده و قابلیت مشاهده،</li>
+          <li>تصمیمات مهم معماری و پیامدهای آن‌ها.</li>
+        </ul>
+
+        <pre><code>Software Architecture
+├── Structures / Building Blocks
+├── Relationships / Dependencies
+├── Interfaces
+├── Cross-cutting Concepts
+├── Principles
+└── Important Decisions + Consequences</code></pre>
+      </section>
+
+      <section id="more-than-diagrams">
+        <h2>۲. معماری فراتر از دیاگرام‌هاست</h2>
+        <p>یک برداشت نادرست رایج این است که معماری یعنی تولید دیاگرام‌های جعبه و پیکان. دیاگرام‌ها مفیدند، اما فقط یکی از بازنمایی‌های معماری هستند.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>تفکر صرفاً دیاگرام‌محور</h3>
+            <p>«ما یک API، سه سرویس و یک پایگاه‌داده داریم.»</p>
+          </div>
+          <div class="card">
+            <h3>تفکر معماری</h3>
+            <p>«چرا این مرزها این‌جا هستند؟ این مرزها از چه ویژگی‌های کیفی پشتیبانی می‌کنند؟ اگر یکی از سرویس‌ها از کار بیفتد چه اتفاقی می‌افتد؟ کدام تصمیم‌ها بازگشت‌شان پرهزینه است؟»</p>
+          </div>
+        </div>
+
+        <div class="callout exam">
+          <strong>تمایز آزمون</strong>
+          مستندات معماری می‌تواند شامل دیاگرام باشد، اما خودِ معماری شامل ساختار، اصول، رابط‌ها، تصمیم‌ها و پیامدهاست.
+        </div>
+      </section>
+
+      <section id="goals">
+        <h2>۳. اهداف و مزایای معماری نرم‌افزار</h2>
+        <p>معماری به تیم کمک می‌کند نرم‌افزار را آگاهانه بسازد و تکامل دهد، به‌جای آنکه ساختاری تصادفی انباشته شود.</p>
+
+        <ul>
+          <li><b>طراحی:</b> ساختاری منسجم برای پیاده‌سازی فراهم می‌کند.</li>
+          <li><b>ارتباطات:</b> درک مشترکی از سیستم برای ذی‌نفعان ایجاد می‌کند.</li>
+          <li><b>کیفیت:</b> از ویژگی‌هایی مانند نگهداشت‌پذیری، امنیت، کارایی، در دسترس‌بودن و مقیاس‌پذیری پشتیبانی می‌کند.</li>
+          <li><b>مدیریت ریسک:</b> ریسک‌های فنی عمده و تصمیمات پرهزینه را زودتر آشکار می‌کند.</li>
+          <li><b>تکامل:</b> با تعیین مرزها و اصول پایدار، تغییرات بلندمدت را ساده‌تر می‌کند.</li>
+          <li><b>عملیات:</b> بر استقرار (deployment)، پایش، مدیریت خطا و بازیابی تأثیر می‌گذارد.</li>
+        </ul>
+
+        <div class="callout staff">
+          <strong>نگاه یک Staff Engineer</strong>
+          در سطح Staff، ارزش شما اغلب کمتر به نوشتن بیشترین کد مربوط است و بیشتر به بهبود کیفیت تصمیمات فنی در سراسر تیم‌ها.
+        </div>
+      </section>
+
+      <section id="architecture-vs-code">
+        <h2>۴. تصمیم معماری در برابر جزئیات پیاده‌سازی</h2>
+        <p>هر تصمیم فنی، معماری نیست. یک معیار عملی این است که بپرسیم این تصمیم چقدر گسترده، بلندمدت و پرهزینه برای بازگشت است.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>معمولاً معماری</h3>
+            <ul>
+              <li>مونولیت در برابر سرویس‌های توزیع‌شده</li>
+              <li>مرزهای اصلی مالکیت داده</li>
+              <li>سبک ارتباط میان زیرسیستم‌ها</li>
+              <li>مدل امنیتی</li>
+              <li>معماری استقرار (deployment)</li>
+              <li>استراتژی اصلی پایداری داده</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>معمولاً جزئیات پیاده‌سازی</h3>
+            <ul>
+              <li>نام‌گذاری متغیرها</li>
+              <li>انتخاب‌های کوچک بازآرایی کد (refactoring)</li>
+              <li>ساختار توابع کمکی</li>
+              <li>تصمیمات محلی قالب‌بندی کد</li>
+              <li>استفاده جزئی از یک کتابخانه درون یک مؤلفه</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>این مرز مطلق نیست. یک تصمیم زمانی معماری می‌شود که بخش‌های زیادی از سیستم را تحت تأثیر قرار دهد یا تغییر آن در آینده پرهزینه باشد.</p>
+      </section>
+
+      <section id="tradeoffs">
+        <h2>۵. معماری درباره‌ی مصالحه (Trade-off) است</h2>
+        <p>هیچ معماری «بهترینِ» مطلقی وجود ندارد. معماری خوب، معماری‌ای است که متناسب با زمینه (context) خودش باشد.</p>
+
+        <pre><code>More availability  → often more infrastructure + cost
+More security      → can reduce usability
+More independence  → can increase operational complexity
+More flexibility   → can increase design complexity
+More consistency   → can increase coordination and latency</code></pre>
+
+        <p>به همین دلیل معماران به‌جای آنکه فقط بپرسند یک فناوری یا الگو «خوب» است یا نه، پیامدهای آن را ارزیابی می‌کنند.</p>
+
+        <div class="callout exam">
+          <strong>تله آزمون</strong>
+          به جملات مطلق مانند «میکروسرویس‌ها مقیاس‌پذیرترند» یا «سیستم‌های رویدادمحور همیشه کوپلینگ کمتری دارند» با شک نگاه کنید. انتخاب‌های معماری به نیازمندی‌ها و محدودیت‌ها بستگی دارد.
+        </div>
+      </section>
+
+      <section id="staff">
+        <h2>۶. نگاه یک Staff Engineer به معماری</h2>
+        <p>وقتی کسی راه‌حلی پیشنهاد می‌دهد، خودتان را عادت دهید که این‌گونه سؤال بپرسید:</p>
+
+        <ul>
+          <li>چه مسئله‌ای را حل می‌کنیم؟</li>
+          <li>کدام ویژگی‌های کیفی بیشترین اهمیت را دارند؟</li>
+          <li>کدام محدودیت‌ها ثابت‌اند؟</li>
+          <li>چه چیزی ممکن است از کار بیفتد؟</li>
+          <li>چه وابستگی‌هایی معرفی می‌شوند؟</li>
+          <li>بازگشت این تصمیم چقدر پرهزینه است؟</li>
+          <li>آیا می‌توانیم این تصمیم را تا زمان داشتن شواهد بیشتر به تعویق بیندازیم؟</li>
+        </ul>
+
+        <div class="callout staff">
+          <strong>یک عادت عملی</strong>
+          به‌جای گفتن «من X را ترجیح می‌دهم»، تمرین کنید بگویید «من X را ترجیح می‌دهم چون تحت محدودیت Z، ویژگی Y را بهبود می‌دهد، اما هزینه‌اش W است.»
+        </div>
+      </section>
+
+      <section id="exam">
+        <h2>تله‌های رایج آزمون CPSA-F</h2>
+        <ol>
+          <li><b>«معماری همان مستندسازی است.»</b> نادرست است. مستندسازی، معماری را توصیف می‌کند.</li>
+          <li><b>«معماری فقط ساختار را پوشش می‌دهد.»</b> نادرست است. اصول، مفاهیم فراگیر و تصمیمات مهم نیز اهمیت دارند.</li>
+          <li><b>«برای هر نوع مسئله، یک معماری بهترین وجود دارد.»</b> نادرست است. زمینه (context) و مصالحه‌ها اهمیت دارند.</li>
+          <li><b>«تصمیمات معماری فقط فنی هستند.»</b> نادرست است. محدودیت‌های سازمانی، قانونی و کسب‌وکاری نیز می‌توانند معماری را شکل دهند.</li>
+          <li><b>«تصمیمات معماری هرگز نباید تغییر کنند.»</b> نادرست است. معماری با تغییر نیازمندی‌ها و محیط، تکامل می‌یابد.</li>
+        </ol>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی برای به‌خاطرسپاری</h2>
+        <div class="terms">
+          <div class="term"><b>معماری نرم‌افزار</b><span>ساختارهای بنیادین، روابط، اصول و تصمیمات مهم یک سیستم نرم‌افزاری.</span></div>
+          <div class="term"><b>بلوک سازنده (Building block)</b><span>یک عنصر مهم معماری با مسئولیتی مشخص.</span></div>
+          <div class="term"><b>رابط (Interface)</b><span>قراردادی که عناصر معماری از طریق آن با یکدیگر تعامل می‌کنند.</span></div>
+          <div class="term"><b>دغدغه فراگیر (Cross-cutting concern)</b><span>دغدغه‌ای مانند امنیت، لاگ‌گیری یا پایش که بخش‌های زیادی از سیستم را تحت تأثیر قرار می‌دهد.</span></div>
+          <div class="term"><b>تصمیم معماری (Architectural decision)</b><span>تصمیمی مهم که سیستم را شکل می‌دهد و معمولاً پیامدهایی گسترده یا بلندمدت دارد.</span></div>
+          <div class="term"><b>مصالحه (Trade-off)</b><span>وضعیتی که در آن بهبود یک ویژگی ممکن است ویژگی دیگری را کاهش دهد یا هزینه/پیچیدگی اضافه ایجاد کند.</span></div>
+        </div>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>شما در حال طراحی یک پلتفرم تجارت الکترونیک با ویژگی‌های زیر هستید:</p>
+
+        <ul>
+          <li>۱ میلیون مشتری ثبت‌نام‌شده</li>
+          <li>۱۰٬۰۰۰ کاربر همزمان در اوج ترافیک</li>
+          <li>کاتالوگ، سفارش‌ها، پرداخت‌ها و حساب‌های مشتری</li>
+          <li>۹۹.۹٪ در دسترس‌بودن</li>
+          <li>الزامات GDPR</li>
+        </ul>
+
+        <p>یک توسعه‌دهنده این پیشنهاد را می‌دهد:</p>
+
+        <pre><code>React
+  ↓
+Spring Boot Monolith
+  ↓
+PostgreSQL</code></pre>
+
+        <p><b>پنج پرسش معماری</b> بنویسید که پیش از پذیرش یا رد این پیشنهاد می‌پرسید.</p>
+
+        <details>
+          <summary>نمونه پاسخ</summary>
+          <ul>
+            <li>کدام بخش‌های سیستم نیاز به مقیاس‌پذیری متفاوتی دارند؟</li>
+            <li>چه انتظارات در دسترس‌بودنی برای تسویه‌حساب و پرداخت وجود دارد؟</li>
+            <li>کدام داده‌های مشتری، داده شخصی محسوب می‌شوند و چگونه باید محافظت شوند؟</li>
+            <li>اگر ارائه‌دهنده خدمات پرداخت موقتاً در دسترس نباشد چه اتفاقی می‌افتد؟</li>
+            <li>تیم‌ها چقدر باید بتوانند بخش‌های مختلف سیستم را مستقل از یکدیگر و به‌طور مکرر مستقر یا تغییر دهند؟</li>
+          </ul>
+        </details>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مرور</h2>
+        <details>
+          <summary>۱. آیا معماری نرم‌افزار فقط مجموعه‌ای از دیاگرام‌هاست؟</summary>
+          <p>خیر. دیاگرام‌ها بازنمایی هستند. معماری همچنین شامل ساختارها، روابط، اصول، مفاهیم فراگیر و تصمیمات مهم است.</p>
+        </details>
+
+        <details>
+          <summary>۲. چرا مصالحه‌ها در معماری محوری هستند؟</summary>
+          <p>چون بهبود یک ویژگی کیفی اغلب هزینه یا پیامد منفی برای ویژگی دیگر، پیچیدگی یا بودجه دارد.</p>
+        </details>
+
+        <details>
+          <summary>۳. چه چیزی یک تصمیم را «معماری» می‌کند؟</summary>
+          <p>دامنه آن، تأثیر بلندمدت، هزینه بازگشت، و تأثیرش بر ویژگی‌های مهم یا بخش‌های متعدد سیستم.</p>
+        </details>
+
+        <details>
+          <summary>۴. سه هدف معماری نرم‌افزار را نام ببرید.</summary>
+          <p>نمونه‌ها: بهبود ویژگی‌های کیفی سیستم، کاهش ریسک، هدایت طراحی و پیاده‌سازی، پشتیبانی از ارتباطات، و امکان‌پذیر کردن تکامل بلندمدت.</p>
+        </details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">از این به‌عنوان منبع اصلی برای اهداف یادگیری گواهینامه استفاده کنید.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>منبع مکمل یوتیوب</b>
+            <div style="color:var(--muted)">مایکل پوگربینسکی — مقدمه CPSA-F و اصول معماری نرم‌افزار.</div>
+          </div>
+          <a href="https://www.youtube.com/results?search_query=Michael+Pogrebinsky+CPSA-F+Introduction" target="_blank" rel="noopener noreferrer">جستجو ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>این لینک‌های محلی طوری ساختاردهی شده‌اند که فایل‌های HTML بعدی، در صورت قرارگیری در یک پوشه، بتوانند مستقیماً به یکدیگر لینک شوند.</p>
+
+        <div class="progress">
+          <a class="day active" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+        </div>
+        <div class="navrow">
+          <span></span>
+          <a class="navbtn" href="isaqb-cpsa-f-day-02.html">روز بعد ←</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۰۱ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "01";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
