@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 4: Stakeholders, Concerns & Architecture Communication" />
+  <title>iSAQB CPSA-F — Day 4: Stakeholders, Concerns & Architecture Communication</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <style>
+    :root {
+      --bg: #f7f8fb; --surface: #ffffff; --surface-2: #f1f4f8; --text: #172033; --muted: #637083;
+      --border: #dbe2ea; --accent: #315efb; --accent-soft: #eaf0ff; --success: #16794f; --warning: #8a5a00;
+      --danger: #a12a2a; --code-bg: #111827; --code-text: #e5e7eb;
+      --shadow: 0 12px 32px rgba(23, 32, 51, 0.08); --radius: 16px; --content: 980px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin:0; font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+    a { color: var(--accent); }
+    .wrap { width:min(100% - 32px,var(--content)); margin:0 auto; }
+    .hero { background:radial-gradient(circle at top right,rgba(49,94,251,.14),transparent 34%),linear-gradient(180deg,#fff,#f7f9ff); border-bottom:1px solid var(--border); padding:56px 0 40px; }
+    .eyebrow { display:inline-flex; gap:8px; align-items:center; padding:6px 10px; border:1px solid #cfd8ff; background:var(--accent-soft); border-radius:999px; font-size:.85rem; font-weight:700; color:#274bc9; letter-spacing:.02em; }
+    h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.08; margin:18px 0 14px; letter-spacing:-.03em; }
+    .subtitle { font-size:1.1rem; color:var(--muted); max-width:760px; margin:0; }
+    .meta { display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:22px; color:var(--muted); font-size:.95rem; }
+    .layout { display:grid; grid-template-columns:240px minmax(0,1fr); gap:28px; padding:34px 0 56px; align-items:start; }
+    .toc { position:sticky; top:20px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; }
+    .toc strong { display:block; margin-bottom:10px; font-size:.95rem; }
+    .toc a { display:block; text-decoration:none; color:var(--muted); padding:6px 0; font-size:.92rem; }
+    .toc a:hover { color:var(--accent); }
+    main { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:clamp(24px,4vw,42px); min-width:0; }
+    section { scroll-margin-top:24px; } section + section { margin-top:42px; }
+    h2 { margin:0 0 14px; font-size:1.55rem; letter-spacing:-.02em; }
+    h3 { margin:26px 0 10px; font-size:1.15rem; }
+    p { margin:10px 0 16px; } .lead { font-size:1.08rem; color:#2d394d; }
+    .callout { border:1px solid var(--border); border-left-width:4px; border-radius:12px; padding:16px 18px; margin:18px 0; background:var(--surface-2); }
+    .callout strong { display:block; margin-bottom:6px; }
+    .callout.info { border-left-color:var(--accent); background:#f7f9ff; }
+    .callout.exam { border-left-color:var(--warning); background:#fffaf0; }
+    .callout.staff { border-left-color:var(--success); background:#f4fbf7; }
+    pre { overflow-x:auto; background:var(--code-bg); color:var(--code-text); padding:16px 18px; border-radius:12px; font-size:.94rem; line-height:1.55; border:1px solid #263247; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace; }
+    .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .card { border:1px solid var(--border); border-radius:14px; padding:18px; background:#fff; }
+    .card h3 { margin-top:0; }
+    ul,ol { padding-left:1.3rem; } li + li { margin-top:8px; }
+    .terms { display:grid; gap:12px; }
+    .term { display:grid; grid-template-columns:180px 1fr; gap:18px; padding:12px 0; border-bottom:1px solid var(--border); }
+    .term:last-child { border-bottom:0; } .term b { color:#273653; }
+    details { border:1px solid var(--border); border-radius:12px; padding:14px 16px; background:#fff; margin-top:10px; }
+    summary { cursor:pointer; font-weight:700; }
+    .progress { display:flex; flex-direction:column; margin-top:16px; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    .day { display:flex; align-items:center; gap:14px; text-decoration:none; padding:14px 16px; color:var(--text); background:#fff; border-bottom:1px solid var(--border); }
+    .progress .day:last-child { border-bottom:0; }
+    .day.active { background:var(--accent-soft); }
+    .day small { display:inline-block; flex:0 0 68px; color:var(--muted); margin-bottom:0; font-weight:700; }
+    .day b { flex:1 1 auto; font-weight:600; }
+    .resource { display:flex; justify-content:space-between; align-items:center; gap:14px; border:1px solid var(--border); padding:16px 18px; border-radius:12px; background:#fbfcfe; }
+    .resource a { white-space:nowrap; font-weight:700; }
+    footer { color:var(--muted); text-align:center; padding:0 0 38px; font-size:.9rem; }
+    .navrow { display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    .navbtn { text-decoration:none; border:1px solid var(--border); padding:10px 14px; border-radius:10px; background:#fff; color:var(--text); font-weight:700; }
+    @media (max-width:820px){ .layout{grid-template-columns:1fr}.toc{position:static}.grid-2{grid-template-columns:1fr}.term{grid-template-columns:1fr;gap:4px} }
+    @media (max-width:480px){ .wrap{width:min(100% - 20px,var(--content))}.hero{padding-top:34px}main{padding:22px 18px} }
+    @media print{ body{background:#fff}.hero{padding:20px 0}.layout{display:block}.toc{display:none}main{border:0;box-shadow:none;padding:0}a{color:inherit;text-decoration:none}.progress,.navrow{display:none} }
+  
+    .complete-row { margin-top: 22px; }
+    .btn-complete { cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text); font-weight: 700; padding: 10px 18px; border-radius: 10px; font-size: 0.95rem; }
+    .btn-complete.done { background: var(--success); border-color: var(--success); color: #fff; }
+    .day { position: relative; }
+    .day.done { background: #f4fbf7; }
+    .day.done::after { content: "✓"; position: absolute; top: 50%; right: 16px; transform: translateY(-50%); color: var(--success); font-weight: 800; }
+  </style>
+
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 04</span>
+  <h1>Stakeholders, Concerns & Architecture Communication</h1>
+  <p class="subtitle">A practical, exam-oriented lesson designed to build both CPSA-F knowledge and Staff Engineer architecture skills.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Stakeholders, views, rationale</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a>
+<a href="#stakeholders">Stakeholders and concerns</a><a href="#views">Different stakeholders need different views</a><a href="#rationale">Communicate rationale, not just decisions</a><a href="#staff">Staff Engineer lens</a><a href="#exam">Exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain and apply the core ideas behind <b>Stakeholders, views, rationale</b> in both exam questions and real architecture discussions.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 01-06 and LG 02-01 — Stakeholders and Concerns.</div>
+</section>
+
+<section id="stakeholders"><h2>Stakeholders and concerns</h2>
+<p>A <b>stakeholder</b> is anyone with an interest in the system. A <b>concern</b> is something they care about.</p>
+<div class="grid-2"><div class="card"><h3>Stakeholder</h3><p>Developer, Product Owner, SRE, Security Officer, CFO, customer, regulator.</p></div><div class="card"><h3>Concern</h3><p>Maintainability, delivery speed, uptime, security, cost, compliance, usability.</p></div></div>
+<p>One stakeholder can have many concerns, and one concern can affect many stakeholders.</p>
+</section><section id="views"><h2>Different stakeholders need different views</h2>
+<p>The same architecture should be communicated differently depending on the audience.</p>
+<ul><li>Developers need component responsibilities and interfaces.</li><li>SREs need runtime and deployment behavior.</li><li>Management needs risks, costs, and strategic consequences.</li><li>Security needs trust boundaries, identities, and data flows.</li></ul>
+</section><section id="rationale"><h2>Communicate rationale, not just decisions</h2>
+<pre><code>Context → Options → Decision → Rationale → Consequences</code></pre>
+<p>A decision without rationale is difficult to evaluate later. Good architecture documentation preserves why a choice was made.</p>
+</section><section id="staff"><h2>Staff Engineer lens</h2>
+<div class="callout staff"><strong>Communication skill</strong>Staff Engineers frequently explain the same architecture at multiple abstraction levels—from code-level details to business impact.</div>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol><li><b>Every stakeholder needs the same view.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Concerns map one-to-one to stakeholders.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li><li><b>Technical correctness alone guarantees successful architecture communication.</b> — Treat this as suspicious or false unless the context explicitly supports it.</li></ol></section>
+
+<section id="terms"><h2>Key terms to remember</h2><div class="terms"><div class="term"><b>Stakeholder</b><span>A person or group with an interest in the system.</span></div><div class="term"><b>Concern</b><span>Something a stakeholder cares about.</span></div><div class="term"><b>Architectural view</b><span>A representation tailored to a set of concerns.</span></div><div class="term"><b>Rationale</b><span>The reason why a decision was made.</span></div></div></section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>A healthcare platform plans to move from a monolith to microservices on Kubernetes. Stakeholders: Product Owner, Backend Developer, Security Officer, SRE, CFO.</p>
+<p>For each stakeholder, identify two likely concerns and the architectural view you would show them first.</p>
+</section>
+
+<section id="review"><h2>Review questions</h2><details><summary>What is a stakeholder?</summary><p>A person or group with an interest in the system.</p></details><details><summary>What is a concern?</summary><p>A topic or quality a stakeholder cares about.</p></details><details><summary>Should every stakeholder receive the same architecture documentation?</summary><p>No. Different concerns require different views and levels of detail.</p></details></section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">Use this as the source of truth for learning goals and terminology.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>YouTube supplement</b><div style="color:var(--muted)">A targeted search for today's topic.</div></div>
+<a href="https://www.youtube.com/results?search_query=Gregor+Hohpe+Architect+Elevator" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day active" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders & Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements & Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies & Interfaces</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-03.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-05.html">Next day →</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 04 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "04";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "\u2713 Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
