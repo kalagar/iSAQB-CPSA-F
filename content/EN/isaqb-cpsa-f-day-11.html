@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 11: Revision and Mini Mock Exam for Days 1–10" />
+  <title>iSAQB CPSA-F — Day 11: Revision &amp; Mini Mock Exam</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-11.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-11.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 11</span>
+  <h1>Revision &amp; Mini Mock Exam</h1>
+  <p class="subtitle">Consolidate Days 1–10, practise CPSA-F-style distinctions, and test whether you can apply the ideas instead of only recognizing the terms.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Review, application, exam technique</span><span><strong>Time:</strong> 45–60 minutes</span></div>
+  <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+  <a href="#objectives">Learning objectives</a><a href="#instructions">How to use this lesson</a><a href="#recap">Days 1–10 recap</a><a href="#distinctions">High-value distinctions</a><a href="#mock">Mini mock exam</a><a href="#scenario">Architecture scenario</a><a href="#score">Score guide</a><a href="#traps">Exam technique</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+  <h2>Learning objectives</h2>
+  <p class="lead">By the end of this lesson, you should be able to connect the main concepts from Days 1–10, distinguish commonly confused terms, and reason through short architecture scenarios under exam conditions.</p>
+  <div class="callout info"><strong>Revision checkpoint</strong>This lesson does not introduce a large new topic. It checks whether the foundations are stable before we move into architectural patterns and styles.</div>
+</section>
+
+<section id="instructions">
+  <h2>How to use this lesson</h2>
+  <ol><li>Read the recap once, then close the notes from Days 1–10.</li><li>Give yourself <strong>20 minutes</strong> for the 15 multiple-choice questions.</li><li>Choose the best answer before opening each explanation.</li><li>Complete the architecture scenario in writing.</li><li>Review weak topics, not merely wrong answers.</li></ol>
+  <div class="callout exam"><strong>Exam habit</strong>Look for words such as <em>always</em>, <em>never</em>, <em>only</em>, and <em>automatically</em>. Architecture is contextual, so absolute claims are often distractors.</div>
+</section>
+
+<section id="recap">
+  <h2>Days 1–10 in one page</h2>
+  <div class="terms">
+    <div class="term"><b>Architecture</b><span>Fundamental structures, relationships, principles, cross-cutting concepts, and consequential decisions.</span></div>
+    <div class="term"><b>Architect role</b><span>Clarify requirements, design structures and interfaces, communicate decisions, accompany implementation, and evaluate risks.</span></div>
+    <div class="term"><b>Long-term impact</b><span>Architecture decisions shape future cost, risk, and the system's ability to evolve.</span></div>
+    <div class="term"><b>Stakeholders</b><span>People or groups who affect the system or are affected by it. Their concerns drive useful architecture views.</span></div>
+    <div class="term"><b>Requirements</b><span>Functional requirements describe behaviour. Quality requirements describe how well. Constraints limit the solution space.</span></div>
+    <div class="term"><b>Quality scenario</b><span>A measurable description using source, stimulus, environment, affected artifact, response, and response measure.</span></div>
+    <div class="term"><b>Architecture driver</b><span>A requirement, concern, assumption, or constraint with strong structural impact.</span></div>
+    <div class="term"><b>Decomposition</b><span>Break the system into cohesive building blocks with clear responsibilities, interfaces, and controlled dependencies.</span></div>
+    <div class="term"><b>Design approach</b><span>Top-down and bottom-up reasoning usually work together, iteratively and with attention to risk.</span></div>
+    <div class="term"><b>Coupling</b><span>Dependencies should be loose but functionally sufficient. Static, dynamic, temporal, data, and semantic coupling all matter.</span></div>
+  </div>
+</section>
+
+<section id="distinctions">
+  <h2>High-value distinctions</h2>
+  <div class="grid-2">
+    <div class="card"><h3>Information hiding</h3><p>A design principle: hide decisions and details that clients do not need.</p></div>
+    <div class="card"><h3>Encapsulation</h3><p>A mechanism: restrict access to implementation details and internal state.</p></div>
+    <div class="card"><h3>Interface</h3><p>The contract, including behaviour, errors, semantics, timing, and guarantees.</p></div>
+    <div class="card"><h3>Implementation</h3><p>The concrete realization of that contract.</p></div>
+    <div class="card"><h3>Cohesion</h3><p>How strongly the responsibilities inside one building block belong together.</p></div>
+    <div class="card"><h3>Coupling</h3><p>How strongly one building block depends on another.</p></div>
+    <div class="card"><h3>Top-down</h3><p>Start with goals, requirements, and qualities, then refine the structure.</p></div>
+    <div class="card"><h3>Bottom-up</h3><p>Start with existing systems, technologies, constraints, and reusable assets.</p></div>
+  </div>
+</section>
+
+<section id="mock">
+  <h2>Mini mock exam</h2>
+  <p>Select your answer mentally or on paper, then open the question to check the explanation.</p>
+  <div class="question-set">
+    <details class="question"><summary>Which statement best describes software architecture?</summary><div class="answer"><b>Answer:</b> The fundamental structures, relationships, principles, cross-cutting concepts, and significant decisions that guide a system and its evolution. Architecture is more than diagrams or technology choices.</div></details>
+    <details class="question"><summary>Which is most likely a quality requirement?</summary><div class="answer"><b>Answer:</b> “After the failure of one application instance, service must recover within 30 seconds.” It states measurable quality behaviour. “Users can cancel an order” is functional; “Java must be used” is a constraint.</div></details>
+    <details class="question"><summary>Who is responsible for clarifying architecture-relevant requirements?</summary><div class="answer"><b>Answer:</b> The architect works with the relevant stakeholders. The architect does not invent requirements alone, and Product is not the only possible source.</div></details>
+    <details class="question"><summary>Which decision deserves the most explicit reasoning?</summary><div class="answer"><b>Answer:</b> A company-wide identity model used by many systems. Its broad impact and high reversal cost make it more architectural than a local helper or naming choice.</div></details>
+    <details class="question"><summary>What is the main purpose of an architecture view?</summary><div class="answer"><b>Answer:</b> To represent selected architecture information for specific stakeholder concerns. One diagram rarely answers every stakeholder's questions.</div></details>
+    <details class="question"><summary>Which statement about constraints is correct?</summary><div class="answer"><b>Answer:</b> Constraints restrict the solution space and can be technical, organizational, legal, financial, or time-related. They may be negotiable, but must first be made explicit.</div></details>
+    <details class="question"><summary>What makes a quality scenario useful?</summary><div class="answer"><b>Answer:</b> It replaces vague language with observable conditions and a measurable response. “Fast” is vague; “95% of searches return within 300 ms under peak load” is testable.</div></details>
+    <details class="question"><summary>What is an architecture driver?</summary><div class="answer"><b>Answer:</b> A requirement, quality, concern, assumption, or constraint with enough impact to shape important architecture decisions.</div></details>
+    <details class="question"><summary>Which decomposition has the highest cohesion?</summary><div class="answer"><b>Answer:</b> A Payment module responsible for authorization, capture, refunds, and payment status. A generic Utility module mixing email, tax, images, invoices, and payments has low cohesion.</div></details>
+    <details class="question"><summary>Does replacing a direct code dependency with an HTTP call automatically reduce coupling?</summary><div class="answer"><b>Answer:</b> No. Static coupling may change, while temporal, semantic, data, availability, and error-behaviour coupling remain or increase.</div></details>
+    <details class="question"><summary>When is a bottom-up architecture approach especially useful?</summary><div class="answer"><b>Answer:</b> When existing systems, databases, integrations, infrastructure, skills, and reusable components strongly shape what is possible.</div></details>
+    <details class="question"><summary>Which statement about top-down and bottom-up design is correct?</summary><div class="answer"><b>Answer:</b> Most real architecture work combines both. Top-down supplies direction; bottom-up exposes existing reality and constraints.</div></details>
+    <details class="question"><summary>What does “loose but functionally sufficient coupling” mean?</summary><div class="answer"><b>Answer:</b> Components share only the dependencies and information needed for useful collaboration. Eliminating all coupling would also eliminate collaboration.</div></details>
+    <details class="question"><summary>What makes an interface hard to misuse?</summary><div class="answer"><b>Answer:</b> Clear operations, explicit concepts, meaningful types or parameters, predictable errors, and documented semantics. Ambiguous boolean flags are a classic counterexample.</div></details>
+    <details class="question"><summary>Does asynchronous communication always make a system simpler?</summary><div class="answer"><b>Answer:</b> No. It may reduce temporal coupling, but introduces eventual consistency, retries, duplicate handling, ordering issues, and operational complexity.</div></details>
+  </div>
+</section>
+
+<section id="scenario">
+  <h2>Architecture scenario</h2>
+  <p>You are reviewing an online ordering platform:</p>
+  <pre><code>Web App
+   ↓
+Order Service → Customer Service
+      ↓              ↓
+Inventory Service   Shared Customer DB
+      ↓
+Payment Service → External Payment Provider
+      ↓
+Notification Service</code></pre>
+  <p>Order creation fails if any downstream service is unavailable. The business expects a tenfold traffic increase, payment confirmation must never be lost, and teams want to deploy independently.</p>
+  <ol><li>Identify three likely architecture drivers.</li><li>Name at least four forms of coupling visible or implied in the design.</li><li>Which interactions truly need an immediate response?</li><li>Should notification failure block the order? Explain.</li><li>Write one measurable quality scenario.</li><li>Propose one architecture improvement and name its trade-offs.</li></ol>
+  <details><summary>Example reasoning</summary><div class="answer"><p><b>Drivers:</b> tenfold growth, no lost payment confirmations, and independent deployment.</p><p><b>Coupling:</b> temporal coupling in the synchronous chain, data coupling around the shared database or oversized contracts, semantic coupling around order and payment states, and external availability coupling to the payment provider.</p><p><b>Interaction choices:</b> inventory reservation and payment authorization may need an immediate result depending on business rules. Notification can usually be queued and retried, so a temporary notification outage need not reject the order.</p><p><b>Quality scenario:</b> When one Notification Service instance fails during peak load, accepted notification requests remain durable and processing resumes within 60 seconds without duplicate customer messages.</p><p><b>Improvement:</b> publish an OrderConfirmed event to a durable queue for notification. This reduces temporal coupling, but adds eventual consistency, duplicate handling, monitoring, and operational work.</p></div></details>
+  <div class="callout staff"><strong>Staff Engineer lens</strong>A strong answer does not jump directly to “use Kafka” or “split more services.” It connects the proposal to a driver, explains the mechanism, and names the new costs.</div>
+</section>
+
+<section id="score">
+  <h2>Score guide</h2>
+  <ul><li><strong>13–15 correct:</strong> Strong foundation. Review explanations, then continue.</li><li><strong>10–12 correct:</strong> Good progress. Revisit the concepts behind missed questions.</li><li><strong>7–9 correct:</strong> Repeat Days 5–10 before adding more patterns.</li><li><strong>0–6 correct:</strong> Rebuild the foundation from Days 1–4, then retry this lesson.</li></ul>
+  <p>Do not memorize the option wording. Explain each answer in your own words and give one real system example.</p>
+</section>
+
+<section id="traps">
+  <h2>Exam technique</h2>
+  <ol><li><b>Separate concepts before comparing them.</b> Requirements, qualities, and constraints answer different questions.</li><li><b>Reject automatic conclusions.</b> Microservices, events, interfaces, and abstraction are tools, not guaranteed improvements.</li><li><b>Prefer context-sensitive answers.</b> Architecture quality depends on requirements and constraints.</li><li><b>Check whether a statement confuses goal and mechanism.</b> Information hiding is a goal; encapsulation is a mechanism.</li><li><b>Track consequences.</b> Every architectural benefit normally carries cost, risk, or complexity elsewhere.</li></ol>
+</section>
+
+<section id="resources">
+  <h2>Recommended resources</h2>
+  <div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">Review LG 01-01 through LG 03-07 and compare the learning-goal levels.</div></div><a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+  <div class="resource" style="margin-top:12px"><div><b>Official CPSA-F mock exam</b><div style="color:var(--muted)">Use the official sample questions after completing this mini mock.</div></div><a href="https://www.isaqb.org/certifications/examinations/cpsa-foundation-level/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+  <div class="resource" style="margin-top:12px"><div><b>YouTube supplement</b><div style="color:var(--muted)">Review software architecture fundamentals and CPSA-F concepts.</div></div><a href="https://www.youtube.com/results?search_query=Michael+Pogrebinsky+CPSA-F+software+architecture" target="_blank" rel="noopener noreferrer">Search ↗</a></div>
+</section>
+
+<section id="progress">
+  <h2>Course progress</h2>
+  <p>Keep all course files in the same folder. Every available day links directly to its lesson.</p>
+  <div class="progress">
+    <a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+    <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+    <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+    <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+    <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+    <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+    <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+    <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+    <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+    <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+    <a class="day active" data-day="11" href="isaqb-cpsa-f-day-11.html" aria-current="page"><small>Day 11</small><b>Revision &amp; Mini Mock Exam</b></a>
+  </div>
+  <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-10.html">← Previous day</a></div>
+</section>
+</main>
+</div>
+
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 11 · Designed for local browser reading and printing</footer>
+<script>
+  (function(){
+    var DAY="11", KEY="isaqb-cpsaf-progress";
+    function getDone(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return[]}}
+    function setDone(days){localStorage.setItem(KEY,JSON.stringify(days))}
+    function render(){var done=getDone(),btn=document.getElementById("complete-toggle"),mine=done.indexOf(DAY)!==-1;btn.textContent=mine?"✓ Day "+DAY+" completed":"Mark day complete";btn.classList.toggle("done",mine);document.querySelectorAll(".progress .day").forEach(function(a){var d=a.getAttribute("data-day");a.classList.toggle("done",!!d&&done.indexOf(d)!==-1)})}
+    document.getElementById("complete-toggle").addEventListener("click",function(){var done=getDone(),i=done.indexOf(DAY);if(i===-1)done.push(DAY);else done.splice(i,1);setDone(done);render()});render();
+  })();
+</script>
+</body>
+</html>

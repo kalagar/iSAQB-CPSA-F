@@ -190,6 +190,11 @@ details {
 
 summary { cursor: pointer; font-weight: 700; }
 
+.answer { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--border); color: #2d394d; }
+.question-set { counter-reset: question; }
+.question { counter-increment: question; }
+.question summary::before { content: counter(question) ". "; color: var(--accent); }
+
 .progress {
   display: flex;
   flex-direction: column;
