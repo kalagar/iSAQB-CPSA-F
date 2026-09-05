@@ -164,6 +164,10 @@ code {
 .card { border: 1px solid var(--border); border-radius: 14px; padding: 18px; background: #fff; }
 .card h3 { margin-top: 0; }
 
+table.cmp { width: 100%; border-collapse: collapse; margin: 16px 0; }
+table.cmp th, table.cmp td { text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+table.cmp th { background: #f7f9ff; color: #273653; }
+
 ul, ol { padding-left: 1.3rem; }
 li + li { margin-top: 8px; }
 
@@ -395,6 +399,7 @@ html[lang="fa"] .callout.info { border-left-color: var(--border); border-right-c
 html[lang="fa"] .callout.exam { border-left-color: var(--border); border-right-color: var(--warning); }
 html[lang="fa"] .callout.staff { border-left-color: var(--border); border-right-color: var(--success); }
 html[lang="fa"] ul, html[lang="fa"] ol { padding-left: 0; padding-right: 1.3rem; }
+html[lang="fa"] table.cmp th, html[lang="fa"] table.cmp td { text-align: right; }
 html[lang="fa"] .day.done::after { right: auto; left: 16px; }
 html[lang="fa"] .lang-switch { justify-content: flex-start; }
 

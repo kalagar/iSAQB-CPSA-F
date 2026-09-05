@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 12: Important Architectural Patterns — Layers, Pipes and Filters, and Microservices" />
+  <title>iSAQB CPSA-F — Day 12: Important Architectural Patterns</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-12.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-12.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 12</span>
+  <h1>Important Architectural Patterns: Layers, Pipes &amp; Filters, and Microservices</h1>
+  <p class="subtitle">Understand when these patterns fit, what qualities they support, and what trade-offs they introduce.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Layers, Pipes and Filters, Microservices</span><span><strong>Curriculum:</strong> CPSA-F 2025.1</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a><a href="#patterns">Architectural patterns</a><a href="#layers">Layered architecture</a><a href="#pipes">Pipes and Filters</a><a href="#microservices">Microservices</a><a href="#monolith">Microservices vs modular monolith</a><a href="#comparison">Comparing the three R1 patterns</a><a href="#selection">Pattern selection</a><a href="#combining">Combining patterns</a><a href="#exam">Common CPSA-F exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Practical exercise</a><a href="#staffext">Staff Engineer extension</a><a href="#review">Review questions</a><a href="#minitest">Mini exam check</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain and apply <b>Layers</b>, <b>Pipes and Filters</b>, and <b>Microservices</b>, connect each pattern to quality requirements, compare their trade-offs, and reason about pattern selection at a Staff Engineer level.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 03-08 — Describe, Explain and Apply Important Architectural Patterns. Exam priority: R1 for Layers, Pipes and Filters, and Microservices.</div>
+</section>
+
+<section id="patterns"><h2>Architectural patterns</h2>
+<p>An architectural pattern is a reusable approach to a recurring architectural problem in a particular context. A pattern is not just a diagram — it describes a recurring problem, a structural solution idea, responsibilities, interactions, and consequences.</p>
+<pre><code>Problem + Context + Quality Goals
+             ↓
+       Architectural Pattern
+             ↓
+Structure + Responsibilities + Interaction Rules
+             ↓
+Benefits + Consequences + Trade-offs</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Do not ask “Which architecture pattern is best?” Ask “Which pattern best supports our architecture drivers with acceptable trade-offs?”</div>
+</section>
+
+<section id="layers"><h2>Layered architecture</h2>
+<p>The Layers pattern organizes a system into ordered groups of responsibilities.</p>
+<pre><code>┌─────────────────────────┐
+│ Presentation Layer      │
+├─────────────────────────┤
+│ Application Layer       │
+├─────────────────────────┤
+│ Domain / Business Layer │
+├─────────────────────────┤
+│ Infrastructure Layer    │
+└─────────────────────────┘</code></pre>
+<p>Typical responsibilities: <b>Presentation</b> — controllers, APIs, request/response handling. <b>Application</b> — use-case orchestration and transaction boundaries. <b>Domain</b> — business rules and domain concepts. <b>Infrastructure</b> — databases, messaging, external APIs.</p>
+<div class="grid-2">
+<div class="card"><h3>Potential benefits</h3><p>Maintainability, understandability, separation of concerns, testability, replaceability of technical mechanisms.</p></div>
+<div class="card"><h3>Possible trade-offs</h3><p>Extra abstractions, mapping code, indirection, pass-through layers, possible performance overhead.</p></div>
+</div>
+<h3>Layer vs tier</h3>
+<p>A <b>layer</b> is mainly a logical structure. A <b>tier</b> normally refers to deployment separation. A three-tier deployment can still contain many logical layers.</p>
+<pre><code>Browser
+   ↓
+Application Server
+   ↓
+Database Server</code></pre>
+</section>
+
+<section id="pipes"><h2>Pipes and Filters</h2>
+<p>The Pipes and Filters pattern organizes processing into independent transformation stages. Each <b>filter</b> performs a transformation; each <b>pipe</b> carries data between filters.</p>
+<pre><code>Raw XML
+   ↓
+Parse
+   ↓
+Validate
+   ↓
+Normalize
+   ↓
+Enrich
+   ↓
+Persist</code></pre>
+<div class="grid-2">
+<div class="card"><h3>Potential strengths</h3><p>Composability, testability, reuse, incremental processing, parallelism, separation of transformations.</p></div>
+<div class="card"><h3>Possible trade-offs</h3><p>Serialization overhead, state-management difficulty, debugging across stages, error-handling complexity, latency.</p></div>
+</div>
+<p>If Filter 4 fails after Filters 1–3 succeed, you may need retries, idempotency, checkpoints, dead-letter handling, and compensation.</p>
+</section>
+
+<section id="microservices"><h2>Microservices</h2>
+<p>A Microservices architecture decomposes a system into focused, independently deployable services.</p>
+<pre><code>                    ┌──────────────┐
+                    │ API Gateway  │
+                    └──────┬───────┘
+                           │
+         ┌─────────────────┼─────────────────┐
+         ↓                 ↓                 ↓
+   Order Service     Customer Service   Payment Service
+         │                 │                 │
+     Order DB          Customer DB        Payment DB</code></pre>
+<p>Potential benefits: independent deployability, selective scaling, team autonomy, evolvability, fault isolation.</p>
+<div class="callout exam"><strong>Important warning</strong>Microservices do not automatically mean loose coupling. If all services must be available simultaneously, temporal coupling may still be strong — data, semantic, version, and operational coupling can all remain.</div>
+<pre><code>Order Service
+   ↓ HTTP
+Customer Service
+   ↓ HTTP
+Inventory Service
+   ↓ HTTP
+Payment Service</code></pre>
+<h3>Distributed-system costs</h3>
+<p>Microservices introduce concerns such as network failures, latency, retries, duplicate messages, distributed tracing, service discovery, eventual consistency, inter-service authentication, API compatibility, and deployment orchestration.</p>
+<p>A local call:</p>
+<pre><code>paymentService.pay(order);</code></pre>
+<p>becomes a remote interaction where you must consider:</p>
+<pre><code>Timeout?
+Retry?
+Authentication?
+Network failure?
+Duplicate request?
+Version mismatch?
+Partial success?</code></pre>
+</section>
+
+<section id="monolith"><h2>Microservices vs modular monolith</h2>
+<div class="grid-2">
+<div class="card"><h3>Modular monolith</h3><p>May fit well when the team is small, operational simplicity matters, independent scaling is not yet needed, strong consistency is valuable, or boundaries are still evolving.</p></div>
+<div class="card"><h3>Microservices</h3><p>May be attractive when teams need independent delivery, components have different scaling characteristics, fault isolation matters, domain boundaries are mature, or operations capability is strong.</p></div>
+</div>
+<p>Neither is universally better.</p>
+</section>
+
+<section id="comparison"><h2>Comparing the three R1 patterns</h2>
+<table class="cmp"><thead><tr><th>Pattern</th><th>Core idea</th><th>Typical strengths</th><th>Typical trade-offs</th></tr></thead><tbody>
+<tr><td>Layers</td><td>Organize responsibilities by abstraction/purpose</td><td>Maintainability, understandability, separation of concerns</td><td>Indirection, pass-through layers</td></tr>
+<tr><td>Pipes &amp; Filters</td><td>Process data through independent stages</td><td>Reuse, testability, composability</td><td>Error handling, latency, state complexity</td></tr>
+<tr><td>Microservices</td><td>Split into independently deployable services</td><td>Independent evolution, scaling, team autonomy</td><td>Distributed-system and operational complexity</td></tr>
+</tbody></table>
+</section>
+
+<section id="selection"><h2>Pattern selection must follow architecture drivers</h2>
+<p>Do not choose a pattern because it is popular.</p>
+<ul>
+<li>“Individual processing stages must be independently testable and replaceable.” → Possible fit: <b>Pipes and Filters</b></li>
+<li>“Business logic should remain isolated from UI and database technology.” → Possible fit: <b>Layers</b></li>
+<li>“Several teams need independent deployment and different scaling characteristics.” → Possible fit: <b>Microservices</b></li>
+</ul>
+<p>This is stronger reasoning than “Microservices are modern.”</p>
+</section>
+
+<section id="combining"><h2>Patterns can be combined</h2>
+<p>Patterns are not mutually exclusive. A microservice can internally use layers:</p>
+<pre><code>Order Service
+ ├── Presentation Layer
+ ├── Application Layer
+ ├── Domain Layer
+ └── Infrastructure Layer</code></pre>
+<p>Another service might use Pipes and Filters:</p>
+<pre><code>Upload
+ ↓
+Virus Scan
+ ↓
+Extract
+ ↓
+Validate
+ ↓
+Index</code></pre>
+<p>One system can use multiple patterns at different levels.</p>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol>
+<li><b>Microservices automatically create loose coupling.</b> — False.</li>
+<li><b>Layers and tiers are the same thing.</b> — False.</li>
+<li><b>A system must use only one architectural pattern.</b> — False.</li>
+<li><b>Pipes and Filters means every filter must run as a separate service.</b> — False.</li>
+<li><b>Microservices are better than a monolith.</b> — Too absolute.</li>
+<li><b>Patterns are primarily technology choices.</b> — False.</li>
+</ol></section>
+
+<section id="terms"><h2>Key terms to remember</h2><div class="terms">
+<div class="term"><b>Architectural pattern</b><span>Reusable architectural approach for recurring problems in a given context.</span></div>
+<div class="term"><b>Layer</b><span>Logical grouping of responsibilities according to abstraction or purpose.</span></div>
+<div class="term"><b>Pipe</b><span>Connection carrying data between filters.</span></div>
+<div class="term"><b>Filter</b><span>Independent processing or transformation stage.</span></div>
+<div class="term"><b>Microservice</b><span>Focused, independently deployable service with explicit interfaces.</span></div>
+<div class="term"><b>Independent deployability</b><span>Ability to deploy a service without requiring simultaneous deployment of the entire system.</span></div>
+<div class="term"><b>Pattern consequence</b><span>Positive or negative effect resulting from using a pattern.</span></div>
+</div></section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>You are designing a document-processing platform. Requirements: users upload PDF documents; uploaded files must be virus-scanned; metadata must be extracted; text must be indexed; workloads arrive in large batches; stages should be independently testable; failed stages should be retryable; the product team contains only six developers.</p>
+<p>The CTO proposes: “Every processing stage should be its own microservice.”</p>
+<ol>
+<li>Which architectural pattern naturally fits this workflow?</li>
+<li>Draw the processing flow.</li>
+<li>Which quality requirements support your choice?</li>
+<li>Does Pipes and Filters require each filter to be a separate microservice?</li>
+<li>What additional complexity would separate microservices introduce?</li>
+<li>Would a modular monolith containing the pipeline be reasonable?</li>
+<li>What evidence would justify splitting one filter into an independent service later?</li>
+</ol>
+</section>
+
+<section id="staffext"><h2>Staff Engineer extension</h2>
+<p>Suppose the extraction stage now requires GPU processing and receives 20× more load than the other stages. Ask:</p>
+<pre><code>Does Extraction need independent scaling?
+Does it require different infrastructure?
+Does it fail independently?
+Does it have a stable input/output contract?
+Would deployment independence provide measurable value?</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>If several answers are yes, splitting that stage into an independently deployed service has stronger architectural justification.</div>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>What are the three LG 03-08 architectural patterns at R1?</summary><p>Layers, Pipes and Filters, and Microservices.</p></details>
+<details><summary>What is the core idea behind layered architecture?</summary><p>Organizing responsibilities into ordered logical groups.</p></details>
+<details><summary>Why are layers and deployment tiers not equivalent?</summary><p>Layers are logical; tiers usually describe deployment separation.</p></details>
+<details><summary>What are the two basic elements of Pipes and Filters?</summary><p>Filters and pipes.</p></details>
+<details><summary>Name three qualities Pipes and Filters can support.</summary><p>Examples: testability, composability, reuse, incremental processing, parallelism.</p></details>
+<details><summary>What is one major benefit of microservices?</summary><p>Examples: independent deployment, selective scaling, team autonomy.</p></details>
+<details><summary>Name four kinds of complexity introduced by distributed microservices.</summary><p>Examples: network failure, latency, tracing, retries, distributed consistency, versioning, authentication.</p></details>
+<details><summary>Why does replacing local calls with HTTP not automatically reduce coupling?</summary><p>Runtime, semantic, temporal, and data dependencies may remain.</p></details>
+<details><summary>Can multiple architectural patterns coexist?</summary><p>Yes.</p></details>
+<details><summary>What should drive pattern selection?</summary><p>Requirements, quality goals, constraints, architecture drivers, and context.</p></details>
+</section>
+
+<section id="minitest"><h2>Mini exam check</h2>
+<div class="question-set">
+<details class="question"><summary>Which pattern is based most directly on a chain of data transformation stages?</summary><div class="answer"><b>Answer:</b> Pipes and Filters. Layers organize by abstraction, and Microservices organize by independent deployability — neither is defined by a transformation chain.</div></details>
+<details class="question"><summary>Which statement is most accurate?</summary><div class="answer"><b>Answer:</b> Multiple architectural patterns can be combined in one system. Layers do not require separate machines, microservices do not require different languages, and Pipes and Filters does not require asynchronous messaging.</div></details>
+<details class="question"><summary>Six autonomous teams need independent deployment and different scaling characteristics. Which pattern is especially relevant to evaluate?</summary><div class="answer"><b>Answer:</b> Microservices. Independent deployability and selective scaling are its core strengths.</div></details>
+<details class="question"><summary>Which statement about architectural patterns is correct?</summary><div class="answer"><b>Answer:</b> Patterns help achieve qualities for particular problems and contexts. A pattern does not guarantee a good architecture, does not remove the need for decisions, and is not merely a framework choice.</div></details>
+<details class="question"><summary>Which is a likely disadvantage of microservices?</summary><div class="answer"><b>Answer:</b> They introduce distributed-system complexity. They can scale independently, they add (not eliminate) network communication, and they do not require one shared database.</div></details>
+</div>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">LG 03-08 — Describe, Explain and Apply Important Architectural Patterns (R1, R3).</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official CPSA-F curriculum PDF</b><div style="color:var(--muted)">Printable version of the current curriculum.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Lesson 38: Identifying Microservices</b><div style="color:var(--muted)">Software Architecture Monday.</div></div>
+<a href="https://developertoarchitect.com/lessons/lesson38.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day active" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-11.html">← Previous day</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 12 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "12";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

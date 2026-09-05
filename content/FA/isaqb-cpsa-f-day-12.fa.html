@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۲ دوره iSAQB CPSA-F: الگوهای مهم معماری — لایه‌ها، لوله‌ها و صافی‌ها، و میکروسرویس‌ها" />
+  <title>iSAQB CPSA-F — روز ۱۲: الگوهای مهم معماری</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-12.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-12.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۲</span>
+      <h1>الگوهای مهم معماری: لایه‌ها، لوله‌ها و صافی‌ها، و میکروسرویس‌ها</h1>
+      <p class="subtitle">
+        بفهمید هر الگو کجا مناسب است، از چه ویژگی‌های کیفی پشتیبانی می‌کند، و چه مصالحه‌هایی (trade-offs) به همراه دارد.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> لایه‌ها، لوله‌ها و صافی‌ها، میکروسرویس‌ها</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#patterns">الگوهای معماری</a>
+      <a href="#layers">معماری لایه‌ای</a>
+      <a href="#pipes">لوله‌ها و صافی‌ها</a>
+      <a href="#microservices">میکروسرویس‌ها</a>
+      <a href="#monolith">میکروسرویس‌ها در برابر مونولیت ماژولار</a>
+      <a href="#comparison">مقایسه سه الگوی سطح R1</a>
+      <a href="#selection">انتخاب الگو</a>
+      <a href="#combining">ترکیب الگوها</a>
+      <a href="#exam">دام‌های رایج آزمون CPSA-F</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین عملی</a>
+      <a href="#staffext">بسط Staff Engineer</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#minitest">آزمون کوتاه</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس، باید بتوانید <b>لایه‌ها (Layers)</b>، <b>لوله‌ها و صافی‌ها (Pipes and Filters)</b> و <b>میکروسرویس‌ها (Microservices)</b> را توضیح داده و به‌کار ببرید، هر الگو را به نیازمندی‌های کیفی مرتبط کنید، مصالحه‌های آن‌ها را مقایسه کنید، و درباره انتخاب الگو در سطح Staff Engineer استدلال کنید.</p>
+        <div class="callout info"><strong>هم‌راستایی رسمی</strong>LG 03-08 — توصیف، توضیح و کاربرد الگوهای مهم معماری. اولویت آزمون: سطح R1 برای لایه‌ها، لوله‌ها و صافی‌ها، و میکروسرویس‌ها.</div>
+      </section>
+
+      <section id="patterns">
+        <h2>الگوهای معماری</h2>
+        <p>یک الگوی معماری یک رویکرد قابل استفاده مجدد برای یک مسئله تکرارشونده معماری در یک زمینه (context) خاص است. یک الگو صرفاً یک نمودار نیست؛ بلکه یک مسئله تکرارشونده، ایده یک راه‌حل ساختاری، مسئولیت‌ها، تعاملات و پیامدها را توصیف می‌کند.</p>
+        <pre><code>Problem + Context + Quality Goals
+             ↓
+       Architectural Pattern
+             ↓
+Structure + Responsibilities + Interaction Rules
+             ↓
+Benefits + Consequences + Trade-offs</code></pre>
+        <div class="callout staff"><strong>دیدگاه Staff Engineer</strong>نپرسید «کدام الگوی معماری بهتر است؟» بپرسید «کدام الگو با مصالحه‌های قابل‌قبول، بیشترین پشتیبانی را از محرک‌های معماری ما می‌کند؟»</div>
+      </section>
+
+      <section id="layers">
+        <h2>معماری لایه‌ای</h2>
+        <p>الگوی لایه‌ها یک سیستم را به گروه‌های مرتب‌شده‌ای از مسئولیت‌ها سازمان‌دهی می‌کند.</p>
+        <pre><code>┌─────────────────────────┐
+│ Presentation Layer      │
+├─────────────────────────┤
+│ Application Layer       │
+├─────────────────────────┤
+│ Domain / Business Layer │
+├─────────────────────────┤
+│ Infrastructure Layer    │
+└─────────────────────────┘</code></pre>
+        <p>مسئولیت‌های معمول: <b>لایه نمایش (Presentation)</b> — کنترلرها، APIها، مدیریت درخواست/پاسخ. <b>لایه اپلیکیشن (Application)</b> — هماهنگی موارد کاربرد (use case) و مرزهای تراکنش. <b>لایه دامنه (Domain)</b> — قوانین کسب‌وکار و مفاهیم دامنه. <b>لایه زیرساخت (Infrastructure)</b> — پایگاه‌های داده، پیام‌رسانی، APIهای خارجی.</p>
+        <div class="grid-2">
+          <div class="card"><h3>مزایای احتمالی</h3><p>نگهداشت‌پذیری، قابل‌فهم‌بودن، جداسازی دغدغه‌ها، آزمون‌پذیری، جایگزین‌پذیری مکانیزم‌های فنی.</p></div>
+          <div class="card"><h3>مصالحه‌های ممکن</h3><p>انتزاع‌های اضافی، کد نگاشت (mapping)، لایه‌بندی غیرمستقیم، لایه‌های صرفاً عبوری (pass-through)، سربار احتمالی کارایی.</p></div>
+        </div>
+        <h3>لایه در برابر لایه استقرار (Tier)</h3>
+        <p>یک <b>لایه (Layer)</b> عمدتاً یک ساختار منطقی است. یک <b>Tier</b> معمولاً به جداسازی استقرار (deployment) اشاره دارد. یک استقرار سه‌لایه (three-tier) هنوز می‌تواند شامل لایه‌های منطقی زیادی باشد.</p>
+        <pre><code>Browser
+   ↓
+Application Server
+   ↓
+Database Server</code></pre>
+      </section>
+
+      <section id="pipes">
+        <h2>لوله‌ها و صافی‌ها (Pipes and Filters)</h2>
+        <p>الگوی لوله‌ها و صافی‌ها پردازش را به مراحل مستقل تبدیل (transformation) سازمان‌دهی می‌کند. هر <b>صافی (Filter)</b> یک تبدیل انجام می‌دهد؛ هر <b>لوله (Pipe)</b> داده را بین صافی‌ها منتقل می‌کند.</p>
+        <pre><code>Raw XML
+   ↓
+Parse
+   ↓
+Validate
+   ↓
+Normalize
+   ↓
+Enrich
+   ↓
+Persist</code></pre>
+        <div class="grid-2">
+          <div class="card"><h3>نقاط قوت احتمالی</h3><p>قابلیت ترکیب (composability)، آزمون‌پذیری، استفاده مجدد، پردازش تدریجی، موازی‌سازی، جداسازی تبدیل‌ها.</p></div>
+          <div class="card"><h3>مصالحه‌های ممکن</h3><p>سربار سریال‌سازی، دشواری مدیریت وضعیت، اشکال‌زدایی بین مراحل، پیچیدگی مدیریت خطا، تأخیر (latency).</p></div>
+        </div>
+        <p>اگر صافی چهارم پس از موفقیت صافی‌های ۱ تا ۳ شکست بخورد، ممکن است به تلاش مجدد، ایدمپوتنسی، نقاط بازرسی (checkpoints)، مدیریت پیام‌های ناموفق (dead-letter) و جبران (compensation) نیاز داشته باشید.</p>
+      </section>
+
+      <section id="microservices">
+        <h2>میکروسرویس‌ها</h2>
+        <p>یک معماری میکروسرویس، سیستم را به سرویس‌های متمرکز و مستقل از نظر استقرار تجزیه می‌کند.</p>
+        <pre><code>                    ┌──────────────┐
+                    │ API Gateway  │
+                    └──────┬───────┘
+                           │
+         ┌─────────────────┼─────────────────┐
+         ↓                 ↓                 ↓
+   Order Service     Customer Service   Payment Service
+         │                 │                 │
+     Order DB          Customer DB        Payment DB</code></pre>
+        <p>مزایای احتمالی: قابلیت استقرار مستقل، مقیاس‌پذیری انتخابی، خودمختاری تیم‌ها، قابلیت تکامل، جداسازی خطا (fault isolation).</p>
+        <div class="callout exam"><strong>هشدار مهم</strong>میکروسرویس‌ها به‌طور خودکار به معنای کوپلینگ سست نیستند. اگر همه سرویس‌ها باید هم‌زمان در دسترس باشند، کوپلینگ زمانی همچنان می‌تواند قوی باشد — کوپلینگ داده‌ای، معنایی، نسخه‌بندی و عملیاتی نیز ممکن است باقی بمانند.</div>
+        <pre><code>Order Service
+   ↓ HTTP
+Customer Service
+   ↓ HTTP
+Inventory Service
+   ↓ HTTP
+Payment Service</code></pre>
+        <h3>هزینه‌های سیستم توزیع‌شده</h3>
+        <p>میکروسرویس‌ها دغدغه‌هایی مانند خرابی شبکه، تأخیر، تلاش مجدد، پیام‌های تکراری، ردیابی توزیع‌شده (tracing)، کشف سرویس، سازگاری نهایی (eventual consistency)، احراز هویت بین‌سرویسی، سازگاری نسخه API و هماهنگ‌سازی استقرار را وارد می‌کنند.</p>
+        <p>یک فراخوانی محلی:</p>
+        <pre><code>paymentService.pay(order);</code></pre>
+        <p>به یک تعامل دوردست تبدیل می‌شود که باید در نظر بگیرید:</p>
+        <pre><code>Timeout?
+Retry?
+Authentication?
+Network failure?
+Duplicate request?
+Version mismatch?
+Partial success?</code></pre>
+      </section>
+
+      <section id="monolith">
+        <h2>میکروسرویس‌ها در برابر مونولیت ماژولار</h2>
+        <div class="grid-2">
+          <div class="card"><h3>مونولیت ماژولار</h3><p>ممکن است زمانی مناسب باشد که تیم کوچک است، سادگی عملیاتی اهمیت دارد، مقیاس‌پذیری مستقل هنوز لازم نیست، سازگاری قوی ارزشمند است، یا مرزها هنوز در حال تکامل‌اند.</p></div>
+          <div class="card"><h3>میکروسرویس‌ها</h3><p>ممکن است زمانی جذاب باشند که تیم‌ها به تحویل مستقل نیاز دارند، مؤلفه‌ها ویژگی‌های مقیاس‌پذیری متفاوتی دارند، جداسازی خطا اهمیت دارد، مرزهای دامنه بالغ‌اند، یا توانایی عملیاتی قوی است.</p></div>
+        </div>
+        <p>هیچ‌کدام همیشه بهتر نیست.</p>
+      </section>
+
+      <section id="comparison">
+        <h2>مقایسه سه الگوی سطح R1</h2>
+        <table class="cmp"><thead><tr><th>الگو</th><th>ایده اصلی</th><th>نقاط قوت معمول</th><th>مصالحه‌های معمول</th></tr></thead><tbody>
+          <tr><td>لایه‌ها (Layers)</td><td>سازمان‌دهی مسئولیت‌ها بر اساس انتزاع/هدف</td><td>نگهداشت‌پذیری، قابل‌فهم‌بودن، جداسازی دغدغه‌ها</td><td>لایه‌بندی غیرمستقیم، لایه‌های عبوری</td></tr>
+          <tr><td>لوله‌ها و صافی‌ها</td><td>پردازش داده از طریق مراحل مستقل</td><td>استفاده مجدد، آزمون‌پذیری، قابلیت ترکیب</td><td>مدیریت خطا، تأخیر، پیچیدگی وضعیت</td></tr>
+          <tr><td>میکروسرویس‌ها</td><td>تجزیه به سرویس‌های مستقل از نظر استقرار</td><td>تکامل مستقل، مقیاس‌پذیری، خودمختاری تیم</td><td>پیچیدگی سیستم توزیع‌شده و عملیاتی</td></tr>
+        </tbody></table>
+      </section>
+
+      <section id="selection">
+        <h2>انتخاب الگو باید از محرک‌های معماری پیروی کند</h2>
+        <p>الگو را به این دلیل که محبوب است انتخاب نکنید.</p>
+        <ul>
+          <li>«هر مرحله پردازشی باید به‌طور مستقل قابل آزمون و جایگزینی باشد.» ← گزینه محتمل: <b>لوله‌ها و صافی‌ها</b></li>
+          <li>«منطق کسب‌وکار باید از فناوری رابط کاربری و پایگاه داده جدا بماند.» ← گزینه محتمل: <b>لایه‌ها</b></li>
+          <li>«چند تیم به استقرار مستقل و ویژگی‌های مقیاس‌پذیری متفاوت نیاز دارند.» ← گزینه محتمل: <b>میکروسرویس‌ها</b></li>
+        </ul>
+        <p>این استدلال قوی‌تر از «میکروسرویس‌ها مدرن هستند» است.</p>
+      </section>
+
+      <section id="combining">
+        <h2>الگوها می‌توانند ترکیب شوند</h2>
+        <p>الگوها متقابلاً منحصربه‌فرد نیستند. یک میکروسرویس می‌تواند درونش از لایه‌ها استفاده کند:</p>
+        <pre><code>Order Service
+ ├── Presentation Layer
+ ├── Application Layer
+ ├── Domain Layer
+ └── Infrastructure Layer</code></pre>
+        <p>سرویس دیگری ممکن است از لوله‌ها و صافی‌ها استفاده کند:</p>
+        <pre><code>Upload
+ ↓
+Virus Scan
+ ↓
+Extract
+ ↓
+Validate
+ ↓
+Index</code></pre>
+        <p>یک سیستم می‌تواند در سطوح مختلف از چندین الگو استفاده کند.</p>
+      </section>
+
+      <section id="exam">
+        <h2>دام‌های رایج آزمون CPSA-F</h2>
+        <ol>
+          <li><b>میکروسرویس‌ها به‌طور خودکار کوپلینگ سست ایجاد می‌کنند.</b> — نادرست.</li>
+          <li><b>لایه‌ها (Layers) و Tierها یکسان‌اند.</b> — نادرست.</li>
+          <li><b>یک سیستم باید فقط از یک الگوی معماری استفاده کند.</b> — نادرست.</li>
+          <li><b>لوله‌ها و صافی‌ها یعنی هر صافی باید به‌صورت یک سرویس جداگانه اجرا شود.</b> — نادرست.</li>
+          <li><b>میکروسرویس‌ها بهتر از مونولیت هستند.</b> — بیش از حد مطلق.</li>
+          <li><b>الگوها اساساً انتخاب‌های فناوری هستند.</b> — نادرست.</li>
+        </ol>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی برای به‌خاطرسپاری</h2>
+        <div class="terms">
+          <div class="term"><b>الگوی معماری (Architectural pattern)</b><span>رویکرد معماری قابل استفاده مجدد برای مسائل تکرارشونده در یک زمینه معین.</span></div>
+          <div class="term"><b>لایه (Layer)</b><span>گروه‌بندی منطقی مسئولیت‌ها بر اساس انتزاع یا هدف.</span></div>
+          <div class="term"><b>لوله (Pipe)</b><span>اتصالی که داده را بین صافی‌ها منتقل می‌کند.</span></div>
+          <div class="term"><b>صافی (Filter)</b><span>مرحله مستقل پردازش یا تبدیل.</span></div>
+          <div class="term"><b>میکروسرویس (Microservice)</b><span>سرویسی متمرکز، مستقل از نظر استقرار، با رابط‌های صریح.</span></div>
+          <div class="term"><b>قابلیت استقرار مستقل (Independent deployability)</b><span>توانایی استقرار یک سرویس بدون نیاز به استقرار هم‌زمان کل سیستم.</span></div>
+          <div class="term"><b>پیامد الگو (Pattern consequence)</b><span>اثر مثبت یا منفی حاصل از استفاده یک الگو.</span></div>
+        </div>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>در حال طراحی یک پلتفرم پردازش اسناد هستید. نیازمندی‌ها: کاربران فایل‌های PDF آپلود می‌کنند؛ فایل‌های آپلودشده باید از نظر ویروس اسکن شوند؛ فراداده (metadata) باید استخراج شود؛ متن باید ایندکس شود؛ حجم کار به‌صورت دسته‌ای (batch) بزرگ می‌رسد؛ مراحل باید به‌طور مستقل قابل‌آزمون باشند؛ مراحل ناموفق باید قابل تلاش مجدد باشند؛ تیم محصول فقط شش توسعه‌دهنده دارد.</p>
+        <p>مدیر ارشد فناوری (CTO) پیشنهاد می‌دهد: «هر مرحله پردازشی باید میکروسرویس مستقل خودش باشد.»</p>
+        <ol>
+          <li>کدام الگوی معماری به‌طور طبیعی با این جریان کاری سازگار است؟</li>
+          <li>جریان پردازش را رسم کنید.</li>
+          <li>کدام نیازمندی‌های کیفی از انتخاب شما پشتیبانی می‌کنند؟</li>
+          <li>آیا لوله‌ها و صافی‌ها نیاز دارد هر صافی یک میکروسرویس جداگانه باشد؟</li>
+          <li>میکروسرویس‌های جداگانه چه پیچیدگی اضافه‌ای وارد می‌کنند؟</li>
+          <li>آیا یک مونولیت ماژولار حاوی این خط لوله معقول خواهد بود؟</li>
+          <li>چه شواهدی توجیه می‌کند که بعداً یک صافی را به سرویسی مستقل تبدیل کنید؟</li>
+        </ol>
+      </section>
+
+      <section id="staffext">
+        <h2>بسط Staff Engineer</h2>
+        <p>فرض کنید مرحله استخراج اکنون به پردازش GPU نیاز دارد و ۲۰ برابر بیشتر از مراحل دیگر بار دریافت می‌کند. بپرسید:</p>
+        <pre><code>Does Extraction need independent scaling?
+Does it require different infrastructure?
+Does it fail independently?
+Does it have a stable input/output contract?
+Would deployment independence provide measurable value?</code></pre>
+        <div class="callout staff"><strong>دیدگاه Staff Engineer</strong>اگر پاسخ چند مورد بله باشد، جدا کردن آن مرحله به یک سرویس مستقر مستقل، توجیه معماری قوی‌تری دارد.</div>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>سه الگوی معماری LG 03-08 در سطح R1 کدام‌اند؟</summary><p>لایه‌ها، لوله‌ها و صافی‌ها، و میکروسرویس‌ها.</p></details>
+        <details><summary>ایده اصلی پشت معماری لایه‌ای چیست؟</summary><p>سازمان‌دهی مسئولیت‌ها به گروه‌های منطقی مرتب‌شده.</p></details>
+        <details><summary>چرا لایه‌ها و Tierهای استقرار معادل نیستند؟</summary><p>لایه‌ها منطقی‌اند؛ Tierها معمولاً جداسازی استقرار را توصیف می‌کنند.</p></details>
+        <details><summary>دو عنصر پایه لوله‌ها و صافی‌ها چیست؟</summary><p>صافی‌ها و لوله‌ها.</p></details>
+        <details><summary>سه ویژگی کیفی که لوله‌ها و صافی‌ها می‌توانند پشتیبانی کنند را نام ببرید.</summary><p>نمونه‌ها: آزمون‌پذیری، قابلیت ترکیب، استفاده مجدد، پردازش تدریجی، موازی‌سازی.</p></details>
+        <details><summary>یکی از مزایای اصلی میکروسرویس‌ها چیست؟</summary><p>نمونه‌ها: استقرار مستقل، مقیاس‌پذیری انتخابی، خودمختاری تیم.</p></details>
+        <details><summary>چهار نوع پیچیدگی که میکروسرویس‌های توزیع‌شده وارد می‌کنند را نام ببرید.</summary><p>نمونه‌ها: خرابی شبکه، تأخیر، ردیابی، تلاش مجدد، سازگاری توزیع‌شده، نسخه‌بندی، احراز هویت.</p></details>
+        <details><summary>چرا جایگزینی فراخوانی‌های محلی با HTTP به‌طور خودکار کوپلینگ را کاهش نمی‌دهد؟</summary><p>وابستگی‌های زمان اجرا، معنایی، زمانی و داده‌ای ممکن است باقی بمانند.</p></details>
+        <details><summary>آیا چند الگوی معماری می‌توانند هم‌زمان وجود داشته باشند؟</summary><p>بله.</p></details>
+        <details><summary>چه چیزی باید انتخاب الگو را هدایت کند؟</summary><p>نیازمندی‌ها، اهداف کیفی، محدودیت‌ها، محرک‌های معماری و زمینه.</p></details>
+      </section>
+
+      <section id="minitest">
+        <h2>آزمون کوتاه</h2>
+        <div class="question-set">
+          <details class="question"><summary>کدام الگو مستقیماً بر پایه زنجیره‌ای از مراحل تبدیل داده است؟</summary><div class="answer"><b>پاسخ:</b> لوله‌ها و صافی‌ها. لایه‌ها بر اساس انتزاع سازمان‌دهی می‌شوند و میکروسرویس‌ها بر اساس قابلیت استقرار مستقل — هیچ‌کدام با یک زنجیره تبدیل تعریف نمی‌شوند.</div></details>
+          <details class="question"><summary>کدام گزینه درست‌تر است؟</summary><div class="answer"><b>پاسخ:</b> چندین الگوی معماری می‌توانند در یک سیستم ترکیب شوند. لایه‌ها نیازی به ماشین‌های جداگانه ندارند، میکروسرویس‌ها نیازی به زبان‌های متفاوت ندارند، و لوله‌ها و صافی‌ها نیازی به پیام‌رسانی ناهمگام ندارد.</div></details>
+          <details class="question"><summary>شش تیم مستقل به استقرار مستقل و ویژگی‌های مقیاس‌پذیری متفاوت نیاز دارند. کدام الگو به‌ویژه شایسته بررسی است؟</summary><div class="answer"><b>پاسخ:</b> میکروسرویس‌ها. قابلیت استقرار مستقل و مقیاس‌پذیری انتخابی نقاط قوت اصلی آن‌اند.</div></details>
+          <details class="question"><summary>کدام گزینه درباره الگوهای معماری درست است؟</summary><div class="answer"><b>پاسخ:</b> الگوها به دستیابی به ویژگی‌های کیفی برای مسائل و زمینه‌های خاص کمک می‌کنند. یک الگو معماری خوب را تضمین نمی‌کند، نیاز به تصمیم‌گیری را از بین نمی‌برد، و صرفاً یک انتخاب فناوری نیست.</div></details>
+          <details class="question"><summary>کدام گزینه احتمالاً یک نقطه‌ضعف میکروسرویس‌هاست؟</summary><div class="answer"><b>پاسخ:</b> پیچیدگی سیستم توزیع‌شده را وارد می‌کنند. آن‌ها می‌توانند به‌طور مستقل مقیاس یابند، ارتباط شبکه را اضافه می‌کنند (نه حذف)، و به یک پایگاه داده مشترک نیاز ندارند.</div></details>
+        </div>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">LG 03-08 — توصیف، توضیح و کاربرد الگوهای مهم معماری (R1, R3).</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>نسخه PDF برنامه درسی رسمی</b>
+            <div style="color:var(--muted)">نسخه قابل چاپ برنامه درسی فعلی.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — درس ۳۸: شناسایی میکروسرویس‌ها</b>
+            <div style="color:var(--muted)">Software Architecture Monday.</div>
+          </div>
+          <a href="https://developertoarchitect.com/lessons/lesson38.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress">
+          <a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day active" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+        </div>
+        <div class="navrow">
+          <a class="navbtn" href="isaqb-cpsa-f-day-11.fa.html">→ روز قبل</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۲ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "12";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
