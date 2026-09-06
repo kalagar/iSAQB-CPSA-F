@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۳ دوره iSAQB CPSA-F: حلقه‌های بازخورد، عدم قطعیت و ریسک معماری" />
+  <title>iSAQB CPSA-F — روز ۱۳: حلقه‌های بازخورد، عدم قطعیت و ریسک معماری</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-13.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-13.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۳</span>
+      <h1>حلقه‌های بازخورد، عدم قطعیت و ریسک معماری</h1>
+      <p class="subtitle">
+        یاد بگیرید چگونه معماری تکراری، بازخورد و کاهش ریسک با هم کار می‌کنند — و چگونه آن‌ها را در سطح Staff Engineer به‌کار ببرید.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> حلقه‌های بازخورد، عدم قطعیت، ریسک</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#relationship">رابطه اصلی</a>
+      <a href="#uncertainty-risk">عدم قطعیت در برابر ریسک</a>
+      <a href="#drivers">ریسک معماری از محرک‌ها آغاز می‌شود</a>
+      <a href="#iteration">چرا تکرار ریسک را کاهش می‌دهد</a>
+      <a href="#prediction">پیش‌بینی در برابر بازخورد</a>
+      <a href="#loops">حلقه‌های بازخورد کوتاه در برابر بلند</a>
+      <a href="#reversibility">ریسک و برگشت‌پذیری</a>
+      <a href="#matrix">ماتریس عملی ریسک</a>
+      <a href="#techniques">تکنیک‌های بازخورد</a>
+      <a href="#stakeholders">دریافت نظام‌مند بازخورد ذی‌نفعان</a>
+      <a href="#consensus">بازخورد به معنای اجماع نیست</a>
+      <a href="#adrs">ADRها به‌عنوان ابزار بازخورد</a>
+      <a href="#staffscenario">سناریوی Staff Engineer</a>
+      <a href="#production">بازخورد محیط عملیاتی</a>
+      <a href="#fitness">توابع تناسب (Fitness Functions)</a>
+      <a href="#exam">دام‌های رایج آزمون CPSA-F</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین عملی</a>
+      <a href="#staffext">بسط Staff Engineer</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#minitest">آزمون کوتاه</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس، باید بتوانید توضیح دهید چرا کار معماری اغلب باید تکراری (iterative) باشد، عدم قطعیت، ریسک، بازخورد و قابلیت پیش‌بینی را به هم مرتبط کنید، تصمیمات معماری را به‌صورت تدریجی اتخاذ کنید، و بازخورد ذی‌نفعان را به‌صورت نظام‌مند دریافت کنید.</p>
+        <div class="callout info"><strong>هم‌راستایی رسمی</strong>LG 03-05 — همبستگی بین حلقه‌های بازخورد و ریسک‌ها. اولویت آزمون: سطح R1 برای تصمیم‌گیری تکراری، سطح R2 برای دریافت نظام‌مند بازخورد ذی‌نفعان.</div>
+      </section>
+
+      <section id="relationship">
+        <h2>رابطه اصلی</h2>
+        <pre><code>Uncertainty
+    ↓
+Architectural Decision
+    ↓
+Potential Risk
+    ↓
+Experiment / Implementation / Discussion
+    ↓
+Feedback
+    ↓
+New Evidence
+    ↓
+Refined Decision</code></pre>
+        <p>هدف اجتناب از تصمیم‌گیری نیست. هدف اتخاذ تصمیم با اطمینان مناسب و دریافت شواهد به‌اندازه کافی زودهنگام برای اصلاح اشتباهات پیش از گران‌شدنشان است.</p>
+      </section>
+
+      <section id="uncertainty-risk">
+        <h2>عدم قطعیت در برابر ریسک</h2>
+        <div class="grid-2">
+          <div class="card"><h3>عدم قطعیت (Uncertainty)</h3><p>هنوز به‌اندازه کافی نمی‌دانیم. نمونه‌ها: آیا API جدید می‌تواند ۱۰٬۰۰۰ درخواست در ثانیه را پردازش کند؟ آیا کاربران به نتایج بی‌درنگ نیاز دارند؟ آیا API یک تأمین‌کننده به‌اندازه کافی قابل‌اعتماد است؟ آیا تیم می‌تواند Kubernetes را به‌طور مؤثر عملیاتی کند؟</p></div>
+          <div class="card"><h3>ریسک (Risk)</h3><p>یک شرایط نامطمئن ممکن است بر یک هدف مهم اثر منفی بگذارد.</p></div>
+        </div>
+        <pre><code>Uncertainty:
+Can the external payment provider handle peak load?
+
+Risk:
+Checkout availability may fall below 99.95%.</code></pre>
+        <p>هر عدم قطعیتی از نظر معماری مهم نیست. ریسک زمانی اهمیت دارد که در دسترس‌پذیری، امنیت، کارایی، نگهداشت‌پذیری، هزینه، انطباق (compliance) یا اهداف کسب‌وکار را تهدید کند.</p>
+      </section>
+
+      <section id="drivers">
+        <h2>ریسک معماری از محرک‌ها آغاز می‌شود</h2>
+        <pre><code>Quality Requirement
+99.95% checkout availability
+        ↓
+Architecture Driver
+Payment availability must not unnecessarily block ordering
+        ↓
+Architecture Decision
+Synchronous payment interaction
+        ↓
+Risk
+Payment outage causes checkout outage</code></pre>
+        <p>محرک معماری توضیح می‌دهد چرا این ریسک اهمیت دارد.</p>
+      </section>
+
+      <section id="iteration">
+        <h2>چرا تکرار ریسک را کاهش می‌دهد</h2>
+        <p>مقایسه کنید:</p>
+        <pre><code>Design for 12 months
+→ implement everything
+→ load test at the end</code></pre>
+        <p>با:</p>
+        <pre><code>Identify critical assumption
+→ build a small slice
+→ load test
+→ analyze evidence
+→ refine</code></pre>
+        <p>حلقه‌های بازخورد کوتاه‌تر، فرضیات نادرست را زودتر آشکار می‌کنند. تکرار موفقیت را تضمین نمی‌کند؛ یادگیری را ارزان‌تر و زودتر می‌کند.</p>
+      </section>
+
+      <section id="prediction">
+        <h2>پیش‌بینی در برابر بازخورد</h2>
+        <p>معماری از هر دو استفاده می‌کند.</p>
+        <div class="grid-2">
+          <div class="card"><h3>پیش‌بینی (Prediction)</h3><p>استدلال درباره ترافیک مورد انتظار، خرابی‌ها، نیازمندی‌ها و نیازهای تیم.</p></div>
+          <div class="card"><h3>بازخورد (Feedback)</h3><p>مشاهده نمونه‌های اولیه، کاربران، متریک‌های محیط عملیاتی، توسعه‌دهندگان و خرابی‌های واقعی.</p></div>
+        </div>
+        <p>معماری قوی این‌ها را ترکیب می‌کند:</p>
+        <pre><code>Reason → Decide → Validate → Learn → Adjust</code></pre>
+      </section>
+
+      <section id="loops">
+        <h2>حلقه‌های بازخورد کوتاه در برابر بلند</h2>
+        <div class="grid-2">
+          <div class="card"><h3>حلقه بلند</h3><p>تصمیم ← ۶ ماه پیاده‌سازی ← محیط عملیاتی ← اولین تست کارایی.</p></div>
+          <div class="card"><h3>حلقه کوتاه</h3><p>تصمیم ← نمونه اولیه ← تست بار ← بازخورد ← اصلاح.</p></div>
+        </div>
+        <p>حلقه‌های کوتاه به‌ویژه برای تصمیمات پرهزینه، غیرقابل‌بازگشت، ناآشنا یا پرریسک ارزشمندند.</p>
+      </section>
+
+      <section id="reversibility">
+        <h2>ریسک و برگشت‌پذیری</h2>
+        <pre><code>High impact
++
+High uncertainty
++
+Low reversibility
+=
+Strong need for early feedback</code></pre>
+        <p>انتخاب یک کتابخانه کمکی محلی به اعتبارسنجی کمی نیاز دارد. یک استراتژی تقسیم‌بندی داده در سطح کل شرکت به اعتبارسنجی بسیار بیشتری نیاز دارد.</p>
+      </section>
+
+      <section id="matrix">
+        <h2>ماتریس عملی ریسک</h2>
+        <div class="table-wrap"><table class="cmp"><thead><tr><th>تصمیم</th><th>تأثیر</th><th>عدم قطعیت</th><th>اولویت</th></tr></thead><tbody>
+          <tr><td>کتابخانه لاگ‌گیری</td><td>کم</td><td>کم</td><td>کم</td></tr>
+          <tr><td>مدل احراز هویت</td><td>زیاد</td><td>متوسط</td><td>زیاد</td></tr>
+          <tr><td>توان عملیاتی Kafka در اوج بار</td><td>زیاد</td><td>زیاد</td><td>بسیار زیاد</td></tr>
+          <tr><td>فریم‌ورک دکمه</td><td>کم</td><td>متوسط</td><td>کم</td></tr>
+          <tr><td>سازگاری بین‌منطقه‌ای</td><td>بسیار زیاد</td><td>زیاد</td><td>بحرانی</td></tr>
+        </tbody></table></div>
+        <div class="callout staff"><strong>دیدگاه Staff Engineer</strong>تلاش معماری را جایی صرف کنید که عدم قطعیت و پیامدها قابل‌توجه‌اند.</div>
+      </section>
+
+      <section id="techniques">
+        <h2>تکنیک‌های بازخورد</h2>
+        <p>بازخورد معماری می‌تواند از موارد زیر به‌دست آید:</p>
+        <ul>
+          <li><b>نمونه اولیه (Prototype)</b> — اعتبارسنجی امکان‌پذیری.</li>
+          <li><b>اثبات مفهوم (Proof of Concept)</b> — آزمودن اینکه آیا یک فناوری یا یکپارچه‌سازی می‌تواند مسئله را حل کند.</li>
+          <li><b>اسپایک (Spike)</b> — بررسی زمان‌محدود برای کاهش عدم قطعیت.</li>
+          <li><b>تست بار (Load Test)</b> — اعتبارسنجی کارایی/مقیاس‌پذیری.</li>
+          <li><b>تست خرابی (Failure Test)</b> — اعتبارسنجی تاب‌آوری.</li>
+          <li><b>بازبینی معماری (Architecture Review)</b> — دریافت نظر ذی‌نفعان باتجربه.</li>
+          <li><b>بازخورد توسعه‌دهندگان</b> — آشکار کردن کوپلینگ، مسئولیت‌های نامشخص، رابط‌های ضعیف.</li>
+          <li><b>بازخورد عملیات (Operations)</b> — آشکار کردن تأخیر، نرخ خرابی، مصرف منابع، شکاف‌های رصدپذیری (observability).</li>
+        </ul>
+      </section>
+
+      <section id="stakeholders">
+        <h2>دریافت نظام‌مند بازخورد ذی‌نفعان</h2>
+        <p>به این تکیه نکنید: «اگر کسی مخالف باشد، به ما می‌گوید.» از یک فرآیند آگاهانه استفاده کنید:</p>
+        <pre><code>Decision
+   ↓
+Identify affected stakeholders
+   ↓
+Identify concerns
+   ↓
+Choose feedback method
+   ↓
+Collect feedback
+   ↓
+Resolve conflicts / update decision</code></pre>
+        <p>مثال تصمیم: تحویل ناهمگام اعلان‌ها (notifications). دغدغه‌های احتمالی ذی‌نفعان:</p>
+        <ul>
+          <li>توسعه‌دهندگان ← پیچیدگی و آزمون</li>
+          <li>SRE ← قابلیت اطمینان و تلاش مجدد بروکر</li>
+          <li>محصول ← تأخیر قابل‌مشاهده برای کاربر</li>
+          <li>امنیت ← داده‌های رویداد حساس</li>
+          <li>مالی ← هزینه زیرساخت</li>
+        </ul>
+      </section>
+
+      <section id="consensus">
+        <h2>بازخورد به معنای اجماع نیست</h2>
+        <p>بازخورد به تصمیم‌گیری کمک می‌کند اما به معنای آن نیست که همه باید موافق باشند.</p>
+        <pre><code>Stakeholder A prefers A.
+Stakeholder B prefers B.
+Architecture Driver favors B.
+Decision: B.
+Rationale documented.</code></pre>
+        <p>معماری شامل مصالحه‌هاست.</p>
+      </section>
+
+      <section id="adrs">
+        <h2>ADRها به‌عنوان ابزار بازخورد</h2>
+        <pre><code>ADR-042: Asynchronous notification delivery
+
+Context:
+Notification outages currently block checkout.
+
+Architecture Driver:
+Checkout availability >= 99.95%.
+
+Options:
+1. Synchronous HTTP
+2. Queue + async processing
+
+Decision:
+Use asynchronous delivery.
+
+Risks:
+- duplicates
+- delayed emails
+- broker dependency
+
+Validation:
+- failure test
+- load test
+- retry simulation
+
+Review Date:
+After first production release</code></pre>
+        <p>بخش مهم <b>اعتبارسنجی (validation)</b> است. با تغییر شواهد می‌توان تصمیمات را بازبینی کرد.</p>
+      </section>
+
+      <section id="staffscenario">
+        <h2>سناریوی Staff Engineer</h2>
+        <p>در حال طراحی یک پلتفرم پردازش سفارش هستید. نیازمندی‌ها: ۲٬۰۰۰ سفارش در دقیقه امروز؛ احتمال رشد به ۲۰٬۰۰۰؛ دسترس‌پذیری ۹۹.۹۵٪ برای پذیرش سفارش؛ سفارش‌های تأییدشده هرگز نباید گم شوند؛ SAP الزامی است؛ SAP گاهی از دسترس خارج می‌شود؛ تیم تاکنون Kafka را عملیاتی نکرده است.</p>
+        <p>پیشنهاد فعلی:</p>
+        <pre><code>Client
+  ↓
+Order API
+  ↓
+SAP</code></pre>
+        <p>جایگزین:</p>
+        <pre><code>Client
+  ↓
+Order API
+  ↓
+Kafka
+  ↓
+Order Processor
+  ↓
+SAP</code></pre>
+        <p>عدم قطعیت‌ها را شناسایی کنید: آیا پردازش همگام می‌تواند دسترس‌پذیری موردنیاز را برآورده کند؟ آیا Kafka می‌تواند توان عملیاتی و دوام موردنیاز را فراهم کند؟ آیا تیم می‌تواند Kafka را عملیاتی کند؟ خرابی‌های SAP چگونه باید بر سفارش‌های پذیرفته‌شده اثر بگذارند؟</p>
+        <p>بازخورد را انتخاب کنید:</p>
+        <pre><code>Kafka throughput → load test
+Durability → broker failure test
+Operational readiness → spike + runbook exercise
+SAP outages → outage simulation</code></pre>
+        <p>اکنون تصمیم مبتنی بر شواهد می‌شود.</p>
+      </section>
+
+      <section id="production">
+        <h2>بازخورد محیط عملیاتی</h2>
+        <p>بازخورد معماری پس از استقرار هم ادامه دارد. سیگنال‌های مفید عبارتند از:</p>
+        <pre><code>Latency
+Error rate
+Availability
+CPU / memory
+Queue depth
+Database contention
+Deployment failure rate
+Recovery time</code></pre>
+        <p>اگر فرضی می‌گوید تأخیر اعلان باید کمتر از ۵ دقیقه بماند، اما p95 آن ۲۲ دقیقه است، معماری شواهد جدیدی دارد و باید بازبینی شود.</p>
+      </section>
+
+      <section id="fitness">
+        <h2>توابع تناسب (Fitness Functions) — ارتباط پیشرفته</h2>
+        <p>یک تابع تناسب یک بررسی خودکار یا قابل‌اندازه‌گیری است که نشان می‌دهد آیا معماری همچنان یک ویژگی مهم را برآورده می‌کند.</p>
+        <pre><code>p95 latency < 500 ms</code></pre>
+        <pre><code>No forbidden dependency from Domain → Infrastructure</code></pre>
+        <pre><code>Recovery time < 60 seconds</code></pre>
+        <p>این کانون اصلی LG 03-05 نیست، اما برای تمرین Staff Engineer بسیار مفید است زیرا بازخورد را پیوسته می‌کند.</p>
+      </section>
+
+      <section id="exam">
+        <h2>دام‌های رایج آزمون CPSA-F</h2>
+        <ol>
+          <li><b>تصمیمات معماری باید پیش از پیاده‌سازی نهایی شوند.</b> — نادرست.</li>
+          <li><b>تکرار ریسک معماری را حذف می‌کند.</b> — نادرست.</li>
+          <li><b>بازخورد فقط زمانی لازم است که یک تصمیم شکست بخورد.</b> — نادرست.</li>
+          <li><b>بازخورد فقط به معنای پایش محیط عملیاتی است.</b> — نادرست.</li>
+          <li><b>برنامه‌ریزی بیشتر همیشه قابلیت پیش‌بینی بیشتری ایجاد می‌کند.</b> — نادرست.</li>
+          <li><b>همه تصمیمات به یک میزان اعتبارسنجی نیاز دارند.</b> — نادرست.</li>
+          <li><b>بازخورد ذی‌نفعان به معنای الزامی‌بودن اجماع است.</b> — نادرست.</li>
+        </ol>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی برای به‌خاطرسپاری</h2>
+        <div class="terms">
+          <div class="term"><b>حلقه بازخورد (Feedback loop)</b><span>چرخه‌ای که در آن نتایج بر تصمیمات بعدی اثر می‌گذارند.</span></div>
+          <div class="term"><b>ریسک معماری (Architectural risk)</b><span>پیامد منفی بالقوه‌ای که اهداف معماری را تهدید می‌کند.</span></div>
+          <div class="term"><b>عدم قطعیت (Uncertainty)</b><span>فقدان دانش کافی درباره یک تصمیم یا نتیجه.</span></div>
+          <div class="term"><b>تصمیم‌گیری تکراری (Iterative decision-making)</b><span>اصلاح تدریجی تصمیمات با در دسترس قرارگرفتن شواهد.</span></div>
+          <div class="term"><b>نمونه اولیه (Prototype)</b><span>پیاده‌سازی کوچک برای کاوش یا اعتبارسنجی یک ایده.</span></div>
+          <div class="term"><b>اثبات مفهوم (Proof of Concept)</b><span>پیاده‌سازی متمرکز برای تعیین امکان‌پذیری.</span></div>
+          <div class="term"><b>اسپایک (Spike)</b><span>بررسی زمان‌محدود برای کاهش عدم قطعیت.</span></div>
+          <div class="term"><b>اعتبارسنجی (Validation)</b><span>دریافت شواهدی مبنی بر مناسب‌بودن یک تصمیم یا فرض.</span></div>
+          <div class="term"><b>قابلیت پیش‌بینی (Predictability)</b><span>میزانی که در آن نتایج به‌طور معقول قابل پیش‌بینی‌اند.</span></div>
+        </div>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>در حال طراحی یک پلتفرم پشتیبانی مشتری مبتنی بر هوش مصنوعی هستید. نیازمندی‌ها: پاسخ‌ها معمولاً باید در کمتر از ۲ ثانیه آغاز شوند؛ داده‌های مشتری باید در اتحادیه اروپا بمانند؛ کاربران می‌توانند اسناد تا ۱۰۰ مگابایت آپلود کنند؛ تیم پیش‌بینی می‌کند ظرف یک سال ۱۰۰٬۰۰۰ کاربر خواهد داشت؛ تأمین‌کننده هوش مصنوعی هنوز تحت تست بار قرار نگرفته است؛ هدف عرضه چهار ماه دیگر است.</p>
+        <pre><code>Web App
+   ↓
+Backend
+   ↓
+AI Provider
+   ↓
+Vector Database</code></pre>
+        <ol>
+          <li>حداقل پنج عدم قطعیت را شناسایی کنید.</li>
+          <li>کدام‌یک ریسک معماری قابل‌توجهی ایجاد می‌کنند؟</li>
+          <li>آن‌ها را بر اساس تأثیر × عدم قطعیت رتبه‌بندی کنید.</li>
+          <li>برای هر مورد پرریسک یک مکانیزم بازخورد انتخاب کنید.</li>
+          <li>کدام تصمیمات باید اکنون گرفته شوند؟</li>
+          <li>کدام‌ها را می‌توان با اطمینان به تعویق انداخت؟</li>
+          <li>چه شواهدی معماری شما را تغییر می‌دهد؟</li>
+          <li>کدام ذی‌نفعان باید بازخورد دهند؟</li>
+        </ol>
+      </section>
+
+      <section id="staffext">
+        <h2>بسط Staff Engineer</h2>
+        <p>یک ثبت ریسک (risk register) کوچک ایجاد کنید:</p>
+        <pre><code>Risk:
+Architecture Driver:
+Probability:
+Impact:
+Evidence:
+Validation Method:
+Mitigation:
+Owner:
+Review Date:</code></pre>
+        <p>مثال:</p>
+        <pre><code>Risk:
+AI provider latency exceeds 2 seconds at peak.
+
+Architecture Driver:
+Response initiation <= 2 seconds.
+
+Probability:
+Unknown.
+
+Impact:
+High.
+
+Evidence:
+No production-scale test yet.
+
+Validation Method:
+Load test with representative prompts.
+
+Mitigation:
+Streaming / fallback model / rate limiting.</code></pre>
+        <div class="callout staff"><strong>دیدگاه Staff Engineer</strong>یک ثبت ریسک، نگرانی مبهم را به یک اقدام دارای مالک و مبتنی بر شواهد با تاریخ بازبینی مشخص تبدیل می‌کند.</div>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>چرا رویکردهای تکراری در معماری اهمیت دارند؟</summary><p>تصمیمات اغلب تحت عدم قطعیت گرفته می‌شوند؛ تکرار امکان اصلاح با ظهور شواهد را فراهم می‌کند.</p></details>
+        <details><summary>تفاوت عدم قطعیت و ریسک چیست؟</summary><p>عدم قطعیت یعنی ندانستن؛ ریسک یعنی این عدم قطعیت ممکن است به یک هدف مهم آسیب برساند.</p></details>
+        <details><summary>حلقه‌های بازخورد کوتاه‌تر چگونه ریسک را کاهش می‌دهند؟</summary><p>فرضیات نادرست را زودتر آشکار می‌کنند.</p></details>
+        <details><summary>آیا معماری تکراری به معنای اجتناب از طراحی پیشینی است؟</summary><p>خیر. طراحی آگاهانه را با یادگیری تدریجی ترکیب می‌کند.</p></details>
+        <details><summary>چهار راه برای دریافت بازخورد معماری نام ببرید.</summary><p>نمونه اولیه، اثبات مفهوم، تست بار، تست خرابی، بازبینی، بازخورد توسعه‌دهنده، پایش محیط عملیاتی.</p></details>
+        <details><summary>چرا تصمیمات دشوارِ بازگشت باید اعتبارسنجی بیشتری دریافت کنند؟</summary><p>تصمیمات نادرست پیامدهای بزرگ‌تری دارند و بازگرداندنشان پرهزینه‌تر است.</p></details>
+        <details><summary>نقش بازخورد ذی‌نفعان چیست؟</summary><p>دغدغه‌ها و پیامدها را آشکار می‌کند.</p></details>
+        <details><summary>آیا بازخورد ذی‌نفعان نیازمند اجماع است؟</summary><p>خیر.</p></details>
+        <details><summary>یک ADR چگونه می‌تواند در یک حلقه بازخورد مشارکت کند؟</summary><p>ADRها می‌توانند فرضیات، دلایل، اعتبارسنجی و شرایط بازبینی را ثبت کنند.</p></details>
+        <details><summary>چرا یک نمونه اولیه می‌تواند از برنامه‌ریزی اضافی ارزشمندتر باشد؟</summary><p>آزمایش‌ها می‌توانند شواهدی تولید کنند که تحلیل به‌تنهایی نمی‌تواند.</p></details>
+      </section>
+
+      <section id="minitest">
+        <h2>آزمون کوتاه</h2>
+        <div class="question-set">
+          <details class="question"><summary>چرا CPSA-F بر تکرار تأکید می‌کند؟</summary><div class="answer"><b>پاسخ:</b> تصمیمات اغلب تحت عدم قطعیت گرفته می‌شوند. معماران نباید از تصمیم‌گیری اجتناب کنند، تکرار به معنای الزام به Agile نیست، و مستندسازی هنوز اهمیت دارد.</div></details>
+          <details class="question"><summary>کدام فعالیت قوی‌ترین بازخورد را درباره یک فرض مقیاس‌پذیری فراهم می‌کند؟</summary><div class="answer"><b>پاسخ:</b> یک تست بار واقع‌گرایانه. تغییر نام یک نمودار، افزودن مستندات، یا پرسیدن فقط از معمار اصلی شواهدی تولید نمی‌کند.</div></details>
+          <details class="question"><summary>کدام گزینه درست است؟</summary><div class="answer"><b>پاسخ:</b> تصمیمات تکراری می‌توانند با درنظرگیری شواهد، قابلیت پیش‌بینی را بهبود دهند. تکرار ریسک را حذف نمی‌کند، تصمیمات می‌توانند تغییر کنند، و بازخورد هم پیش و هم پس از محیط عملیاتی مفید است.</div></details>
+          <details class="question"><summary>کدام وضعیت بیشترین توجیه را برای اعتبارسنجی زودهنگام دارد؟</summary><div class="answer"><b>پاسخ:</b> یک تصمیم پرتأثیر، نامطمئن و دشوارِ بازگشت. تصمیمات کم‌تأثیر و قابل‌بازگشت، نام‌گذاری متغیرها، و قالب‌بندی مستندات به اعتبارسنجی کم یا بدون آن نیاز دارند.</div></details>
+          <details class="question"><summary>نقش اصلی بازخورد ذی‌نفعان چیست؟</summary><div class="answer"><b>پاسخ:</b> ارائه اطلاعات درباره دغدغه‌ها و پیامدها. این تضمین‌کننده اجماع نیست، جایگزین مسئولیت معماری نمی‌شود، و مصالحه‌ها را حذف نمی‌کند.</div></details>
+        </div>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">LG 03-05 — همبستگی بین حلقه‌های بازخورد و ریسک‌ها (R1, R2).</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — ارزیابی ریسک معماری، بخش ۱</b>
+            <div style="color:var(--muted)">Software Architecture Monday.</div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=qHCG6j-ZRgU" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>صفحه درس همراه</b>
+            <div style="color:var(--muted)">developertoarchitect.com — درس ۱۲۷.</div>
+          </div>
+          <a href="https://developertoarchitect.com/lessons/lesson127.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress">
+          <a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day active" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+        </div>
+        <div class="navrow">
+          <a class="navbtn" href="isaqb-cpsa-f-day-12.fa.html">→ روز قبل</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۳ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "13";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

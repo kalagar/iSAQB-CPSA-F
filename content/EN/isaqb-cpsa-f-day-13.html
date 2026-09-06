@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 13: Feedback Loops, Uncertainty & Architectural Risk" />
+  <title>iSAQB CPSA-F — Day 13: Feedback Loops, Uncertainty &amp; Architectural Risk</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-13.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-13.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 13</span>
+  <h1>Feedback Loops, Uncertainty &amp; Architectural Risk</h1>
+  <p class="subtitle">Learn how iterative architecture, feedback, and risk reduction work together—and how to apply them like a Staff Engineer.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Feedback loops, uncertainty, risk</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a><a href="#relationship">Core relationship</a><a href="#uncertainty-risk">Uncertainty vs risk</a><a href="#drivers">Architecture risk starts with drivers</a><a href="#iteration">Why iteration reduces risk</a><a href="#prediction">Prediction vs feedback</a><a href="#loops">Short vs long feedback loops</a><a href="#reversibility">Risk and reversibility</a><a href="#matrix">Practical risk matrix</a><a href="#techniques">Feedback techniques</a><a href="#stakeholders">Systematically obtaining stakeholder feedback</a><a href="#consensus">Feedback does not mean consensus</a><a href="#adrs">ADRs as feedback tools</a><a href="#staffscenario">Staff Engineer scenario</a><a href="#production">Production feedback</a><a href="#fitness">Fitness functions</a><a href="#exam">Common CPSA-F exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Practical exercise</a><a href="#staffext">Staff Engineer extension</a><a href="#review">Review questions</a><a href="#minitest">Mini exam check</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain why architecture work must often be iterative, connect uncertainty, risk, feedback, and predictability, make architectural decisions incrementally, and systematically obtain stakeholder feedback.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 03-05 — Correlation between Feedback Loops and Risks. Exam relevance: R1 for iterative decision-making, R2 for systematically obtaining stakeholder feedback.</div>
+</section>
+
+<section id="relationship"><h2>The core relationship</h2>
+<pre><code>Uncertainty
+    ↓
+Architectural Decision
+    ↓
+Potential Risk
+    ↓
+Experiment / Implementation / Discussion
+    ↓
+Feedback
+    ↓
+New Evidence
+    ↓
+Refined Decision</code></pre>
+<p>The goal is not to avoid decisions. The goal is to make decisions with appropriate confidence and obtain evidence early enough to correct mistakes before they become expensive.</p>
+</section>
+
+<section id="uncertainty-risk"><h2>Uncertainty vs risk</h2>
+<div class="grid-2">
+<div class="card"><h3>Uncertainty</h3><p>We do not know enough yet. Examples: can the new API handle 10,000 requests/second? Will users need real-time results? Is a vendor API reliable enough? Can the team operate Kubernetes effectively?</p></div>
+<div class="card"><h3>Risk</h3><p>An uncertain condition may negatively affect an important goal.</p></div>
+</div>
+<pre><code>Uncertainty:
+Can the external payment provider handle peak load?
+
+Risk:
+Checkout availability may fall below 99.95%.</code></pre>
+<p>Not every uncertainty is architecturally important. Risk matters when it threatens availability, security, performance, maintainability, cost, compliance, or business goals.</p>
+</section>
+
+<section id="drivers"><h2>Architecture risk starts with drivers</h2>
+<pre><code>Quality Requirement
+99.95% checkout availability
+        ↓
+Architecture Driver
+Payment availability must not unnecessarily block ordering
+        ↓
+Architecture Decision
+Synchronous payment interaction
+        ↓
+Risk
+Payment outage causes checkout outage</code></pre>
+<p>The architecture driver explains why the risk matters.</p>
+</section>
+
+<section id="iteration"><h2>Why iteration reduces risk</h2>
+<p>Compare:</p>
+<pre><code>Design for 12 months
+→ implement everything
+→ load test at the end</code></pre>
+<p>with:</p>
+<pre><code>Identify critical assumption
+→ build a small slice
+→ load test
+→ analyze evidence
+→ refine</code></pre>
+<p>Shorter feedback loops expose incorrect assumptions sooner. Iteration does not guarantee success. It makes learning cheaper and earlier.</p>
+</section>
+
+<section id="prediction"><h2>Prediction vs feedback</h2>
+<p>Architecture uses both.</p>
+<div class="grid-2">
+<div class="card"><h3>Prediction</h3><p>Reason about expected traffic, failures, requirements, and team needs.</p></div>
+<div class="card"><h3>Feedback</h3><p>Observe prototypes, users, production metrics, developers, and real failures.</p></div>
+</div>
+<p>Strong architecture combines:</p>
+<pre><code>Reason → Decide → Validate → Learn → Adjust</code></pre>
+</section>
+
+<section id="loops"><h2>Short vs long feedback loops</h2>
+<div class="grid-2">
+<div class="card"><h3>Long loop</h3><p>Decision → 6 months implementation → production → first performance test.</p></div>
+<div class="card"><h3>Short loop</h3><p>Decision → prototype → load test → feedback → refine.</p></div>
+</div>
+<p>Short loops are especially valuable for expensive, irreversible, unfamiliar, or high-risk decisions.</p>
+</section>
+
+<section id="reversibility"><h2>Risk and reversibility</h2>
+<pre><code>High impact
++
+High uncertainty
++
+Low reversibility
+=
+Strong need for early feedback</code></pre>
+<p>A local helper-library choice needs little validation. A company-wide data partitioning strategy deserves much more.</p>
+</section>
+
+<section id="matrix"><h2>Practical risk matrix</h2>
+<div class="table-wrap"><table class="cmp"><thead><tr><th>Decision</th><th>Impact</th><th>Uncertainty</th><th>Priority</th></tr></thead><tbody>
+<tr><td>Logging library</td><td>Low</td><td>Low</td><td>Low</td></tr>
+<tr><td>Authentication model</td><td>High</td><td>Medium</td><td>High</td></tr>
+<tr><td>Kafka throughput at peak</td><td>High</td><td>High</td><td>Very High</td></tr>
+<tr><td>Button framework</td><td>Low</td><td>Medium</td><td>Low</td></tr>
+<tr><td>Cross-region consistency</td><td>Very High</td><td>High</td><td>Critical</td></tr>
+</tbody></table></div>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Spend architecture effort where uncertainty and consequences are significant.</div>
+</section>
+
+<section id="techniques"><h2>Feedback techniques</h2>
+<p>Architecture feedback can come from:</p>
+<ul>
+<li><b>Prototype</b> — validate feasibility.</li>
+<li><b>Proof of Concept</b> — test whether a technology or integration can solve the problem.</li>
+<li><b>Spike</b> — time-boxed investigation to reduce uncertainty.</li>
+<li><b>Load Test</b> — validate performance/scalability.</li>
+<li><b>Failure Test</b> — validate resilience.</li>
+<li><b>Architecture Review</b> — obtain experienced stakeholder input.</li>
+<li><b>Developer Feedback</b> — reveal coupling, unclear responsibilities, poor interfaces.</li>
+<li><b>Operations Feedback</b> — reveal latency, failure rates, resource use, observability gaps.</li>
+</ul>
+</section>
+
+<section id="stakeholders"><h2>Systematically obtaining stakeholder feedback</h2>
+<p>Do not rely on: <i>“If someone disagrees, they will tell us.”</i> Use a deliberate process:</p>
+<pre><code>Decision
+   ↓
+Identify affected stakeholders
+   ↓
+Identify concerns
+   ↓
+Choose feedback method
+   ↓
+Collect feedback
+   ↓
+Resolve conflicts / update decision</code></pre>
+<p>Example decision: asynchronous notification delivery. Possible stakeholder concerns:</p>
+<ul>
+<li>Developers → complexity and testing</li>
+<li>SRE → broker reliability and retries</li>
+<li>Product → user-visible delay</li>
+<li>Security → sensitive event data</li>
+<li>Finance → infrastructure cost</li>
+</ul>
+</section>
+
+<section id="consensus"><h2>Feedback does not mean consensus</h2>
+<p>Feedback informs decisions. It does not mean everyone must agree.</p>
+<pre><code>Stakeholder A prefers A.
+Stakeholder B prefers B.
+Architecture Driver favors B.
+Decision: B.
+Rationale documented.</code></pre>
+<p>Architecture involves trade-offs.</p>
+</section>
+
+<section id="adrs"><h2>ADRs as feedback tools</h2>
+<pre><code>ADR-042: Asynchronous notification delivery
+
+Context:
+Notification outages currently block checkout.
+
+Architecture Driver:
+Checkout availability >= 99.95%.
+
+Options:
+1. Synchronous HTTP
+2. Queue + async processing
+
+Decision:
+Use asynchronous delivery.
+
+Risks:
+- duplicates
+- delayed emails
+- broker dependency
+
+Validation:
+- failure test
+- load test
+- retry simulation
+
+Review Date:
+After first production release</code></pre>
+<p>The important part is <b>validation</b>. Decisions can be revisited when evidence changes.</p>
+</section>
+
+<section id="staffscenario"><h2>Staff Engineer scenario</h2>
+<p>You are designing an order-processing platform. Requirements: 2,000 orders/minute today; possible growth to 20,000; 99.95% order-acceptance availability; confirmed orders must never disappear; SAP is mandatory; SAP has occasional outages; the team has never operated Kafka.</p>
+<p>Current proposal:</p>
+<pre><code>Client
+  ↓
+Order API
+  ↓
+SAP</code></pre>
+<p>Alternative:</p>
+<pre><code>Client
+  ↓
+Order API
+  ↓
+Kafka
+  ↓
+Order Processor
+  ↓
+SAP</code></pre>
+<p>Identify uncertainties: can synchronous processing meet availability? Can Kafka handle required throughput and durability? Can the team operate Kafka? How should SAP outages affect accepted orders?</p>
+<p>Choose feedback:</p>
+<pre><code>Kafka throughput → load test
+Durability → broker failure test
+Operational readiness → spike + runbook exercise
+SAP outages → outage simulation</code></pre>
+<p>Now the decision becomes evidence-driven.</p>
+</section>
+
+<section id="production"><h2>Production feedback</h2>
+<p>Architecture feedback continues after deployment. Useful signals include:</p>
+<pre><code>Latency
+Error rate
+Availability
+CPU / memory
+Queue depth
+Database contention
+Deployment failure rate
+Recovery time</code></pre>
+<p>If an assumption says notification delay should stay under 5 minutes, but p95 is 22 minutes, the architecture has new evidence and should be revisited.</p>
+</section>
+
+<section id="fitness"><h2>Fitness functions — advanced connection</h2>
+<p>A fitness function is an automated or measurable check showing whether an architecture continues to satisfy an important characteristic.</p>
+<pre><code>p95 latency < 500 ms</code></pre>
+<pre><code>No forbidden dependency from Domain → Infrastructure</code></pre>
+<pre><code>Recovery time < 60 seconds</code></pre>
+<p>Not the main focus of LG 03-05, but highly useful for Staff Engineer practice because it makes feedback continuous.</p>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol>
+<li><b>Architecture decisions should be finalized before implementation.</b> — False.</li>
+<li><b>Iteration eliminates architectural risk.</b> — False.</li>
+<li><b>Feedback is only needed when a decision fails.</b> — False.</li>
+<li><b>Feedback only means production monitoring.</b> — False.</li>
+<li><b>More planning always creates more predictability.</b> — False.</li>
+<li><b>All decisions require the same validation effort.</b> — False.</li>
+<li><b>Stakeholder feedback means consensus is required.</b> — False.</li>
+</ol></section>
+
+<section id="terms"><h2>Key terms to remember</h2><div class="terms">
+<div class="term"><b>Feedback loop</b><span>A cycle in which results influence subsequent decisions.</span></div>
+<div class="term"><b>Architectural risk</b><span>Potential negative consequence threatening architecture goals.</span></div>
+<div class="term"><b>Uncertainty</b><span>Lack of sufficient knowledge about a decision or outcome.</span></div>
+<div class="term"><b>Iterative decision-making</b><span>Refining decisions progressively as evidence becomes available.</span></div>
+<div class="term"><b>Prototype</b><span>Small implementation used to explore or validate an idea.</span></div>
+<div class="term"><b>Proof of Concept</b><span>Focused implementation used to determine feasibility.</span></div>
+<div class="term"><b>Spike</b><span>Time-boxed investigation used to reduce uncertainty.</span></div>
+<div class="term"><b>Validation</b><span>Obtaining evidence that a decision or assumption is appropriate.</span></div>
+<div class="term"><b>Predictability</b><span>Degree to which outcomes can reasonably be anticipated.</span></div>
+</div></section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>You are designing an AI-assisted customer-support platform. Requirements: responses should usually begin within 2 seconds; customer data must remain in the EU; users may upload documents up to 100 MB; the team predicts 100,000 users within one year; the AI provider has not been load-tested; launch target is four months.</p>
+<pre><code>Web App
+   ↓
+Backend
+   ↓
+AI Provider
+   ↓
+Vector Database</code></pre>
+<ol>
+<li>Identify at least five uncertainties.</li>
+<li>Which create significant architectural risk?</li>
+<li>Rank them by impact × uncertainty.</li>
+<li>Choose one feedback mechanism for each high-risk item.</li>
+<li>Which decisions should be made now?</li>
+<li>Which can safely be deferred?</li>
+<li>What evidence would change your architecture?</li>
+<li>Which stakeholders should provide feedback?</li>
+</ol>
+</section>
+
+<section id="staffext"><h2>Staff Engineer extension</h2>
+<p>Create a small risk register:</p>
+<pre><code>Risk:
+Architecture Driver:
+Probability:
+Impact:
+Evidence:
+Validation Method:
+Mitigation:
+Owner:
+Review Date:</code></pre>
+<p>Example:</p>
+<pre><code>Risk:
+AI provider latency exceeds 2 seconds at peak.
+
+Architecture Driver:
+Response initiation <= 2 seconds.
+
+Probability:
+Unknown.
+
+Impact:
+High.
+
+Evidence:
+No production-scale test yet.
+
+Validation Method:
+Load test with representative prompts.
+
+Mitigation:
+Streaming / fallback model / rate limiting.</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>A risk register turns vague worry into an owned, evidence-driven action item with a review date.</div>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>Why are iterative approaches important in architecture?</summary><p>Decisions are often made under uncertainty; iteration enables refinement as evidence appears.</p></details>
+<details><summary>What is the difference between uncertainty and risk?</summary><p>Uncertainty means not knowing; risk means that uncertainty may harm an important goal.</p></details>
+<details><summary>How can shorter feedback loops reduce risk?</summary><p>They expose incorrect assumptions earlier.</p></details>
+<details><summary>Does iterative architecture mean avoiding upfront design?</summary><p>No. It combines intentional design with incremental learning.</p></details>
+<details><summary>Name four ways to obtain architecture feedback.</summary><p>Prototype, PoC, load test, failure test, review, developer feedback, production monitoring.</p></details>
+<details><summary>Why should hard-to-reverse decisions receive more validation?</summary><p>Incorrect decisions have larger consequences and are more expensive to undo.</p></details>
+<details><summary>What is the role of stakeholder feedback?</summary><p>It reveals stakeholder concerns and consequences.</p></details>
+<details><summary>Does stakeholder feedback require consensus?</summary><p>No.</p></details>
+<details><summary>How can an ADR participate in a feedback loop?</summary><p>ADRs can record assumptions, rationale, validation, and review conditions.</p></details>
+<details><summary>Why can a prototype be more valuable than additional planning?</summary><p>Experiments can produce evidence that analysis alone cannot.</p></details>
+</section>
+
+<section id="minitest"><h2>Mini exam check</h2>
+<div class="question-set">
+<details class="question"><summary>Why does CPSA-F emphasize iteration?</summary><div class="answer"><b>Answer:</b> Decisions are often made under uncertainty. Architects should not avoid decisions, iteration is not a mandate for Agile specifically, and documentation still matters.</div></details>
+<details class="question"><summary>Which activity gives strongest feedback about a scalability assumption?</summary><div class="answer"><b>Answer:</b> A realistic load test. Renaming a diagram, adding documentation, or asking only the original architect does not produce evidence.</div></details>
+<details class="question"><summary>Which statement is correct?</summary><div class="answer"><b>Answer:</b> Iterative decisions can improve predictability by incorporating evidence. Iteration does not eliminate risk, and decisions can change; feedback is useful before and after production.</div></details>
+<details class="question"><summary>Which situation most strongly justifies early validation?</summary><div class="answer"><b>Answer:</b> A high-impact, uncertain, hard-to-reverse decision. Low-impact reversible decisions, variable naming, and documentation formatting need little or no validation.</div></details>
+<details class="question"><summary>What is the main role of stakeholder feedback?</summary><div class="answer"><b>Answer:</b> Providing information about concerns and consequences. It does not guarantee consensus, replace architecture responsibility, or eliminate trade-offs.</div></details>
+</div>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">LG 03-05 — Correlation between Feedback Loops and Risks (R1, R2).</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Assessing Architectural Risk, Part 1</b><div style="color:var(--muted)">Software Architecture Monday.</div></div>
+<a href="https://www.youtube.com/watch?v=qHCG6j-ZRgU" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Companion lesson page</b><div style="color:var(--muted)">developertoarchitect.com — Lesson 127.</div></div>
+<a href="https://developertoarchitect.com/lessons/lesson127.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day active" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-12.html">← Previous day</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 13 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "13";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
