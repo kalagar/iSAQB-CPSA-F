@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 17: Architecture Analysis and Quality Evaluation" />
+  <title>iSAQB CPSA-F — Day 17: Architecture Analysis &amp; Quality Evaluation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-17.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-17.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 17</span>
+  <h1>Architecture Analysis &amp; Quality Evaluation</h1>
+  <p class="subtitle">A system can be functionally correct and architecturally unhealthy. Learn to replace “this looks scalable” with evidence a stakeholder can check.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Quality scenarios, metrics, qualitative vs quantitative evidence</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a><a href="#why">Why analyze architecture?</a><a href="#reasons">Reasons for analysis</a><a href="#evidence">Evidence-based analysis</a><a href="#qual-quant">Qualitative vs quantitative</a><a href="#match">Match method to quality</a><a href="#scenario">Scenario-based analysis</a><a href="#walkthrough">Scenario walkthrough</a><a href="#acceptance">Acceptance tests as evidence</a><a href="#runtime">Runtime measurement</a><a href="#coupling">Coupling metrics</a><a href="#context">Metrics need context</a><a href="#goodhart">Goodhart's Law</a><a href="#sources">Information sources</a><a href="#clusters">Error clusters &amp; change frequency</a><a href="#costbenefit">Cost-benefit analysis</a><a href="#atam">ATAM</a><a href="#testing">Analysis vs testing</a><a href="#designtime">Design-time vs runtime</a><a href="#conformance">Conformance preview</a><a href="#framework">Staff Engineer review framework</a><a href="#exam">Common CPSA-F exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Practical exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain why architectures are analyzed, distinguish design-time from runtime analysis, choose analysis methods for quality attributes, distinguish qualitative and quantitative analysis, use quality scenarios, interpret coupling metrics, identify evidence sources, explain the difference between analysis and conformance, and conduct a lightweight architecture assessment.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 05-01, LG 05-02. Related: LG 05-03.</div>
+</section>
+
+<section id="why"><h2>Why analyze architecture?</h2>
+<p>Architecture analysis asks:</p>
+<div class="callout info"><strong>The core question</strong>Does this architecture actually support what the system needs?</div>
+<p>A system can be functionally correct but architecturally unhealthy:</p>
+<pre><code>Features work,
+but deployments take 4 hours,
+one failure breaks checkout,
+and changes touch 12 modules.</code></pre>
+</section>
+
+<section id="reasons"><h2>Reasons for analysis</h2>
+<ul>
+<li>identify risks and improvement opportunities;</li>
+<li>determine whether requirements are fulfilled;</li>
+<li>assess conformance;</li>
+<li>verify stakeholder concerns.</li>
+</ul>
+<p>It can happen <b>before, during, or after</b> implementation.</p>
+</section>
+
+<section id="evidence"><h2>Evidence-based analysis</h2>
+<p>Weak: “This architecture looks scalable.”</p>
+<p>Stronger:</p>
+<pre><code>Quality Requirement
+       ↓
+Analysis Method
+       ↓
+Evidence
+       ↓
+Conclusion</code></pre>
+<p>Example:</p>
+<pre><code>Requirement:
+p95 latency &lt; 500 ms
+
+Method:
+Load test
+
+Evidence:
+p95 = 420 ms at 2,000 req/s</code></pre>
+</section>
+
+<section id="qual-quant"><h2>Qualitative vs quantitative</h2>
+<div class="grid-2">
+<div class="card"><h3>Quantitative</h3><pre><code>Latency = 420 ms
+Throughput = 3,000 req/s
+Availability = 99.96%
+Outbound dependencies = 14</code></pre></div>
+<div class="card"><h3>Qualitative</h3><p>Structured judgment: architecture review, interviews, security review, scenario walkthrough, stakeholder survey.</p></div>
+</div>
+<div class="callout exam"><strong>Trap</strong>“Quantitative methods are always superior” is false. A number without interpretation is not an architectural conclusion.</div>
+</section>
+
+<section id="match"><h2>Match method to quality</h2>
+<table>
+<thead><tr><th>Quality</th><th>Possible method</th></tr></thead>
+<tbody>
+<tr><td>Performance</td><td>Load test, runtime metrics</td></tr>
+<tr><td>Availability</td><td>Failure test, uptime metrics</td></tr>
+<tr><td>Security</td><td>Threat analysis, penetration testing</td></tr>
+<tr><td>Maintainability</td><td>Code review, coupling metrics</td></tr>
+<tr><td>Usability</td><td>User testing</td></tr>
+<tr><td>Modifiability</td><td>Change scenarios</td></tr>
+<tr><td>Deployability</td><td>Pipeline analysis</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="scenario"><h2>Scenario-based analysis</h2>
+<p>Instead of “the system should be maintainable”, use:</p>
+<pre><code>Stimulus:
+Add a new payment provider.
+
+Response:
+Implement without modifying order logic.
+
+Measure:
+Completed within 3 developer-days.</code></pre>
+<h3>Quality scenario structure</h3>
+<pre><code>Source
+Stimulus
+Environment
+Artifact
+Response
+Response Measure</code></pre>
+<pre><code>Source:
+Payment Provider
+
+Stimulus:
+Provider unavailable
+
+Environment:
+Peak traffic
+
+Artifact:
+Checkout workflow
+
+Response:
+Orders remain accepted
+
+Measure:
+Checkout availability &gt;= 99.95%</code></pre>
+</section>
+
+<section id="walkthrough"><h2>Scenario walkthrough</h2>
+<pre><code>Checkout
+   ↓
+Payment
+   ↓
+Notification</code></pre>
+<p>If Notification is unavailable and checkout waits synchronously, availability is threatened. The walkthrough finds this without writing any code.</p>
+</section>
+
+<section id="acceptance"><h2>Acceptance tests as evidence</h2>
+<p>Requirement: recover from worker failure within 60 seconds.</p>
+<pre><code>1. Start workload.
+2. Kill worker.
+3. Observe recovery.
+4. Measure interruption.
+
+Result:
+Recovery = 42 seconds</code></pre>
+</section>
+
+<section id="runtime"><h2>Runtime measurement</h2>
+<pre><code>p50
+p95
+p99
+error rate
+CPU
+memory
+queue depth
+retry count</code></pre>
+<div class="callout exam"><strong>Watch out</strong>Averages hide tail latency. A healthy mean with a terrible p99 is a real user-facing problem.</div>
+</section>
+
+<section id="coupling"><h2>Coupling metrics</h2>
+<div class="grid-2">
+<div class="card"><h3>Inbound / afferent</h3><p>How many other elements depend on this component?</p></div>
+<div class="card"><h3>Outbound / efferent</h3><p>How many other elements does this component depend on?</p></div>
+</div>
+<p>High outbound coupling can signal failure exposure, low autonomy, harder testing and harder deployment.</p>
+</section>
+
+<section id="context"><h2>Metrics need context</h2>
+<p>A high dependency count does not automatically prove bad architecture — the component may legitimately be an orchestrator.</p>
+<div class="callout info"><strong>Rule of thumb</strong>Metrics are evidence, not verdicts.</div>
+</section>
+
+<section id="goodhart"><h2>Goodhart's Law</h2>
+<p>If a metric becomes a rigid target, teams optimize the number instead of the quality.</p>
+<pre><code>Every service must have &lt;= 3 dependencies.</code></pre>
+<p>Teams may create a MegaGateway: the metric improves while the architecture gets worse.</p>
+</section>
+
+<section id="sources"><h2>Information sources</h2>
+<p>Requirements · architecture documentation · models · source code · source metrics · tests and results · defect clusters · logs · runtime metrics · revision history.</p>
+</section>
+
+<section id="clusters"><h2>Error clusters &amp; change frequency</h2>
+<pre><code>Billing: 3 defects
+Customer: 5 defects
+Integration: 46 defects</code></pre>
+<p>This does not prove bad architecture, but it is a strong investigation signal.</p>
+<pre><code>Highly volatile component
++
+high inbound coupling
+=
+potential architecture risk</code></pre>
+</section>
+
+<section id="costbenefit"><h2>Cost-benefit analysis (R3)</h2>
+<pre><code>Distributed cache
+
+Benefit:
+- lower latency
+- less DB load
+
+Cost:
++ operations
++ invalidation complexity</code></pre>
+<p>Architecture analysis asks whether the benefit is worth the cost.</p>
+</section>
+
+<section id="atam"><h2>ATAM (R3)</h2>
+<p>You do not need deep ATAM mastery for CPSA-F. The basic idea: evaluate the architecture against quality attributes and identify risks, trade-offs, sensitivity points and important decisions.</p>
+</section>
+
+<section id="testing"><h2>Analysis vs testing</h2>
+<div class="grid-2">
+<div class="card"><h3>Testing</h3><p>Does the implemented system behave correctly?</p></div>
+<div class="card"><h3>Architecture analysis</h3><p>Does the structure support future change? Are dependencies appropriate? Are quality goals met? Does the implementation conform?</p></div>
+</div>
+</section>
+
+<section id="designtime"><h2>Design-time vs runtime</h2>
+<div class="grid-2">
+<div class="card"><h3>Design-time</h3><p>Diagrams, scenarios, dependency reasoning, design reviews.</p></div>
+<div class="card"><h3>Runtime</h3><p>Load tests, metrics, logs, traces, failure tests.</p></div>
+</div>
+<p>Strong assessments combine both.</p>
+</section>
+
+<section id="conformance"><h2>Conformance preview</h2>
+<p>Conformance asks whether the implementation matches architecture decisions and design.</p>
+<pre><code>UI → Application → Domain</code></pre>
+<p>If Domain imports UI code, conformance is violated. <b>Drift</b> is implementation moving away from intended architecture; <b>erosion</b> is accumulated deviation weakening important properties. Day 18 goes deeper.</p>
+</section>
+
+<section id="framework"><h2>Staff Engineer review framework</h2>
+<ol>
+<li>Identify drivers.</li>
+<li>Identify scenarios.</li>
+<li>Inspect structure.</li>
+<li>Gather evidence.</li>
+<li>Identify risks.</li>
+<li>Recommend action.</li>
+</ol>
+<p>Possible actions:</p>
+<pre><code>Accept
+Measure
+Prototype
+Refactor
+Add guardrail
+Revisit decision</code></pre>
+<p>Communicate findings in a fixed shape:</p>
+<pre><code>Observation
+Evidence
+Risk
+Affected Quality
+Recommendation
+Validation</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>A finding without evidence is an opinion; a finding without a recommendation is a complaint. The six-line shape forces both.</div>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2>
+<ul>
+<li>Analysis happens only after implementation. → <b>False</b></li>
+<li>Analysis only checks functionality. → <b>False</b></li>
+<li>Quantitative methods are always superior. → <b>False</b></li>
+<li>High coupling proves bad architecture. → <b>False</b></li>
+<li>Scenario analysis requires production. → <b>False</b></li>
+<li>Testing and architecture analysis are identical. → <b>False</b></li>
+<li>ATAM must be mastered in depth. → <b>False</b></li>
+</ul>
+</section>
+
+<section id="terms"><h2>Key terms</h2>
+<p>Architecture Analysis · Quality Analysis · Scenario-Based Analysis · Quantitative Analysis · Qualitative Analysis · Architecture Metric · Inbound Dependency · Outbound Dependency · Architecture Conformance · Architecture Erosion</p>
+</section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>Given a customer portal with:</p>
+<pre><code>p95 = 1.2 s
+60% of classes depend on Document Provider SDK
+Notification outages caused incidents
+Authorization exists in UI and backend
+Document Service has 18 outbound dependencies</code></pre>
+<ol>
+<li>Identify four risks.</li>
+<li>Map each to a quality attribute.</li>
+<li>Classify each finding as qualitative or quantitative.</li>
+<li>Choose an analysis method per risk.</li>
+<li>Write an availability and a modifiability scenario.</li>
+<li>Prioritize the highest risk and justify it.</li>
+</ol>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>What does architecture analysis ask?</summary><p>Whether the architecture actually supports the required qualities.</p></details>
+<details><summary>When can analysis happen?</summary><p>Before, during, or after implementation.</p></details>
+<details><summary>Qualitative vs quantitative?</summary><p>Structured judgment vs numerical evidence; strong analysis combines both.</p></details>
+<details><summary>What is a quality scenario?</summary><p>Source, stimulus, environment, artifact, response, response measure — making an abstract quality analyzable.</p></details>
+<details><summary>Why are averages dangerous?</summary><p>They hide tail latency problems that users actually experience.</p></details>
+<details><summary>What does high outbound coupling signal?</summary><p>Possible failure exposure, low autonomy, harder testing and deployment — a signal, not a verdict.</p></details>
+<details><summary>What is Goodhart's Law in architecture?</summary><p>When a metric becomes a target, teams optimize the number instead of the quality.</p></details>
+<details><summary>Analysis vs testing?</summary><p>Testing checks behavior; analysis checks structure, dependencies, qualities and conformance.</p></details>
+<details><summary>Drift vs erosion?</summary><p>Drift = deviation; erosion = accumulated degradation.</p></details>
+<details><summary>How should findings be communicated?</summary><p>Observation, evidence, risk, affected quality, recommendation, validation.</p></details>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">LG 05-01, LG 05-02 — architecture analysis and quality evaluation.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Analyzing Architecture: Macro Techniques</b><div style="color:var(--muted)">Software Architecture Monday, Lesson 9.</div></div>
+<a href="https://www.youtube.com/watch?v=h1So8tVukS8" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>CPSA-A connection: ARCEVAL</b><div style="color:var(--muted)">The Advanced Level module dedicated to architecture evaluation.</div></div>
+<a href="https://public.isaqb.org/curriculum-arceval/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day active" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-16.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-18.html">Next day →</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 17 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "17";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

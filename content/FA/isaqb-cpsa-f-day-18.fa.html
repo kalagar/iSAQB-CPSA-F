@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۸ دوره iSAQB CPSA-F: انطباق معماری، زوال ساختاری و توابع تناسب" />
+  <title>iSAQB CPSA-F — روز ۱۸: انطباق معماری، زوال ساختاری و توابع تناسب</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-18.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-18.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۸</span>
+      <h1>انطباق معماری، زوال ساختاری و توابع تناسب</h1>
+      <p class="subtitle">
+        معماری موردنظر و معماری پیاده‌شده، میان‌بر به میان‌بر، از هم فاصله می‌گیرند. تصمیم‌ها را به قاعده تبدیل کنید و قاعده‌ها را به بررسی‌هایی که خودکار اجرا می‌شوند.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> انطباق، انحراف، فرسایش، قواعد معماری، توابع تناسب</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#focus">تمرکز رسمی CPSA-F</a>
+      <a href="#intended">موردنظر در برابر پیاده‌شده</a>
+      <a href="#conformance">انطباق معماری</a>
+      <a href="#why">چرا انطباق اهمیت دارد</a>
+      <a href="#drift">انحراف در برابر فرسایش</a>
+      <a href="#decay">زوال ساختاری چگونه رخ می‌دهد</a>
+      <a href="#explicit">قواعد باید صریح باشند</a>
+      <a href="#chain">تصمیم ← قاعده ← راستی‌آزمایی</a>
+      <a href="#methods">سه روش انطباق</a>
+      <a href="#tests">آزمون‌های معماری</a>
+      <a href="#java">نمونه لایه‌ای</a>
+      <a href="#microservice">نمونه میکروسرویس</a>
+      <a href="#guardrails">حفاظ در برابر دروازه</a>
+      <a href="#exceptions">استثناهای معماری</a>
+      <a href="#fitness">توابع تناسب</a>
+      <a href="#vs-test">تابع تناسب در برابر تست معمولی</a>
+      <a href="#structural">ساختاری در برابر عملیاتی</a>
+      <a href="#triggered">رویدادی در برابر پیوسته</a>
+      <a href="#ffda">معماری مبتنی بر تابع تناسب</a>
+      <a href="#runtime">انطباق در زمان اجرا</a>
+      <a href="#views">انطباق در نماهای مختلف</a>
+      <a href="#signals">نشانه‌های زوال ساختاری</a>
+      <a href="#traps-design">دام ماژول مشترک و چرخه‌ها</a>
+      <a href="#categories">دسته‌های قواعد</a>
+      <a href="#overgovernance">پرهیز از حکمرانی افراطی</a>
+      <a href="#automate">چه چیزی را خودکار کنیم</a>
+      <a href="#exam">دام‌های رایج آزمون</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین عملی</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس باید بتوانید انطباق معماری را توضیح دهید، معماری موردنظر را از پیاده‌شده تفکیک کنید، انحراف و فرسایش را تشخیص دهید، بازبینی کد / بازبینی معماری / تحلیل ابزارمحور را توضیح دهید، تصمیم‌ها را به قواعد صریح تبدیل کنید، آزمون‌های معماری و توابع تناسب را بشناسید، بررسی‌های ساختاری را از عملیاتی و بررسی‌های رویدادی را از پیوسته تفکیک کنید و حفاظ‌های سبک معماری طراحی کنید.</p>
+        <div class="callout info"><strong>تطابق رسمی</strong>LG 05-03 — ارزیابی انطباق با تصمیم‌های معماری (R2). مرتبط با LG 05-01 و LG 05-02.</div>
+      </section>
+
+      <section id="focus">
+        <h2>تمرکز رسمی CPSA-F</h2>
+        <p>انتظار اصلی: <b>ارزیابی اینکه آیا پیاده‌سازی با طراحی و تصمیم‌های معماری منطبق است.</b></p>
+        <p>برنامه درسی صراحتاً بازبینی کد، بازبینی معماری و تحلیل ابزارمحور را نام می‌برد. توابع تناسب توسعه‌ای عملی‌اند که از بازخورد پیوسته پشتیبانی می‌کنند — مفیدند، اما عین عبارت هدف یادگیری نیستند.</p>
+      </section>
+
+      <section id="intended">
+        <h2>معماری موردنظر در برابر پیاده‌شده</h2>
+        <div class="grid-2">
+          <div class="card"><h3>موردنظر</h3><p>آنچه طراحی و تصمیم‌گیری کرده‌ایم.</p></div>
+          <div class="card"><h3>پیاده‌شده</h3><p>آنچه کد و زمان اجرا واقعاً انجام می‌دهند.</p></div>
+        </div>
+        <p>معماری سالم این دو را به‌اندازه معقول همسو نگه می‌دارد — نه یکسان، اما نه متناقض.</p>
+      </section>
+
+      <section id="conformance">
+        <h2>انطباق معماری</h2>
+        <p>انطباق می‌پرسد: آیا سیستم پیاده‌شده از قواعد و تصمیم‌های موردنظر پیروی می‌کند؟</p>
+        <pre><code>Domain must not depend on UI.
+Only Payment Adapter may use the payment SDK.
+Services may not read another service's database directly.
+All external communication must use TLS.
+All events must contain eventId and schemaVersion.</code></pre>
+      </section>
+
+      <section id="why">
+        <h2>چرا انطباق اهمیت دارد</h2>
+        <p>بدون بررسی:</p>
+        <pre><code>Design documentation
+        ≠
+Source code
+        ≠
+Runtime behavior</code></pre>
+        <p>پیامدها: مستندات کهنه، وابستگی‌های پنهان، مرزهای تضعیف‌شده، افت ویژگی‌های کیفی.</p>
+      </section>
+
+      <section id="drift">
+        <h2>انحراف در برابر فرسایش</h2>
+        <div class="grid-2">
+          <div class="card"><h3>انحراف (Drift)</h3><p>پیاده‌سازی از طراحی موردنظر فاصله می‌گیرد.</p><pre><code>One service bypasses another's
+API and reads its database.</code></pre></div>
+          <div class="card"><h3>فرسایش (Erosion)</h3><p>انحراف‌های انباشته ویژگی‌های معماری را تضعیف می‌کنند.</p><pre><code>Many services now read
+each other's databases.</code></pre></div>
+        </div>
+        <pre><code>Small deviations
+      ↓
+Repeated exceptions
+      ↓
+Drift
+      ↓
+Accumulation
+      ↓
+Erosion</code></pre>
+      </section>
+
+      <section id="decay">
+        <h2>زوال ساختاری چگونه رخ می‌دهد</h2>
+        <p>معمولاً از طریق میان‌برهای محلی:</p>
+        <pre><code>"We only need one direct DB query."</code></pre>
+        <p>بعدتر:</p>
+        <pre><code>"We already do it in one place."</code></pre>
+        <p>در نهایت:</p>
+        <pre><code>Many services
+     ↓
+Shared Database</code></pre>
+      </section>
+
+      <section id="explicit">
+        <h2>قواعد معماری باید صریح باشند</h2>
+        <p>ضعیف: <i>«معماری را تمیز نگه دارید.»</i></p>
+        <p>قوی:</p>
+        <pre><code>Domain must not depend on:
+- web
+- persistence implementation
+- messaging implementation</code></pre>
+        <p>حالا این قاعده قابل بازبینی، آزمون و خودکارسازی است.</p>
+      </section>
+
+      <section id="chain">
+        <h2>تصمیم ← قاعده ← راستی‌آزمایی</h2>
+        <pre><code>Architecture Decision
+       ↓
+Architecture Rule
+       ↓
+Verification Method
+       ↓
+Feedback</code></pre>
+        <p>نمونه ADR: <i>هر ماژول دامنه مالک پایداری خودش است.</i> قاعده مشتق: <i>دسترسی بین‌ماژولی به پایگاه داده ممنوع است.</i></p>
+      </section>
+
+      <section id="methods">
+        <h2>سه روش انطباق</h2>
+        <div class="grid-2">
+          <div class="card"><h3>۱ · بازبینی کد</h3><p>جهت وابستگی، نقض مرزها، دسترسی مستقیم به زیرساخت، قواعد امنیتی و قراردادهای رابط را بررسی می‌کند.</p><p><b>قوت:</b> قضاوت زمینه‌ای، تشخیص مشکلات معنایی. <b>محدودیت:</b> دستی، ناهمگون، به‌راحتی از دست می‌رود.</p></div>
+          <div class="card"><h3>۲ · بازبینی معماری</h3><pre><code>Do module boundaries still match?
+Have new dependencies appeared?
+Are cross-cutting concepts consistent?
+Are teams bypassing interfaces?</code></pre></div>
+          <div class="card"><h3>۳ · تحلیل ابزارمحور</h3><pre><code>Dependency analysis
+Static architecture analysis
+Cycle detection
+Forbidden-dependency checks
+Code metrics</code></pre><p>بهترین گزینه برای قواعد ساختاری عینی و تکرارپذیر.</p></div>
+        </div>
+      </section>
+
+      <section id="tests">
+        <h2>آزمون‌های معماری</h2>
+        <pre><code>assert no classes in "domain"
+       depend on classes in "infrastructure"</code></pre>
+        <pre><code>assert payment-sdk
+       is only referenced from "payment-adapter"</code></pre>
+        <p>آزمون‌های معماری، قواعد معماری را اجراپذیر می‌کنند.</p>
+      </section>
+
+      <section id="java">
+        <h2>نمونه لایه‌ای</h2>
+        <pre><code>domain
+application
+infrastructure
+web</code></pre>
+        <pre><code>web → application
+application → domain
+infrastructure → domain
+
+domain → nothing technical</code></pre>
+        <p>بررسی‌های ممکن: دامنه نباید به فریم‌ورک وب وابسته باشد؛ دامنه نباید به فریم‌ورک پایداری وابسته باشد؛ لایه وب نباید مستقیماً به repository دسترسی داشته باشد.</p>
+        <div class="callout info"><strong>نکته آزمون</strong>ArchUnit ابزاری رایج در جاواست، اما مفهوم آزمون <i>تحلیل ابزارمحور</i> است، نه نام محصول.</div>
+      </section>
+
+      <section id="microservice">
+        <h2>نمونه میکروسرویس</h2>
+        <p>تصمیم: هر سرویس مالک داده خودش است.</p>
+        <pre><code>Intended:
+Order → Order DB
+Payment → Payment DB
+Customer → Customer DB
+
+Violation:
+Order → Payment DB directly</code></pre>
+        <p>راه‌های اعمال: اعتبارنامه‌های پایگاه داده، سیاست شبکه، بازبینی مخزن، بررسی‌های زیرساختی، لاگ‌های دسترسی.</p>
+      </section>
+
+      <section id="guardrails">
+        <h2>حفاظ در برابر دروازه</h2>
+        <div class="grid-2">
+          <div class="card"><h3>دروازه (Gate)</h3><p>تغییر را مسدود می‌کند.</p><pre><code>Forbidden dependency
+→ build fails</code></pre></div>
+          <div class="card"><h3>حفاظ (Guardrail)</h3><p>رفتار را هدایت می‌کند و استثنای کنترل‌شده را می‌پذیرد.</p><pre><code>Violation
+→ warning
+→ ADR required</code></pre></div>
+        </div>
+        <div class="callout exam"><strong>دام</strong>«همه قواعد باید build را مسدود کنند» نادرست است. دروازه را برای قواعد عینی، پرارزش و مستعد بازگشت نگه دارید.</div>
+      </section>
+
+      <section id="exceptions">
+        <h2>استثناهای معماری</h2>
+        <p>بهتر از نادیده گرفتن بی‌سروصدای یک قاعده:</p>
+        <pre><code>Rule violated
+        ↓
+Explain why
+        ↓
+Assess consequence
+        ↓
+Record exception
+        ↓
+Set expiry/review condition</code></pre>
+      </section>
+
+      <section id="fitness">
+        <h2>توابع تناسب (Fitness Functions)</h2>
+        <p>یک تابع تناسب، یک ویژگی معماری را به‌شکل عینی ارزیابی می‌کند.</p>
+        <div class="grid-2">
+          <div class="card"><h3>ساختاری</h3><pre><code>No domain → infrastructure
+dependencies</code></pre></div>
+          <div class="card"><h3>کارایی</h3><pre><code>p95 latency &lt; 500 ms</code></pre></div>
+          <div class="card"><h3>تاب‌آوری</h3><pre><code>Recovery &lt; 60 s</code></pre></div>
+          <div class="card"><h3>امنیت</h3><pre><code>No public endpoint
+without authentication</code></pre></div>
+        </div>
+      </section>
+
+      <section id="vs-test">
+        <h2>تابع تناسب در برابر تست معمولی</h2>
+        <pre><code>Unit test:
+calculatePrice() returns 42.00
+
+Fitness function:
+No module violates allowed dependency direction.</code></pre>
+        <div class="callout info"><strong>پرسش کلیدی</strong>آیا این بررسی از یک ویژگی معماری محافظت می‌کند؟</div>
+      </section>
+
+      <section id="structural">
+        <h2>ساختاری در برابر عملیاتی</h2>
+        <div class="grid-2">
+          <div class="card"><h3>ساختاری</h3><p>نبود چرخه؛ استقلال دامنه از فریم‌ورک‌ها؛ SDK فروشنده فقط در آداپتورها.</p></div>
+          <div class="card"><h3>عملیاتی</h3><p>p95 تأخیر؛ دسترس‌پذیری؛ زمان failover؛ سن صف.</p></div>
+        </div>
+      </section>
+
+      <section id="triggered">
+        <h2>رویدادی در برابر پیوسته</h2>
+        <div class="grid-2">
+          <div class="card"><h3>رویدادی</h3><pre><code>Pull Request
+→ CI
+→ architecture dependency test</code></pre></div>
+          <div class="card"><h3>پیوسته</h3><pre><code>Production
+→ observability
+→ p95 latency
+→ threshold</code></pre></div>
+        </div>
+      </section>
+
+      <section id="ffda">
+        <h2>معماری مبتنی بر تابع تناسب</h2>
+        <pre><code>Define desired characteristic
+       ↓
+Define measurable fitness function
+       ↓
+Change architecture
+       ↓
+Measure
+       ↓
+Repeat</code></pre>
+        <pre><code>Goal:
+Reduce Orders–Payments coupling.
+
+Fitness function:
+Payment SDK imports outside adapter = 0</code></pre>
+      </section>
+
+      <section id="runtime">
+        <h2>انطباق در زمان اجرا</h2>
+        <pre><code>Decision:
+Checkout should not depend on Notification availability.
+
+Runtime fitness function:
+Given Notification unavailable,
+checkout acceptance remains within SLO.</code></pre>
+        <p>برخی تصمیم‌های معماری را فقط می‌توان به‌صورت پویا اعتبارسنجی کرد — تحلیل ایستا نمی‌تواند هر تصمیمی را راستی‌آزمایی کند.</p>
+      </section>
+
+      <section id="views">
+        <h2>انطباق در نماهای مختلف</h2>
+        <ul>
+          <li><b>بلوک ساختمانی:</b> قواعد وابستگی.</li>
+          <li><b>زمان اجرا:</b> رفتار تعامل و خطا.</li>
+          <li><b>استقرار:</b> جای‌گذاری زیرساخت و مرزها.</li>
+          <li><b>زمینه:</b> وابستگی‌های بیرونی مستندنشده.</li>
+        </ul>
+      </section>
+
+      <section id="signals">
+        <h2>نشانه‌های زوال ساختاری</h2>
+        <pre><code>Increasing dependency cycles
+Growing shared utility module
+More cross-module DB access
+Increasing architecture exceptions
+Frequent changes across many modules
+Docs contradicting code</code></pre>
+      </section>
+
+      <section id="traps-design">
+        <h2>دام ماژول مشترک و وابستگی‌های چرخه‌ای</h2>
+        <pre><code>shared-utils
+├── SecurityUtils
+├── DatabaseUtils
+├── PaymentHelper
+└── OrderRules</code></pre>
+        <p>در ابتدا: استفاده مجدد. بعدتر: یک قطب کوپلینگ.</p>
+        <pre><code>Orders → Payments
+Payments → Customers
+Customers → Orders</code></pre>
+        <p>پیامدهای محتمل: تغییر مستقل دشوار، تست دشوار، مالکیت مبهم. تابع تناسب مفید:</p>
+        <pre><code>Number of module cycles = 0</code></pre>
+      </section>
+
+      <section id="categories">
+        <h2>دسته‌های قواعد معماری</h2>
+        <p>قواعد وابستگی · قواعد فناوری · قواعد مالکیت داده · قواعد ارتباطی · قواعد امنیتی · قواعد عملیاتی · قواعد استقرار. هر دسته به سازوکار راستی‌آزمایی متفاوتی نیاز دارد.</p>
+      </section>
+
+      <section id="overgovernance">
+        <h2>پرهیز از حکمرانی افراطی</h2>
+        <pre><code>Bad:
+500 mandatory rules
++ manual approval for every decision
+
+Better:
+Few high-value rules
++ automation where possible
++ clear rationale
++ explicit exception process</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>هدف، یکپارچگی بالای معماری با هزینه هماهنگی پایین است. هر قاعده‌ای که اضافه می‌کنید مالیاتی است که همه تیم‌ها برای همیشه می‌پردازند — فقط جایی وضعش کنید که چیزی بخرد.</div>
+      </section>
+
+      <section id="automate">
+        <h2>چه چیزی را خودکار کنیم</h2>
+        <p>نامزدهای خوب عینی، تکرارشونده، مهم، ارزان برای بررسی و مستعد بازگشت‌اند.</p>
+        <ul>
+          <li>نبود چرخه وابستگی؛</li>
+          <li>نبود دسترسی بین‌سرویسی به پایگاه داده؛</li>
+          <li>فیلدهای الزامی رویداد؛</li>
+          <li>نبود وابستگی‌های ممنوع بین بسته‌ها.</li>
+        </ul>
+      </section>
+
+      <section id="exam">
+        <h2>دام‌های رایج آزمون CPSA-F</h2>
+        <ul>
+          <li>انطباق یعنی بررسی درستی نیازمندی‌ها. → <b>نادرست</b></li>
+          <li>انطباق فقط دستی قابل بررسی است. → <b>نادرست</b></li>
+          <li>بازبینی کد بی‌ربط است. → <b>نادرست</b></li>
+          <li>هر انحرافی خودبه‌خود بد است. → <b>بیش از حد مطلق</b></li>
+          <li>«تابع تناسب» عین عبارت LG 05-03 است. → <b>نادرست</b></li>
+          <li>همه قواعد باید build را مسدود کنند. → <b>نادرست</b></li>
+          <li>تحلیل ایستا می‌تواند هر تصمیمی را راستی‌آزمایی کند. → <b>نادرست</b></li>
+          <li>مستندات به‌تنهایی انطباق را اثبات می‌کند. → <b>نادرست</b></li>
+        </ul>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی</h2>
+        <p>انطباق معماری · انحراف معماری · فرسایش معماری · قاعده معماری · آزمون معماری · تابع تناسب · تابع تناسب ساختاری · تابع تناسب عملیاتی · تابع تناسب رویدادی · تابع تناسب پیوسته · حفاظ · دروازه</p>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>با این قواعد:</p>
+        <pre><code>1. Domain must not depend on the web framework.
+2. Presentation may not access repositories directly.
+3. Payment SDK only in PaymentAdapter.
+4. Domain modules must not depend cyclically.
+5. Customer PII must never be logged.</code></pre>
+        <p>و این یافته‌ها:</p>
+        <pre><code>6 domain classes import the persistence framework.
+3 controllers call repositories directly.
+Payment SDK imported in 9 application classes.
+Orders ↔ Customers form a cycle.
+One production log contains customer email addresses.</code></pre>
+        <ol>
+          <li>هر نقض را طبقه‌بندی کنید.</li>
+          <li>تعیین کنید کدام‌یک را می‌توان به‌صورت ایستا خودکار کرد.</li>
+          <li>تعیین کنید کدام‌یک به تحلیل زمان اجرا یا لاگ نیاز دارد.</li>
+          <li>بزرگ‌ترین ریسک ماژولاریتی را شناسایی کنید.</li>
+          <li>آزمون‌های معماری را تعریف کنید.</li>
+          <li>یک تابع تناسب برای لاگ‌گیری PII تعریف کنید.</li>
+          <li>تعیین کنید کدام بررسی‌ها باید CI را مسدود کنند.</li>
+        </ol>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>انطباق معماری چه چیزی را ارزیابی می‌کند؟</summary><p>اینکه آیا پیاده‌سازی از طراحی و تصمیم‌های معماری موردنظر پیروی می‌کند.</p></details>
+        <details><summary>کدام سه روش صریحاً به LG 05-03 مربوط‌اند؟</summary><p>بازبینی کد، بازبینی معماری، تحلیل ابزارمحور.</p></details>
+        <details><summary>انحراف در برابر فرسایش؟</summary><p>انحراف = فاصله گرفتن از قصد؛ فرسایش = انحراف انباشته که ویژگی‌های معماری را تضعیف می‌کند.</p></details>
+        <details><summary>چرا قواعد را صریح کنیم؟</summary><p>فقط قاعده صریح قابل بازبینی، آزمون یا خودکارسازی است.</p></details>
+        <details><summary>آزمون معماری چیست؟</summary><p>بررسی اجراپذیر یک قاعده معماری، معمولاً درباره ساختار یا وابستگی‌ها.</p></details>
+        <details><summary>تابع تناسب چیست؟</summary><p>ارزیابی عینی یک ویژگی معماری.</p></details>
+        <details><summary>ساختاری در برابر عملیاتی؟</summary><p>ساختار و وابستگی‌ها در برابر رفتار زمان اجرا مانند تأخیر، دسترس‌پذیری و بازیابی.</p></details>
+        <details><summary>رویدادی در برابر پیوسته؟</summary><p>رویدادی با یک رخداد مانند pull request اجرا می‌شود؛ پیوسته محیط عملیات را رصد می‌کند.</p></details>
+        <details><summary>چرا تحلیل ایستا نمی‌تواند هر تصمیمی را اعتبارسنجی کند؟</summary><p>برخی تصمیم‌ها درباره رفتار زمان اجرا هستند و فقط در شرایط واقعی آشکار می‌شوند.</p></details>
+        <details><summary>چرا حکمرانی افراطی خطرناک است؟</summary><p>هزینه هماهنگی را بالا می‌برد، تیم‌ها را کند می‌کند و کار را به دور زدن قواعد سوق می‌دهد.</p></details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">LG 05-03 — ارزیابی انطباق با تصمیم‌های معماری.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — Fitness Function-Driven Architecture</b>
+            <div style="color:var(--muted)">Software Architecture Monday، درس ۲۱۵. همچنین درس‌های ۷۳ و ۱۳۹.</div>
+          </div>
+          <a href="https://developertoarchitect.com/lessons/lesson215.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day active" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-17.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-19.fa.html">روز بعد ←</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۸ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "18";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

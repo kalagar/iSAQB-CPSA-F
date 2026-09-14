@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 20: Mock Exam I — 40 mixed-topic questions with answer key, explanations and a weakness map" />
+  <title>iSAQB CPSA-F — Day 20: Mock Exam I</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-20.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-20.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 20</span>
+  <h1>CPSA-F Mock Exam I</h1>
+  <p class="subtitle">Forty original mixed-topic questions across Days 1–19. Seventy-five minutes, one point per question, practice pass at 24/40 — then a weakness map that tells you exactly what to revise.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Format:</strong> 40 questions · 75 minutes</span><span><strong>Pass reference:</strong> 60% of achievable points</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#how">How to use this mock</a><a href="#partA">Part A — Fundamentals &amp; drivers</a><a href="#partB">Part B — Design &amp; patterns</a><a href="#partC">Part C — Interfaces &amp; decisions</a><a href="#partD">Part D — Feedback &amp; risk</a><a href="#partE">Part E — Documentation &amp; views</a><a href="#partF">Part F — Analysis &amp; conformance</a><a href="#key">Answer key</a><a href="#scoring">Scoring</a><a href="#weakness">Weakness map</a><a href="#challenge">Staff Engineer challenge</a><a href="#strategy">Exam strategy</a><a href="#checklist">Key terms checklist</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="how">
+<h2>How to use this mock</h2>
+<p class="lead">The current official CPSA-F exam runs about <b>75 minutes</b> with roughly <b>40 multiple-choice questions</b>. The exact number varies because questions carry different point values. The official passing threshold is <b>60% of the maximum achievable points</b>.</p>
+<pre><code>Questions: 40
+Points per question: 1
+Maximum: 40
+Practice pass: 24/40
+Time limit: 75 minutes</code></pre>
+<div class="callout exam"><strong>Discipline</strong>Answer all forty before opening a single answer. Reveal an answer early and you lose the diagnostic value of the weakness map at the bottom.</div>
+</section>
+
+<section id="partA"><h2>Part A — Fundamentals, requirements &amp; drivers</h2>
+
+<p><b>Q1.</b> Which statement best describes software architecture?</p>
+<ol type="A"><li>The folder structure of the source code</li><li>Fundamental structures, relationships, and significant design decisions</li><li>A complete UML model of all classes</li><li>The technology stack alone</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Architecture is broader than code layout or technology choice.</p></details>
+
+<p><b>Q2.</b> Which activity is most characteristic of a software architect?</p>
+<ol type="A"><li>Personally making every implementation decision</li><li>Reconciling architecturally significant concerns with stakeholders</li><li>Avoiding business stakeholders</li><li>Choosing every local variable name</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Architects reconcile significant concerns across stakeholders.</p></details>
+
+<p><b>Q3.</b> Which requirement is most likely to become an architecture driver?</p>
+<ol type="A"><li>A button should use a specific label</li><li>Orders must still be accepted while SAP is unavailable</li><li>A helper method should be renamed</li><li>One test should use different sample data</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Availability during an SAP failure materially changes the architecture.</p></details>
+
+<p><b>Q4.</b> Which statement about constraints is correct?</p>
+<ol type="A"><li>Constraints always describe functionality</li><li>Constraints restrict the available solution space</li><li>Constraints are irrelevant to architecture</li><li>Constraints may always be ignored</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Constraints restrict the solution space.</p></details>
+
+<p><b>Q5.</b> Why should assumptions be explicit?</p>
+<ol type="A"><li>They can never be changed</li><li>Wrong assumptions can create architecture risk</li><li>They replace ADRs</li><li>They are verified facts</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Hidden assumptions create unmanaged risk.</p></details>
+
+<p><b>Q6.</b> “95% of requests complete within 500 ms at 2,000 req/s” is primarily:</p>
+<ol type="A"><li>A measurable quality requirement</li><li>A coding convention</li><li>A deployment rule</li><li>A functional decomposition rule</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — It is measurable and quality-focused.</p></details>
+
+<p><b>Q7.</b> Which statement about quality attributes is most accurate?</p>
+<ol type="A"><li>All should be maximized equally</li><li>They often involve trade-offs</li><li>They matter only after implementation</li><li>Performance is the only important one</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Qualities frequently conflict.</p></details>
+
+<p><b>Q8.</b> Which is the strongest example of an architecture-relevant constraint?</p>
+<ol type="A"><li>Customer data must remain inside the EU</li><li>A submit button says “Send”</li><li>A method should be short</li><li>A variable is called <code>customerId</code></li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Data residency restricts deployment and data design.</p></details>
+</section>
+
+<section id="partB"><h2>Part B — Design, decomposition, coupling &amp; patterns</h2>
+
+<p><b>Q9.</b> High cohesion means:</p>
+<ol type="A"><li>Related responsibilities belong together</li><li>Every component depends on every other</li><li>One component contains unrelated responsibilities</li><li>Everything is stored in one module</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Cohesion means related responsibilities belong together.</p></details>
+
+<p><b>Q10.</b> Which statement about coupling is most accurate?</p>
+<ol type="A"><li>All coupling is bad</li><li>Every dependency should be eliminated</li><li>Dependencies should be appropriate, explicit, and controlled</li><li>Coupling matters only in OO systems</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — Dependencies should be intentional and controlled, not absent.</p></details>
+
+<p><b>Q11.</b> Stepwise refinement primarily means:</p>
+<ol type="A"><li>Model everything in one diagram</li><li>Progressively decompose architecture into suitable detail levels</li><li>Avoid black-box descriptions</li><li>Replace documentation with source code</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Refinement handles architecture at multiple abstraction levels.</p></details>
+
+<p><b>Q12.</b> A black-box description primarily shows:</p>
+<ol type="A"><li>Every internal class</li><li>Responsibility and externally visible interfaces</li><li>Infrastructure nodes</li><li>Source-code metrics</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Black boxes emphasize externally visible responsibility and interfaces.</p></details>
+
+<p><b>Q13.</b> Which statement about architecture patterns is correct?</p>
+<ol type="A"><li>Patterns are always best practices</li><li>Patterns are reusable approaches whose suitability depends on context</li><li>Patterns remove trade-offs</li><li>CPSA-F mandates microservices</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Pattern suitability depends on context.</p></details>
+
+<p><b>Q14.</b> A team chooses microservices because “modern companies use them.” What is wrong?</p>
+<ol type="A"><li>Microservices cannot be documented</li><li>The choice is not tied to architecture drivers and trade-offs</li><li>Microservices cannot communicate over networks</li><li>Microservices cannot be deployed independently</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Fashion is not an architecture driver.</p></details>
+
+<p><b>Q15.</b> Which situation most strongly signals problematic coupling?</p>
+<ol type="A"><li>A stable module has one explicit dependency</li><li>Adding one payment provider requires changes in unrelated modules</li><li>A UI component uses a local helper</li><li>A component exposes a documented API</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Broad change propagation indicates problematic coupling.</p></details>
+
+<p><b>Q16.</b> Good architecture decomposition should:</p>
+<ol type="A"><li>Always use technical layers</li><li>Support responsibilities, expected change, and architecture drivers</li><li>Put all reuse into one global utility module</li><li>Avoid interfaces between building blocks</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Boundaries should reflect responsibilities and expected change.</p></details>
+</section>
+
+<section id="partC"><h2>Part C — Interfaces, cross-cutting concepts &amp; decisions</h2>
+
+<p><b>Q17.</b> Useful interface documentation can include:</p>
+<ol type="A"><li>Only method names</li><li>Semantics, errors, constraints, timing, security, and versioning</li><li>Developer schedules</li><li>Only the programming language</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Interfaces are semantic and behavioral contracts.</p></details>
+
+<p><b>Q18.</b> Provided vs required interface:</p>
+<ol type="A"><li>External vs internal</li><li>Offered capability vs dependency on another capability</li><li>Mandatory vs optional</li><li>No difference</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Provided = offered; required = depended upon.</p></details>
+
+<p><b>Q19.</b> Which is semantic coupling?</p>
+<ol type="A"><li>Two services use HTTPS</li><li>A consumer depends on an undocumented meaning of status <code>READY</code></li><li>Two modules use different filenames</li><li>A service uses JSON</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Undocumented meaning is semantic coupling.</p></details>
+
+<p><b>Q20.</b> Which is a cross-cutting concern?</p>
+<ol type="A"><li>One variable name</li><li>System-wide error handling</li><li>One helper method</li><li>One test record</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Error handling affects many building blocks.</p></details>
+
+<p><b>Q21.</b> Concern vs cross-cutting concept:</p>
+<ol type="A"><li>Technology vs team</li><li>Problem/topic vs coherent architecture solution</li><li>Runtime vs deployment</li><li>They are synonyms</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Concern = problem; concept = solution.</p></details>
+
+<p><b>Q22.</b> Why analyze interdependencies between cross-cutting concepts?</p>
+<ol type="A"><li>They never influence each other</li><li>Improving one concern may affect another quality or constraint</li><li>They must use one technology</li><li>They exist only in documentation</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — One concept can affect other qualities.</p></details>
+
+<p><b>Q23.</b> Which choice most clearly deserves an ADR?</p>
+<ol type="A"><li>Rename a local variable</li><li>Choose durable asynchronous integration to protect availability</li><li>Reorder imports</li><li>Rename a test</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — The integration decision has high architectural impact.</p></details>
+
+<p><b>Q24.</b> Main value of decision rationale:</p>
+<ol type="A"><li>Prevent architecture from changing</li><li>Preserve why the decision made sense in context</li><li>Remove the need to document consequences</li><li>Guarantee correctness</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Rationale preserves architectural knowledge.</p></details>
+
+<p><b>Q25.</b> Which ADR statement is correct?</p>
+<ol type="A"><li>One mandatory iSAQB template exists</li><li>ADRs preserve context, decision, rationale, and consequences</li><li>Every small coding choice needs one</li><li>Old ADRs should be silently overwritten</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — ADR format is flexible; knowledge preservation is what matters.</p></details>
+</section>
+
+<section id="partD"><h2>Part D — Feedback, risk &amp; iteration</h2>
+
+<p><b>Q26.</b> Why are short feedback loops valuable?</p>
+<ol type="A"><li>They guarantee first-time correctness</li><li>They test assumptions and risks earlier</li><li>They eliminate decisions</li><li>They guarantee consensus</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Early feedback lowers the cost of wrong assumptions.</p></details>
+
+<p><b>Q27.</b> Which decision most strongly deserves early validation?</p>
+<ol type="A"><li>A reversible low-impact library choice</li><li>A high-impact, uncertain, hard-to-reverse partitioning strategy</li><li>Variable naming</li><li>Comment formatting</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — High impact + uncertainty + low reversibility deserves validation.</p></details>
+
+<p><b>Q28.</b> Which statement about iterative architecture is correct?</p>
+<ol type="A"><li>It means no upfront reasoning</li><li>Decisions can be refined as evidence becomes available</li><li>It eliminates risk</li><li>Documentation becomes unnecessary</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Iteration refines decisions with evidence.</p></details>
+
+<p><b>Q29.</b> Strongest evidence for a scalability assumption:</p>
+<ol type="A"><li>Rename a component</li><li>Representative load test</li><li>Add architecture slides</li><li>Ask only the original proposer</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Load tests directly test scalability assumptions.</p></details>
+</section>
+
+<section id="partE"><h2>Part E — Documentation &amp; views</h2>
+
+<p><b>Q30.</b> Which view shows the system boundary and external systems?</p>
+<ol type="A"><li>Runtime</li><li>Context</li><li>Building block</li><li>Deployment</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Context shows the environment and system boundary.</p></details>
+
+<p><b>Q31.</b> Which view shows static software decomposition?</p>
+<ol type="A"><li>Context</li><li>Runtime</li><li>Building block/component</li><li>Deployment</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — The building block view shows static software structure.</p></details>
+
+<p><b>Q32.</b> Which view best shows what happens when Payment times out?</p>
+<ol type="A"><li>Runtime</li><li>Context</li><li>Deployment</li><li>Glossary</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Runtime shows dynamic interactions and failures.</p></details>
+
+<p><b>Q33.</b> Which view best shows where Payment Service runs and what infrastructure it uses?</p>
+<ol type="A"><li>Context</li><li>Runtime</li><li>Deployment</li><li>Requirements</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — Deployment maps software to infrastructure.</p></details>
+
+<p><b>Q34.</b> Which statement is correct?</p>
+<ol type="A"><li>Architectural view = UML</li><li>A view is a perspective; UML/C4 can be notation</li><li>Every runtime view must be a UML sequence diagram</li><li>C4 is mandatory</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — A view is a perspective; notation is how it is expressed.</p></details>
+</section>
+
+<section id="partF"><h2>Part F — Analysis &amp; conformance</h2>
+
+<p><b>Q35.</b> Architecture analysis:</p>
+<ol type="A"><li>Can only happen after release</li><li>Can happen before, during, or after implementation</li><li>Checks only functional correctness</li><li>Replaces testing</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Architecture can be analyzed at design time and at runtime.</p></details>
+
+<p><b>Q36.</b> Which is quantitative evidence?</p>
+<ol type="A"><li>“The design seems complex.”</li><li>“p95 latency is 1.2 seconds under expected load.”</li><li>“The team dislikes the design.”</li><li>“Responsibilities seem unclear.”</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — A measured latency value is quantitative evidence.</p></details>
+
+<p><b>Q37.</b> A component has 18 outbound dependencies. Best conclusion?</p>
+<ol type="A"><li>Architecture is definitely wrong</li><li>Split it immediately</li><li>It is a signal requiring contextual interpretation</li><li>Reduce dependencies to zero</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — Metrics are signals, not automatic verdicts.</p></details>
+
+<p><b>Q38.</b> Architecture conformance primarily evaluates:</p>
+<ol type="A"><li>Whether implementation aligns with architecture design and decisions</li><li>Business profitability</li><li>IDE consistency</li><li>Stakeholder agreement</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Conformance compares implementation with architecture intent.</p></details>
+
+<p><b>Q39.</b> Drift vs erosion:</p>
+<ol type="A"><li>Drift = deviation; erosion = accumulated degradation of architecture properties</li><li>Drift = runtime-only; erosion = documentation-only</li><li>Drift is always intentional</li><li>They are identical</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Erosion is accumulated harmful drift.</p></details>
+
+<p><b>Q40.</b> Strongest automated architecture check:</p>
+<ol type="A"><li>“Architecture should feel clean.”</li><li>“No domain class may depend on infrastructure packages.”</li><li>“Developers should write elegant code.”</li><li>“The system should be modern.”</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — The rule is explicit, architecture-relevant, and mechanically checkable.</p></details>
+</section>
+
+<section id="key"><h2>Answer key</h2>
+<table>
+<thead><tr><th>Q</th><th>Ans</th><th>Topic</th><th>Q</th><th>Ans</th><th>Topic</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>B</td><td>Fundamentals</td><td>21</td><td>B</td><td>Concern vs concept</td></tr>
+<tr><td>2</td><td>B</td><td>Architect responsibilities</td><td>22</td><td>B</td><td>Concept interdependencies</td></tr>
+<tr><td>3</td><td>B</td><td>Architecture drivers</td><td>23</td><td>B</td><td>ADRs</td></tr>
+<tr><td>4</td><td>B</td><td>Constraints</td><td>24</td><td>B</td><td>Rationale</td></tr>
+<tr><td>5</td><td>B</td><td>Assumptions &amp; risk</td><td>25</td><td>B</td><td>ADRs</td></tr>
+<tr><td>6</td><td>A</td><td>Quality requirements</td><td>26</td><td>B</td><td>Feedback loops</td></tr>
+<tr><td>7</td><td>B</td><td>Trade-offs</td><td>27</td><td>B</td><td>Risk</td></tr>
+<tr><td>8</td><td>A</td><td>Constraints</td><td>28</td><td>B</td><td>Iteration</td></tr>
+<tr><td>9</td><td>A</td><td>Cohesion</td><td>29</td><td>B</td><td>Validation</td></tr>
+<tr><td>10</td><td>C</td><td>Coupling</td><td>30</td><td>B</td><td>Context view</td></tr>
+<tr><td>11</td><td>B</td><td>Decomposition</td><td>31</td><td>C</td><td>Building block view</td></tr>
+<tr><td>12</td><td>B</td><td>Black box</td><td>32</td><td>A</td><td>Runtime view</td></tr>
+<tr><td>13</td><td>B</td><td>Patterns</td><td>33</td><td>C</td><td>Deployment view</td></tr>
+<tr><td>14</td><td>B</td><td>Driver-based design</td><td>34</td><td>B</td><td>View vs notation</td></tr>
+<tr><td>15</td><td>B</td><td>Modifiability/coupling</td><td>35</td><td>B</td><td>Architecture analysis</td></tr>
+<tr><td>16</td><td>B</td><td>Decomposition</td><td>36</td><td>B</td><td>Quantitative analysis</td></tr>
+<tr><td>17</td><td>B</td><td>Interface contracts</td><td>37</td><td>C</td><td>Metrics</td></tr>
+<tr><td>18</td><td>B</td><td>Provided/required</td><td>38</td><td>A</td><td>Conformance</td></tr>
+<tr><td>19</td><td>B</td><td>Semantic coupling</td><td>39</td><td>A</td><td>Drift vs erosion</td></tr>
+<tr><td>20</td><td>B</td><td>Cross-cutting concern</td><td>40</td><td>B</td><td>Architecture rules</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="scoring"><h2>Scoring</h2>
+<pre><code>36–40  Excellent
+32–35  Strong
+28–31  Good
+24–27  Practice pass
+20–23  Close — targeted revision needed
+&lt;20    Revisit major curriculum areas</code></pre>
+<p>The official CPSA-F exam currently requires <b>60% of the maximum achievable points</b>.</p>
+</section>
+
+<section id="weakness"><h2>Weakness map</h2>
+<div class="grid-2">
+<div class="card"><h3>Missed several in 1–8</h3><p>Architecture fundamentals · architect responsibilities · requirements and constraints · architecture drivers · quality requirements · assumptions.</p></div>
+<div class="card"><h3>Missed several in 9–16</h3><p>Decomposition · black box / white box · cohesion · coupling · patterns and trade-offs.</p></div>
+<div class="card"><h3>Missed several in 17–25</h3><p>Interfaces · semantic coupling · cross-cutting concepts · ADRs · decision rationale.</p></div>
+<div class="card"><h3>Missed several in 26–29</h3><p>Uncertainty · feedback loops · validation · risk · reversibility.</p></div>
+<div class="card"><h3>Missed several in 30–34</h3><p>Context, building block, runtime and deployment views · views vs notation.</p></div>
+<div class="card"><h3>Missed several in 35–40</h3><p>Qualitative vs quantitative analysis · architecture metrics · conformance · drift · erosion · architecture rules.</p></div>
+</div>
+</section>
+
+<section id="challenge"><h2>Staff Engineer challenge</h2>
+<pre><code>6 product teams
+Java + Spring Boot
+PostgreSQL
+Kafka
+Kubernetes</code></pre>
+<pre><code>Web
+ ↓
+Claims Service
+ ├── Customer DB
+ ├── Fraud API
+ ├── Payment API
+ ├── Document Provider SDK
+ └── Kafka</code></pre>
+<p>Evidence:</p>
+<pre><code>- Fraud API sometimes takes 8 seconds.
+- Claims availability target is 99.95%.
+- 14 classes use Document Provider SDK directly.
+- A new document provider is planned.
+- Several services read Customer DB directly.
+- Two teams use different retry policies.
+- No architecture tests exist.
+- Production logs occasionally contain customer email addresses.</code></pre>
+<p>Prepare an architecture review with:</p>
+<ol>
+<li>Top 5 architecture drivers</li>
+<li>Top 5 risks</li>
+<li>One availability scenario</li>
+<li>One modifiability scenario</li>
+<li>Three proposed architecture decisions</li>
+<li>Two cross-cutting concepts needing standardization</li>
+<li>Three rules suitable for automated checking</li>
+<li>One runtime fitness function</li>
+<li>The ADR you would write first</li>
+<li>The views you would use to communicate the design</li>
+</ol>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Strong answers link evidence + architecture driver + trade-off. A risk list with no driver behind it is just a list of things you dislike. Day 21 works this exact case through in full.</div>
+</section>
+
+<section id="strategy"><h2>Exam strategy</h2>
+<pre><code>Duration: about 75 minutes
+Questions: roughly 40
+Format: multiple choice
+Pass threshold: 60%</code></pre>
+<p>Suggested pacing:</p>
+<pre><code>First 45 min:  Answer confident questions.
+Next 20 min:   Resolve uncertain questions.
+Final 10 min:  Review wording and mistakes.</code></pre>
+<p>Watch especially for absolute words:</p>
+<pre><code>always
+never
+only
+all
+must</code></pre>
+<div class="callout exam"><strong>Rule of thumb</strong>Do not choose an answer because it names a fashionable technology. Ask: which option best addresses the architectural concern actually being tested?</div>
+</section>
+
+<section id="checklist"><h2>Key terms checklist</h2>
+<p>Make sure you can explain these without notes: software architecture · stakeholder · concern · requirement · constraint · quality requirement · architecture driver · assumption · architectural decision · ADR · cohesion · coupling · black box · white box · pattern · interface contract · provided interface · required interface · cross-cutting concern · cross-cutting concept · feedback loop · architecture risk · context view · building block view · runtime view · deployment view · qualitative analysis · quantitative analysis · quality scenario · architecture metric · architecture conformance · architecture drift · architecture erosion · fitness function.</p>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum 2025.1-rev2-EN</b><div style="color:var(--muted)">Valid since April 1, 2025.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official Foundation Level exam information</b><div style="color:var(--muted)">Includes official mock exam questions for additional practice.</div></div>
+<a href="https://www.isaqb.org/certifications/cpsa-exams/foundation-level-exam/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Identifying Architectural Characteristics</b><div style="color:var(--muted)">Business need → characteristic → driver → decision → trade-off.</div></div>
+<a href="https://www.youtube.com/watch?v=j11MWnz2vYQ" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day active" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-19.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-21.html">Next day →</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 20 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "20";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

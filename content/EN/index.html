@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="A 12-day, exam-oriented iSAQB CPSA-F study guide with a Staff Engineer perspective on every lesson." />
-  <title>iSAQB CPSA-F — 12-Day Study Guide</title>
+  <meta name="description" content="A 21-day, exam-oriented iSAQB CPSA-F study guide with a Staff Engineer perspective on every lesson." />
+  <title>iSAQB CPSA-F — 21-Day Study Guide</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
   <script src="../../lang-switch.js" defer></script>
   <link rel="stylesheet" href="../../style.css" />
@@ -17,13 +17,13 @@
         <a href="../FA/index.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
       </nav>
       <span class="eyebrow">iSAQB CPSA-F · Foundation Level</span>
-      <h1>A 12-day path to the CPSA-F — with a Staff Engineer lens</h1>
+      <h1>A 21-day path to the CPSA-F — with a Staff Engineer lens</h1>
       <p class="subtitle">
         Exam-oriented lessons on software architecture fundamentals, plus the trade-off thinking
         that separates a certificate from real architectural judgment.
       </p>
       <div class="meta">
-        <span><strong>12</strong> daily lessons</span>
+        <span><strong>21</strong> daily lessons</span>
         <span><strong>Curriculum:</strong> CPSA-F 2025.1</span>
         <span><strong>Format:</strong> self-paced, offline-friendly</span>
       </div>
@@ -36,7 +36,7 @@
 
   <main class="wrap">
     <div class="section-head">
-      <h2>The 12 lessons</h2>
+      <h2>The 21 lessons</h2>
       <p>Each day is a self-contained page — read it, work the exercise, then jump straight to the next.</p>
     </div>
 
@@ -119,11 +119,59 @@
         <p class="focus">Iteration, uncertainty, stakeholder feedback</p>
         <span class="go">Read lesson →</span>
       </a>
+      <a class="day-card" data-day="14" href="isaqb-cpsa-f-day-14.html">
+        <div class="top-row"><span class="num">14</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>Cross-Cutting Concerns and Cross-Cutting Concepts</h3>
+        <p class="focus">Persistence, communication, error handling, security, observability</p>
+        <span class="go">Read lesson →</span>
+      </a>
+      <a class="day-card" data-day="15" href="isaqb-cpsa-f-day-15.html">
+        <div class="top-row"><span class="num">15</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>Architecture Documentation &amp; Architectural Views</h3>
+        <p class="focus">Context, building block, runtime and deployment views</p>
+        <span class="go">Read lesson →</span>
+      </a>
+      <a class="day-card" data-day="16" href="isaqb-cpsa-f-day-16.html">
+        <div class="top-row"><span class="num">16</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>Interfaces, Architecture Decisions &amp; ADRs</h3>
+        <p class="focus">Interface contracts, decision rationale, ADRs</p>
+        <span class="go">Read lesson →</span>
+      </a>
+      <a class="day-card" data-day="17" href="isaqb-cpsa-f-day-17.html">
+        <div class="top-row"><span class="num">17</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>Architecture Analysis &amp; Quality Evaluation</h3>
+        <p class="focus">Quality scenarios, metrics, qualitative vs quantitative</p>
+        <span class="go">Read lesson →</span>
+      </a>
+      <a class="day-card" data-day="18" href="isaqb-cpsa-f-day-18.html">
+        <div class="top-row"><span class="num">18</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>Architecture Conformance, Structural Decay &amp; Fitness Functions</h3>
+        <p class="focus">Drift, erosion, architecture rules, fitness functions</p>
+        <span class="go">Read lesson →</span>
+      </a>
+      <a class="day-card" data-day="19" href="isaqb-cpsa-f-day-19.html">
+        <div class="top-row"><span class="num">19</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>Full Curriculum Revision I</h3>
+        <p class="focus">Requirements → drivers → decisions → conformance</p>
+        <span class="go">Read lesson →</span>
+      </a>
+      <a class="day-card" data-day="20" href="isaqb-cpsa-f-day-20.html">
+        <div class="top-row"><span class="num">20</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>CPSA-F Mock Exam I</h3>
+        <p class="focus">40 questions, answer key, weakness map</p>
+        <span class="go">Read lesson →</span>
+      </a>
+      <a class="day-card" data-day="21" href="isaqb-cpsa-f-day-21.html">
+        <div class="top-row"><span class="num">21</span><span class="check" data-tip="Mark complete"></span></div>
+        <h3>Mock Review &amp; Targeted Remediation</h3>
+        <p class="focus">High-error distinctions, Staff Engineer review case</p>
+        <span class="go">Read lesson →</span>
+      </a>
     </div>
 
     <div class="strip">
-      <div><b id="progress-count">0 / 13</b><span>Completed</span></div>
-      <div><b>13</b><span>Lessons, one per day</span></div>
+      <div><b id="progress-count">0 / 21</b><span>Completed</span></div>
+      <div><b>21</b><span>Lessons, one per day</span></div>
       <div><b>Foundation</b><span>CPSA-F exam level</span></div>
       <div><b>2025.1</b><span>Curriculum version</span></div>
     </div>
@@ -148,7 +196,7 @@
         card.querySelector(".check").textContent = mine ? "✓" : "";
       });
       var count = document.getElementById("progress-count");
-      if (count) count.textContent = done.length + " / 13";
+      if (count) count.textContent = done.length + " / 21";
     }
 
     document.querySelectorAll(".day-card .check").forEach(function(btn){

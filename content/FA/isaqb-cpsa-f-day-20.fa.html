@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۲۰ دوره iSAQB CPSA-F: آزمون آزمایشی I — ۴۰ پرسش با کلید پاسخ، توضیحات و نقشه ضعف" />
+  <title>iSAQB CPSA-F — روز ۲۰: آزمون آزمایشی I</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-20.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-20.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۲۰</span>
+      <h1>آزمون آزمایشی CPSA-F — شماره ۱</h1>
+      <p class="subtitle">
+        چهل پرسش اصیل و ترکیبی از روزهای ۱ تا ۱۹. هفتاد و پنج دقیقه، هر پرسش یک امتیاز، قبولی تمرینی ۲۴ از ۴۰ — و سپس نقشه ضعفی که دقیقاً می‌گوید چه چیزی را مرور کنید.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>قالب:</strong> ۴۰ پرسش · ۷۵ دقیقه</span>
+        <span><strong>مرجع قبولی:</strong> ۶۰٪ امتیاز قابل کسب</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#how">نحوه استفاده از این آزمون</a>
+      <a href="#partA">بخش الف — مبانی و محرک‌ها</a>
+      <a href="#partB">بخش ب — طراحی و الگوها</a>
+      <a href="#partC">بخش ج — رابط‌ها و تصمیم‌ها</a>
+      <a href="#partD">بخش د — بازخورد و ریسک</a>
+      <a href="#partE">بخش ه — مستندسازی و نماها</a>
+      <a href="#partF">بخش و — تحلیل و انطباق</a>
+      <a href="#key">کلید پاسخ</a>
+      <a href="#scoring">نمره‌دهی</a>
+      <a href="#weakness">نقشه ضعف</a>
+      <a href="#challenge">چالش Staff Engineer</a>
+      <a href="#strategy">راهبرد آزمون</a>
+      <a href="#checklist">چک‌لیست اصطلاحات کلیدی</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="how">
+        <h2>نحوه استفاده از این آزمون</h2>
+        <p class="lead">آزمون رسمی فعلی CPSA-F حدود <b>۷۵ دقیقه</b> با تقریباً <b>۴۰ پرسش چندگزینه‌ای</b> است. تعداد دقیق متفاوت است چون پرسش‌ها امتیازهای متفاوتی دارند. آستانه قبولی رسمی <b>۶۰٪ حداکثر امتیاز قابل کسب</b> است.</p>
+        <pre><code>Questions: 40
+Points per question: 1
+Maximum: 40
+Practice pass: 24/40
+Time limit: 75 minutes</code></pre>
+        <div class="callout exam"><strong>انضباط</strong>پیش از باز کردن حتی یک پاسخ، به هر ۴۰ پرسش پاسخ دهید. اگر زود پاسخ‌ها را ببینید، ارزش تشخیصی نقشه ضعف انتهای صفحه از بین می‌رود.</div>
+      </section>
+
+      <section id="partA">
+        <h2>بخش الف — مبانی، نیازمندی‌ها و محرک‌ها</h2>
+
+        <p><b>پرسش ۱.</b> کدام گزاره بهترین توصیف معماری نرم‌افزار است؟</p>
+        <ol type="A"><li>ساختار پوشه‌های کد منبع</li><li>ساختارهای بنیادی، روابط و تصمیم‌های طراحی مهم</li><li>یک مدل کامل UML از همه کلاس‌ها</li><li>صرفاً پشته فناوری</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — معماری فراتر از چیدمان کد یا انتخاب فناوری است.</p></details>
+
+        <p><b>پرسش ۲.</b> کدام فعالیت بیشترین تناسب را با نقش معمار نرم‌افزار دارد؟</p>
+        <ol type="A"><li>گرفتن شخصی هر تصمیم پیاده‌سازی</li><li>هماهنگ‌سازی دغدغه‌های مهم معماری با ذی‌نفعان</li><li>پرهیز از ذی‌نفعان کسب‌وکار</li><li>انتخاب نام هر متغیر محلی</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — معمار دغدغه‌های مهم را میان ذی‌نفعان هماهنگ می‌کند.</p></details>
+
+        <p><b>پرسش ۳.</b> کدام نیازمندی محتمل‌تر است که به محرک معماری تبدیل شود؟</p>
+        <ol type="A"><li>یک دکمه باید برچسب مشخصی داشته باشد</li><li>سفارش‌ها باید هنگام در دسترس نبودن SAP هم پذیرفته شوند</li><li>یک متد کمکی باید تغییر نام دهد</li><li>یک تست باید از داده نمونه دیگری استفاده کند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — دسترس‌پذیری هنگام خرابی SAP معماری را به‌طور مادی تغییر می‌دهد.</p></details>
+
+        <p><b>پرسش ۴.</b> کدام گزاره درباره محدودیت‌ها درست است؟</p>
+        <ol type="A"><li>محدودیت‌ها همیشه عملکرد را توصیف می‌کنند</li><li>محدودیت‌ها فضای راه‌حل موجود را محدود می‌کنند</li><li>محدودیت‌ها به معماری بی‌ربط‌اند</li><li>محدودیت‌ها همیشه قابل نادیده گرفتن‌اند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — محدودیت‌ها فضای راه‌حل را محدود می‌کنند.</p></details>
+
+        <p><b>پرسش ۵.</b> چرا فرض‌ها باید صریح باشند؟</p>
+        <ol type="A"><li>هرگز قابل تغییر نیستند</li><li>فرض‌های نادرست می‌توانند ریسک معماری بسازند</li><li>جایگزین ADR می‌شوند</li><li>حقایق راستی‌آزمایی‌شده‌اند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — فرض‌های پنهان ریسک مدیریت‌نشده می‌سازند.</p></details>
+
+        <p><b>پرسش ۶.</b> «۹۵٪ درخواست‌ها در ۵۰۰ میلی‌ثانیه با نرخ ۲٬۰۰۰ درخواست بر ثانیه کامل شوند» اساساً چیست؟</p>
+        <ol type="A"><li>یک نیازمندی کیفی قابل اندازه‌گیری</li><li>یک قرارداد کدنویسی</li><li>یک قاعده استقرار</li><li>یک قاعده تجزیه عملکردی</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — قابل اندازه‌گیری و متمرکز بر کیفیت است.</p></details>
+
+        <p><b>پرسش ۷.</b> کدام گزاره درباره ویژگی‌های کیفی دقیق‌تر است؟</p>
+        <ol type="A"><li>همه باید به‌طور یکسان بیشینه شوند</li><li>اغلب مستلزم مصالحه‌اند</li><li>فقط پس از پیاده‌سازی اهمیت دارند</li><li>کارایی تنها مورد مهم است</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — کیفیت‌ها اغلب با هم در تعارض‌اند.</p></details>
+
+        <p><b>پرسش ۸.</b> قوی‌ترین نمونه محدودیت مرتبط با معماری کدام است؟</p>
+        <ol type="A"><li>داده مشتری باید درون اتحادیه اروپا بماند</li><li>یک دکمه ارسال «Send» بنویسد</li><li>یک متد باید کوتاه باشد</li><li>یک متغیر <code>customerId</code> نام دارد</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — اقامت داده، استقرار و طراحی داده را محدود می‌کند.</p></details>
+      </section>
+
+      <section id="partB">
+        <h2>بخش ب — طراحی، تجزیه، کوپلینگ و الگوها</h2>
+
+        <p><b>پرسش ۹.</b> انسجام بالا یعنی:</p>
+        <ol type="A"><li>مسئولیت‌های مرتبط کنار هم قرار دارند</li><li>هر مؤلفه به همه مؤلفه‌های دیگر وابسته است</li><li>یک مؤلفه مسئولیت‌های نامرتبط دارد</li><li>همه چیز در یک ماژول ذخیره می‌شود</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — انسجام یعنی مسئولیت‌های مرتبط کنار هم‌اند.</p></details>
+
+        <p><b>پرسش ۱۰.</b> کدام گزاره درباره کوپلینگ دقیق‌تر است؟</p>
+        <ol type="A"><li>هر کوپلینگی بد است</li><li>هر وابستگی باید حذف شود</li><li>وابستگی‌ها باید مناسب، صریح و کنترل‌شده باشند</li><li>کوپلینگ فقط در سیستم‌های شیءگرا مهم است</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ج</b> — وابستگی‌ها باید عامدانه و کنترل‌شده باشند، نه ناموجود.</p></details>
+
+        <p><b>پرسش ۱۱.</b> پالایش گام‌به‌گام اساساً یعنی:</p>
+        <ol type="A"><li>مدل کردن همه چیز در یک نمودار</li><li>تجزیه تدریجی معماری به سطوح مناسب جزئیات</li><li>پرهیز از توصیف جعبه سیاه</li><li>جایگزینی مستندات با کد منبع</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — پالایش معماری را در چند سطح انتزاع مدیریت می‌کند.</p></details>
+
+        <p><b>پرسش ۱۲.</b> توصیف جعبه سیاه اساساً چه چیزی را نشان می‌دهد؟</p>
+        <ol type="A"><li>هر کلاس درونی</li><li>مسئولیت و رابط‌های قابل‌مشاهده از بیرون</li><li>گره‌های زیرساخت</li><li>معیارهای کد منبع</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — جعبه سیاه بر مسئولیت و رابط‌های بیرونی تأکید دارد.</p></details>
+
+        <p><b>پرسش ۱۳.</b> کدام گزاره درباره الگوهای معماری درست است؟</p>
+        <ol type="A"><li>الگوها همیشه بهترین‌روش‌اند</li><li>الگوها رویکردهای قابل استفاده مجددند که تناسبشان به زمینه بستگی دارد</li><li>الگوها مصالحه‌ها را حذف می‌کنند</li><li>CPSA-F میکروسرویس را الزام می‌کند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — تناسب الگو به زمینه بستگی دارد.</p></details>
+
+        <p><b>پرسش ۱۴.</b> تیمی میکروسرویس را انتخاب می‌کند چون «شرکت‌های مدرن از آن استفاده می‌کنند». اشکال کار کجاست؟</p>
+        <ol type="A"><li>میکروسرویس‌ها قابل مستندسازی نیستند</li><li>انتخاب به محرک‌های معماری و مصالحه‌ها گره نخورده است</li><li>میکروسرویس‌ها نمی‌توانند روی شبکه ارتباط برقرار کنند</li><li>میکروسرویس‌ها مستقل مستقر نمی‌شوند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — مد روز محرک معماری نیست.</p></details>
+
+        <p><b>پرسش ۱۵.</b> کدام وضعیت قوی‌ترین نشانه کوپلینگ مسئله‌دار است؟</p>
+        <ol type="A"><li>یک ماژول پایدار یک وابستگی صریح دارد</li><li>افزودن یک ارائه‌دهنده پرداخت مستلزم تغییر در ماژول‌های نامرتبط است</li><li>یک مؤلفه رابط کاربری از یک helper محلی استفاده می‌کند</li><li>یک مؤلفه یک API مستند ارائه می‌دهد</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — انتشار گسترده تغییر نشانه کوپلینگ مسئله‌دار است.</p></details>
+
+        <p><b>پرسش ۱۶.</b> تجزیه خوب معماری باید:</p>
+        <ol type="A"><li>همیشه از لایه‌های فنی استفاده کند</li><li>از مسئولیت‌ها، تغییر مورد انتظار و محرک‌های معماری پشتیبانی کند</li><li>همه استفاده مجدد را در یک ماژول سراسری قرار دهد</li><li>از رابط میان بلوک‌های ساختمانی پرهیز کند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — مرزها باید مسئولیت‌ها و تغییر مورد انتظار را بازتاب دهند.</p></details>
+      </section>
+
+      <section id="partC">
+        <h2>بخش ج — رابط‌ها، مفاهیم فراگیر و تصمیم‌ها</h2>
+
+        <p><b>پرسش ۱۷.</b> مستندسازی مفید رابط می‌تواند شامل چه باشد؟</p>
+        <ol type="A"><li>فقط نام متدها</li><li>معناشناسی، خطاها، محدودیت‌ها، زمان‌بندی، امنیت و نسخه‌بندی</li><li>برنامه زمانی توسعه‌دهندگان</li><li>فقط زبان برنامه‌نویسی</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — رابط‌ها قرارداد معنایی و رفتاری‌اند.</p></details>
+
+        <p><b>پرسش ۱۸.</b> رابط ارائه‌شده در برابر موردنیاز:</p>
+        <ol type="A"><li>بیرونی در برابر درونی</li><li>قابلیت عرضه‌شده در برابر وابستگی به قابلیت دیگری</li><li>اجباری در برابر اختیاری</li><li>تفاوتی ندارند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — ارائه‌شده = عرضه‌شده؛ موردنیاز = وابسته به آن.</p></details>
+
+        <p><b>پرسش ۱۹.</b> کدام مورد کوپلینگ معنایی است؟</p>
+        <ol type="A"><li>دو سرویس از HTTPS استفاده می‌کنند</li><li>یک مصرف‌کننده به معنای مستندنشده وضعیت <code>READY</code> وابسته است</li><li>دو ماژول نام فایل متفاوتی دارند</li><li>یک سرویس از JSON استفاده می‌کند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — معنای مستندنشده، کوپلینگ معنایی است.</p></details>
+
+        <p><b>پرسش ۲۰.</b> کدام مورد یک دغدغه فراگیر است؟</p>
+        <ol type="A"><li>نام یک متغیر</li><li>مدیریت خطای سراسری سیستم</li><li>یک متد کمکی</li><li>یک رکورد تست</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — مدیریت خطا بر بلوک‌های ساختمانی متعددی اثر می‌گذارد.</p></details>
+
+        <p><b>پرسش ۲۱.</b> دغدغه در برابر مفهوم فراگیر:</p>
+        <ol type="A"><li>فناوری در برابر تیم</li><li>مسئله/موضوع در برابر راه‌حل منسجم معماری</li><li>زمان اجرا در برابر استقرار</li><li>مترادف‌اند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — دغدغه = مسئله؛ مفهوم = راه‌حل.</p></details>
+
+        <p><b>پرسش ۲۲.</b> چرا وابستگی میان مفاهیم فراگیر را تحلیل کنیم؟</p>
+        <ol type="A"><li>هرگز بر هم اثر نمی‌گذارند</li><li>بهبود یک دغدغه ممکن است کیفیت یا محدودیت دیگری را متأثر کند</li><li>باید از یک فناوری استفاده کنند</li><li>فقط در مستندات وجود دارند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — یک مفهوم می‌تواند بر کیفیت‌های دیگر اثر بگذارد.</p></details>
+
+        <p><b>پرسش ۲۳.</b> کدام انتخاب آشکارا سزاوار یک ADR است؟</p>
+        <ol type="A"><li>تغییر نام یک متغیر محلی</li><li>انتخاب یکپارچه‌سازی ناهمگام بادوام برای حفاظت از دسترس‌پذیری</li><li>مرتب‌سازی مجدد import‌ها</li><li>تغییر نام یک تست</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — تصمیم یکپارچه‌سازی تأثیر معماری بالایی دارد.</p></details>
+
+        <p><b>پرسش ۲۴.</b> ارزش اصلی ثبت دلیل تصمیم:</p>
+        <ol type="A"><li>جلوگیری از تغییر معماری</li><li>حفظ اینکه چرا تصمیم در زمینه خودش منطقی بود</li><li>حذف نیاز به مستندسازی پیامدها</li><li>تضمین درستی</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — دلیل، دانش معماری را حفظ می‌کند.</p></details>
+
+        <p><b>پرسش ۲۵.</b> کدام گزاره درباره ADR درست است؟</p>
+        <ol type="A"><li>یک قالب الزامی iSAQB وجود دارد</li><li>ADR زمینه، تصمیم، دلیل و پیامدها را حفظ می‌کند</li><li>هر انتخاب کوچک کدنویسی به یکی نیاز دارد</li><li>ADRهای قدیمی باید بی‌سروصدا بازنویسی شوند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — قالب ADR انعطاف‌پذیر است؛ حفظ دانش اهمیت دارد.</p></details>
+      </section>
+
+      <section id="partD">
+        <h2>بخش د — بازخورد، ریسک و تکرار</h2>
+
+        <p><b>پرسش ۲۶.</b> چرا حلقه‌های بازخورد کوتاه ارزشمندند؟</p>
+        <ol type="A"><li>درستی از بار اول را تضمین می‌کنند</li><li>فرض‌ها و ریسک‌ها را زودتر می‌آزمایند</li><li>تصمیم‌گیری را حذف می‌کنند</li><li>اجماع را تضمین می‌کنند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — بازخورد زودهنگام هزینه فرض‌های نادرست را کاهش می‌دهد.</p></details>
+
+        <p><b>پرسش ۲۷.</b> کدام تصمیم بیشترین نیاز را به اعتبارسنجی زودهنگام دارد؟</p>
+        <ol type="A"><li>انتخاب یک کتابخانه کم‌تأثیر و برگشت‌پذیر</li><li>یک راهبرد پارتیشن‌بندی پرتأثیر، نامطمئن و سخت‌برگشت</li><li>نام‌گذاری متغیر</li><li>قالب‌بندی کامنت</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — تأثیر بالا + عدم قطعیت + برگشت‌پذیری کم سزاوار اعتبارسنجی است.</p></details>
+
+        <p><b>پرسش ۲۸.</b> کدام گزاره درباره معماری تکرارشونده درست است؟</p>
+        <ol type="A"><li>یعنی نبود استدلال اولیه</li><li>تصمیم‌ها می‌توانند با در دسترس شدن شواهد پالایش شوند</li><li>ریسک را حذف می‌کند</li><li>مستندسازی را غیرضروری می‌کند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — تکرار تصمیم‌ها را با شواهد پالایش می‌کند.</p></details>
+
+        <p><b>پرسش ۲۹.</b> قوی‌ترین شاهد برای یک فرض مقیاس‌پذیری:</p>
+        <ol type="A"><li>تغییر نام یک مؤلفه</li><li>آزمون بار نماینده واقعیت</li><li>افزودن اسلاید معماری</li><li>پرسیدن فقط از پیشنهاددهنده اصلی</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — آزمون بار مستقیماً فرض مقیاس‌پذیری را می‌آزماید.</p></details>
+      </section>
+
+      <section id="partE">
+        <h2>بخش ه — مستندسازی و نماها</h2>
+
+        <p><b>پرسش ۳۰.</b> کدام نما مرز سیستم و سیستم‌های بیرونی را نشان می‌دهد؟</p>
+        <ol type="A"><li>زمان اجرا</li><li>زمینه</li><li>بلوک ساختمانی</li><li>استقرار</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — نمای زمینه محیط و مرز سیستم را نشان می‌دهد.</p></details>
+
+        <p><b>پرسش ۳۱.</b> کدام نما تجزیه ایستای نرم‌افزار را نشان می‌دهد؟</p>
+        <ol type="A"><li>زمینه</li><li>زمان اجرا</li><li>بلوک ساختمانی/مؤلفه</li><li>استقرار</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ج</b> — نمای بلوک ساختمانی ساختار ایستای نرم‌افزار را نشان می‌دهد.</p></details>
+
+        <p><b>پرسش ۳۲.</b> کدام نما بهتر نشان می‌دهد وقتی پرداخت timeout می‌شود چه رخ می‌دهد؟</p>
+        <ol type="A"><li>زمان اجرا</li><li>زمینه</li><li>استقرار</li><li>واژه‌نامه</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — زمان اجرا تعاملات و خطاهای پویا را نشان می‌دهد.</p></details>
+
+        <p><b>پرسش ۳۳.</b> کدام نما بهتر نشان می‌دهد سرویس پرداخت کجا اجرا می‌شود و از چه زیرساختی استفاده می‌کند؟</p>
+        <ol type="A"><li>زمینه</li><li>زمان اجرا</li><li>استقرار</li><li>نیازمندی‌ها</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ج</b> — استقرار نگاشت نرم‌افزار به زیرساخت را نشان می‌دهد.</p></details>
+
+        <p><b>پرسش ۳۴.</b> کدام گزاره درست است؟</p>
+        <ol type="A"><li>نمای معماری = UML</li><li>نما یک منظر است؛ UML/C4 می‌توانند نمادگذاری باشند</li><li>هر نمای زمان اجرا باید نمودار توالی UML باشد</li><li>C4 الزامی است</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — نما منظر است؛ نمادگذاری نحوه بیان آن.</p></details>
+      </section>
+
+      <section id="partF">
+        <h2>بخش و — تحلیل و انطباق</h2>
+
+        <p><b>پرسش ۳۵.</b> تحلیل معماری:</p>
+        <ol type="A"><li>فقط پس از انتشار ممکن است</li><li>می‌تواند پیش از، حین یا پس از پیاده‌سازی رخ دهد</li><li>فقط درستی عملکردی را بررسی می‌کند</li><li>جایگزین تست می‌شود</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — معماری را می‌توان در زمان طراحی و در زمان اجرا تحلیل کرد.</p></details>
+
+        <p><b>پرسش ۳۶.</b> کدام مورد شاهد کمّی است؟</p>
+        <ol type="A"><li>«طراحی پیچیده به‌نظر می‌رسد.»</li><li>«p95 تأخیر تحت بار مورد انتظار ۱٫۲ ثانیه است.»</li><li>«تیم از این طراحی خوشش نمی‌آید.»</li><li>«مسئولیت‌ها مبهم به‌نظر می‌رسند.»</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — مقدار تأخیر اندازه‌گیری‌شده شاهد کمّی است.</p></details>
+
+        <p><b>پرسش ۳۷.</b> یک مؤلفه ۱۸ وابستگی خروجی دارد. بهترین نتیجه‌گیری؟</p>
+        <ol type="A"><li>معماری قطعاً اشتباه است</li><li>فوراً آن را تفکیک کنید</li><li>نشانه‌ای است که به تفسیر زمینه‌ای نیاز دارد</li><li>وابستگی‌ها را به صفر برسانید</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ج</b> — معیارها نشانه‌اند، نه حکم خودکار.</p></details>
+
+        <p><b>پرسش ۳۸.</b> انطباق معماری اساساً چه چیزی را ارزیابی می‌کند؟</p>
+        <ol type="A"><li>اینکه آیا پیاده‌سازی با طراحی و تصمیم‌های معماری همسوست</li><li>سودآوری کسب‌وکار</li><li>یکنواختی IDE</li><li>توافق ذی‌نفعان</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — انطباق پیاده‌سازی را با قصد معماری مقایسه می‌کند.</p></details>
+
+        <p><b>پرسش ۳۹.</b> انحراف در برابر فرسایش:</p>
+        <ol type="A"><li>انحراف = فاصله گرفتن؛ فرسایش = تضعیف انباشته ویژگی‌های معماری</li><li>انحراف = فقط زمان اجرا؛ فرسایش = فقط مستندات</li><li>انحراف همیشه عمدی است</li><li>یکسان‌اند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — فرسایش، انحراف انباشته و آسیب‌رسان است.</p></details>
+
+        <p><b>پرسش ۴۰.</b> قوی‌ترین بررسی خودکار معماری کدام است؟</p>
+        <ol type="A"><li>«معماری باید تمیز حس شود.»</li><li>«هیچ کلاس دامنه‌ای نباید به بسته‌های زیرساخت وابسته باشد.»</li><li>«توسعه‌دهندگان باید کد شیک بنویسند.»</li><li>«سیستم باید مدرن باشد.»</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — قاعده صریح، مرتبط با معماری و قابل بررسی ماشینی است.</p></details>
+      </section>
+
+      <section id="key">
+        <h2>کلید پاسخ</h2>
+        <table>
+          <thead><tr><th>پرسش</th><th>پاسخ</th><th>موضوع</th><th>پرسش</th><th>پاسخ</th><th>موضوع</th></tr></thead>
+          <tbody>
+            <tr><td>۱</td><td>ب</td><td>مبانی</td><td>۲۱</td><td>ب</td><td>دغدغه در برابر مفهوم</td></tr>
+            <tr><td>۲</td><td>ب</td><td>مسئولیت‌های معمار</td><td>۲۲</td><td>ب</td><td>وابستگی مفاهیم</td></tr>
+            <tr><td>۳</td><td>ب</td><td>محرک‌های معماری</td><td>۲۳</td><td>ب</td><td>ADR</td></tr>
+            <tr><td>۴</td><td>ب</td><td>محدودیت‌ها</td><td>۲۴</td><td>ب</td><td>دلیل تصمیم</td></tr>
+            <tr><td>۵</td><td>ب</td><td>فرض‌ها و ریسک</td><td>۲۵</td><td>ب</td><td>ADR</td></tr>
+            <tr><td>۶</td><td>الف</td><td>نیازمندی کیفی</td><td>۲۶</td><td>ب</td><td>حلقه‌های بازخورد</td></tr>
+            <tr><td>۷</td><td>ب</td><td>مصالحه‌ها</td><td>۲۷</td><td>ب</td><td>ریسک</td></tr>
+            <tr><td>۸</td><td>الف</td><td>محدودیت‌ها</td><td>۲۸</td><td>ب</td><td>تکرار</td></tr>
+            <tr><td>۹</td><td>الف</td><td>انسجام</td><td>۲۹</td><td>ب</td><td>اعتبارسنجی</td></tr>
+            <tr><td>۱۰</td><td>ج</td><td>کوپلینگ</td><td>۳۰</td><td>ب</td><td>نمای زمینه</td></tr>
+            <tr><td>۱۱</td><td>ب</td><td>تجزیه</td><td>۳۱</td><td>ج</td><td>نمای بلوک ساختمانی</td></tr>
+            <tr><td>۱۲</td><td>ب</td><td>جعبه سیاه</td><td>۳۲</td><td>الف</td><td>نمای زمان اجرا</td></tr>
+            <tr><td>۱۳</td><td>ب</td><td>الگوها</td><td>۳۳</td><td>ج</td><td>نمای استقرار</td></tr>
+            <tr><td>۱۴</td><td>ب</td><td>طراحی محرک‌محور</td><td>۳۴</td><td>ب</td><td>نما در برابر نمادگذاری</td></tr>
+            <tr><td>۱۵</td><td>ب</td><td>قابلیت تغییر/کوپلینگ</td><td>۳۵</td><td>ب</td><td>تحلیل معماری</td></tr>
+            <tr><td>۱۶</td><td>ب</td><td>تجزیه</td><td>۳۶</td><td>ب</td><td>تحلیل کمّی</td></tr>
+            <tr><td>۱۷</td><td>ب</td><td>قرارداد رابط</td><td>۳۷</td><td>ج</td><td>معیارها</td></tr>
+            <tr><td>۱۸</td><td>ب</td><td>ارائه‌شده/موردنیاز</td><td>۳۸</td><td>الف</td><td>انطباق</td></tr>
+            <tr><td>۱۹</td><td>ب</td><td>کوپلینگ معنایی</td><td>۳۹</td><td>الف</td><td>انحراف و فرسایش</td></tr>
+            <tr><td>۲۰</td><td>ب</td><td>دغدغه فراگیر</td><td>۴۰</td><td>ب</td><td>قواعد معماری</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="scoring">
+        <h2>نمره‌دهی</h2>
+        <pre><code>36–40  Excellent
+32–35  Strong
+28–31  Good
+24–27  Practice pass
+20–23  Close — targeted revision needed
+&lt;20    Revisit major curriculum areas</code></pre>
+        <p>آزمون رسمی CPSA-F در حال حاضر <b>۶۰٪ حداکثر امتیاز قابل کسب</b> را لازم دارد.</p>
+      </section>
+
+      <section id="weakness">
+        <h2>نقشه ضعف</h2>
+        <div class="grid-2">
+          <div class="card"><h3>چند خطا در ۱ تا ۸</h3><p>مبانی معماری · مسئولیت‌های معمار · نیازمندی‌ها و محدودیت‌ها · محرک‌های معماری · نیازمندی‌های کیفی · فرض‌ها.</p></div>
+          <div class="card"><h3>چند خطا در ۹ تا ۱۶</h3><p>تجزیه · جعبه سیاه/سفید · انسجام · کوپلینگ · الگوها و مصالحه‌ها.</p></div>
+          <div class="card"><h3>چند خطا در ۱۷ تا ۲۵</h3><p>رابط‌ها · کوپلینگ معنایی · مفاهیم فراگیر · ADR · دلیل تصمیم.</p></div>
+          <div class="card"><h3>چند خطا در ۲۶ تا ۲۹</h3><p>عدم قطعیت · حلقه‌های بازخورد · اعتبارسنجی · ریسک · برگشت‌پذیری.</p></div>
+          <div class="card"><h3>چند خطا در ۳۰ تا ۳۴</h3><p>نماهای زمینه، بلوک ساختمانی، زمان اجرا و استقرار · نما در برابر نمادگذاری.</p></div>
+          <div class="card"><h3>چند خطا در ۳۵ تا ۴۰</h3><p>تحلیل کیفی و کمّی · معیارهای معماری · انطباق · انحراف · فرسایش · قواعد معماری.</p></div>
+        </div>
+      </section>
+
+      <section id="challenge">
+        <h2>چالش Staff Engineer</h2>
+        <pre><code>6 product teams
+Java + Spring Boot
+PostgreSQL
+Kafka
+Kubernetes</code></pre>
+        <pre><code>Web
+ ↓
+Claims Service
+ ├── Customer DB
+ ├── Fraud API
+ ├── Payment API
+ ├── Document Provider SDK
+ └── Kafka</code></pre>
+        <p>شواهد:</p>
+        <pre><code>- Fraud API sometimes takes 8 seconds.
+- Claims availability target is 99.95%.
+- 14 classes use Document Provider SDK directly.
+- A new document provider is planned.
+- Several services read Customer DB directly.
+- Two teams use different retry policies.
+- No architecture tests exist.
+- Production logs occasionally contain customer email addresses.</code></pre>
+        <p>یک بازبینی معماری با این موارد آماده کنید:</p>
+        <ol>
+          <li>۵ محرک برتر معماری</li>
+          <li>۵ ریسک برتر</li>
+          <li>یک سناریوی دسترس‌پذیری</li>
+          <li>یک سناریوی قابلیت تغییر</li>
+          <li>سه تصمیم معماری پیشنهادی</li>
+          <li>دو مفهوم فراگیر نیازمند استانداردسازی</li>
+          <li>سه قاعده مناسب برای بررسی خودکار</li>
+          <li>یک تابع تناسب زمان اجرا</li>
+          <li>ADR‌ای که اول می‌نویسید</li>
+          <li>نماهایی که برای انتقال طراحی به‌کار می‌برید</li>
+        </ol>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>پاسخ‌های قوی شاهد + محرک معماری + مصالحه را به هم گره می‌زنند. فهرست ریسکی که محرکی پشتش نباشد صرفاً فهرستی از چیزهایی است که دوست ندارید. روز ۲۱ همین مورد را به‌طور کامل حل می‌کند.</div>
+      </section>
+
+      <section id="strategy">
+        <h2>راهبرد آزمون</h2>
+        <pre><code>Duration: about 75 minutes
+Questions: roughly 40
+Format: multiple choice
+Pass threshold: 60%</code></pre>
+        <p>سرعت پیشنهادی:</p>
+        <pre><code>First 45 min:  Answer confident questions.
+Next 20 min:   Resolve uncertain questions.
+Final 10 min:  Review wording and mistakes.</code></pre>
+        <p>به‌ویژه مراقب واژه‌های مطلق باشید:</p>
+        <pre><code>always
+never
+only
+all
+must</code></pre>
+        <div class="callout exam"><strong>قاعده سرانگشتی</strong>پاسخی را فقط به‌خاطر نام یک فناوری مد روز انتخاب نکنید. بپرسید: کدام گزینه بهتر به دغدغه معماریِ واقعاً موردسنجش می‌پردازد؟</div>
+      </section>
+
+      <section id="checklist">
+        <h2>چک‌لیست اصطلاحات کلیدی</h2>
+        <p>مطمئن شوید می‌توانید این‌ها را بدون یادداشت توضیح دهید: معماری نرم‌افزار · ذی‌نفع · دغدغه · نیازمندی · محدودیت · نیازمندی کیفی · محرک معماری · فرض · تصمیم معماری · ADR · انسجام · کوپلینگ · جعبه سیاه · جعبه سفید · الگو · قرارداد رابط · رابط ارائه‌شده · رابط موردنیاز · دغدغه فراگیر · مفهوم فراگیر · حلقه بازخورد · ریسک معماری · نمای زمینه · نمای بلوک ساختمانی · نمای زمان اجرا · نمای استقرار · تحلیل کیفی · تحلیل کمّی · سناریوی کیفی · معیار معماری · انطباق معماری · انحراف معماری · فرسایش معماری · تابع تناسب.</p>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F نسخه 2025.1-rev2-EN</b>
+            <div style="color:var(--muted)">معتبر از ۱ آوریل ۲۰۲۵.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>اطلاعات رسمی آزمون سطح Foundation</b>
+            <div style="color:var(--muted)">شامل پرسش‌های آزمون آزمایشی رسمی برای تمرین بیشتر.</div>
+          </div>
+          <a href="https://www.isaqb.org/certifications/cpsa-exams/foundation-level-exam/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — Identifying Architectural Characteristics</b>
+            <div style="color:var(--muted)">نیاز کسب‌وکار ← ویژگی ← محرک ← تصمیم ← مصالحه.</div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=j11MWnz2vYQ" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day active" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-19.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-21.fa.html">روز بعد ←</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۲۰ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "20";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

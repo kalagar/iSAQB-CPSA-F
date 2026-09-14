@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 15: Architecture Documentation and Architectural Views" />
+  <title>iSAQB CPSA-F — Day 15: Architecture Documentation &amp; Architectural Views</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-15.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-15.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 15</span>
+  <h1>Architecture Documentation &amp; Architectural Views</h1>
+  <p class="subtitle">Write documentation people actually use: understandable, correct, efficient, appropriate and maintainable — and pick the view that answers the question a stakeholder is really asking.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Documentation quality, context, building block, runtime, deployment views</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a><a href="#why">Why documentation exists</a><a href="#quality">Documentation quality requirements</a><a href="#stakeholder">Stakeholder-oriented documentation</a><a href="#view-notation">View vs diagram vs notation</a><a href="#context">Context view</a><a href="#buildingblock">Building block view</a><a href="#runtime">Runtime view</a><a href="#deployment">Deployment view</a><a href="#fourviews">One system, four views</a><a href="#choosing">Choosing the right view</a><a href="#consistency">Consistency across views</a><a href="#template">Template-based documentation</a><a href="#staff">Staff Engineer perspective</a><a href="#exam">Common CPSA-F exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Practical exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain why architecture documentation exists, name the quality requirements of good technical documentation, tailor documentation to stakeholder needs, explain and use the context, building block, runtime and deployment views, distinguish views from diagrams and notations, select the right view for a stakeholder concern, and recognize the common CPSA-F exam traps around documentation.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 04-01, LG 04-02, LG 04-05 — Curriculum CPSA-F 2025.1-rev2.</div>
+</section>
+
+<section id="why"><h2>Why architecture documentation exists</h2>
+<p>Architecture documentation supports design, implementation, communication, maintenance, evolution, onboarding, decision-making and risk reduction.</p>
+<pre><code>Architecture
+    ↓
+Different stakeholder concerns
+    ↓
+Different views
+    ↓
+Appropriate documentation</code></pre>
+<p>The same architecture may need different representations for developers, testers, management, operations, security and product stakeholders. Documentation is not one artifact for everyone — it is a set of answers to different questions.</p>
+</section>
+
+<section id="quality"><h2>Documentation quality requirements</h2>
+<p>The official curriculum emphasizes five qualities:</p>
+<ul>
+<li><b>Understandability</b> — can the intended audience understand it?</li>
+<li><b>Correctness</b> — does it match reality?</li>
+<li><b>Efficiency</b> — can readers find what they need quickly?</li>
+<li><b>Appropriateness</b> — is the content suitable for its purpose?</li>
+<li><b>Maintainability</b> — can it be kept current with reasonable effort?</li>
+</ul>
+<div class="callout exam"><strong>Trap</strong>“More documentation is always better” is false. Documentation that nobody can maintain becomes wrong documentation, and wrong documentation is worse than none.</div>
+</section>
+
+<section id="stakeholder"><h2>Stakeholder-oriented documentation</h2>
+<table>
+<thead><tr><th>Stakeholder</th><th>Question</th><th>View</th></tr></thead>
+<tbody>
+<tr><td>Product Manager</td><td>Which external systems do we depend on?</td><td>Context</td></tr>
+<tr><td>Developer</td><td>Which component owns payment authorization?</td><td>Building Block</td></tr>
+<tr><td>SRE</td><td>What happens when payment times out?</td><td>Runtime</td></tr>
+<tr><td>Operations</td><td>Where does Payment Service run?</td><td>Deployment</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="view-notation"><h2>View vs diagram vs notation</h2>
+<div class="grid-2">
+<div class="card"><h3>View</h3><p>An architectural perspective focused on specific concerns.</p></div>
+<div class="card"><h3>Diagram</h3><p>A visual artifact used to communicate part of a view.</p></div>
+<div class="card"><h3>Notation</h3><p>The language or convention used to draw it — UML, C4, ArchiMate, or plain text.</p></div>
+</div>
+<pre><code>View ≠ Diagram ≠ Notation</code></pre>
+<div class="callout info"><strong>Exam distinction</strong>A runtime view is not “a UML sequence diagram”. The same runtime view can be expressed with UML, BPMN, a C4 dynamic diagram, or a numbered list of steps.</div>
+</section>
+
+<section id="context"><h2>Context view</h2>
+<p>Shows the system in its environment and its external interfaces.</p>
+<pre><code>                Customer
+                   |
+                   v
+         +-------------------+
+         | E-Commerce System |
+         +-------------------+
+          |       |        |
+          v       v        v
+      Payment   CRM     Shipping
+      Provider  System   Provider</code></pre>
+<p>It answers:</p>
+<ul>
+<li>What is inside our system boundary?</li>
+<li>Who uses the system?</li>
+<li>Which external systems interact with it?</li>
+<li>Which interfaces cross the boundary?</li>
+</ul>
+<h3>Business vs technical context</h3>
+<ul>
+<li><b>Business context:</b> actors, business systems, information flow.</li>
+<li><b>Technical context:</b> protocols, interfaces, external technical systems.</li>
+</ul>
+</section>
+
+<section id="buildingblock"><h2>Building block / component view</h2>
+<p>Describes the static decomposition of the software.</p>
+<pre><code>E-Commerce System
+│
+├── Order Management
+│   ├── Order API
+│   ├── Order Application Service
+│   └── Order Repository
+├── Payment
+│   ├── Payment API
+│   └── Payment Provider Adapter
+└── Customer Management
+    ├── Customer API
+    └── Customer Repository</code></pre>
+<p>It answers: what are the main software building blocks, what responsibilities do they have, how are they related, and which interfaces exist?</p>
+<div class="grid-2">
+<div class="card"><h3>Black box</h3><p>Responsibility and externally visible interfaces only.</p></div>
+<div class="card"><h3>White box</h3><p>Internal decomposition and relationships.</p></div>
+</div>
+</section>
+
+<section id="runtime"><h2>Runtime view</h2>
+<p>Describes dynamic behavior and collaboration at runtime.</p>
+<pre><code>Customer
+  |
+  | Place Order
+  v
+Order Service
+  |
+  | Reserve
+  v
+Inventory
+  |
+  | OK
+  v
+Order Service
+  |
+  | Pay
+  v
+Payment</code></pre>
+<p>Useful scenarios: successful checkout, payment timeout, login, message retry, failover, batch import.</p>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Runtime views are the cheapest way to make temporal coupling and failure propagation visible. If a synchronous call appears in a critical path, the availability risk shows up on the whiteboard instead of in production.</div>
+</section>
+
+<section id="deployment"><h2>Deployment view</h2>
+<p>Shows technical infrastructure and the mapping of software onto it.</p>
+<pre><code>+------------------------+
+| Kubernetes Cluster     |
+|  Order Service Pods    |
+|  Payment Service Pods  |
++-----------+------------+
+            |
+            v
++------------------------+
+| PostgreSQL Cluster     |
++------------------------+</code></pre>
+<p>It answers: where does software run, which infrastructure does it depend on, how are components distributed, which network boundaries exist, and where is data stored?</p>
+</section>
+
+<section id="fourviews"><h2>One system, four views</h2>
+<div class="grid-2">
+<div class="card"><h3>Context</h3><pre><code>Customer → Banking Platform → Credit Bureau</code></pre></div>
+<div class="card"><h3>Building Block</h3><pre><code>Banking Platform
+├── Accounts
+├── Payments
+├── Loans
+└── Notifications</code></pre></div>
+<div class="card"><h3>Runtime</h3><pre><code>Customer → Payment API → Fraud Check → Account Service</code></pre></div>
+<div class="card"><h3>Deployment</h3><pre><code>Payment Service → Kubernetes → PostgreSQL</code></pre></div>
+</div>
+</section>
+
+<section id="choosing"><h2>Choosing the right view</h2>
+<pre><code>Who is the stakeholder?
+What is their concern?
+Which view answers that concern?
+What detail level is necessary?</code></pre>
+<table>
+<thead><tr><th>Stakeholder question</th><th>Best view</th></tr></thead>
+<tbody>
+<tr><td>Which external systems exist?</td><td>Context</td></tr>
+<tr><td>Which module owns customer data?</td><td>Building Block</td></tr>
+<tr><td>What happens during checkout?</td><td>Runtime</td></tr>
+<tr><td>Where does the service run?</td><td>Deployment</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="consistency"><h2>Consistency across views</h2>
+<p>Views must not contradict each other.</p>
+<pre><code>Context:        System → Payment Provider
+Building Block: Payment Adapter → Payment Provider
+Runtime:        Order Service → Payment Provider directly</code></pre>
+<p>If those differ, readers cannot trust any of the documentation — and inconsistency is usually a symptom that the implementation has already drifted.</p>
+</section>
+
+<section id="template"><h2>Template-based documentation</h2>
+<p>A lightweight template:</p>
+<pre><code>1. Context
+2. Architecture Drivers
+3. Building Block View
+4. Runtime Scenarios
+5. Deployment
+6. Cross-Cutting Concepts
+7. Architecture Decisions
+8. Risks</code></pre>
+<p>arc42 is one well-known documentation template. The exam tests the idea of structured, stakeholder-oriented documentation — not one specific product.</p>
+</section>
+
+<section id="staff"><h2>Staff Engineer perspective</h2>
+<p>Documentation is part of architecture design, not only an after-the-fact activity.</p>
+<pre><code>Draw runtime scenario
+        ↓
+Discover synchronous dependency
+        ↓
+Availability risk becomes visible
+        ↓
+Architecture changes</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Documenting before implementing is a design technique. The diagram you cannot draw cleanly is usually the design you have not finished thinking about.</div>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2>
+<ul>
+<li>A view is the same as a UML diagram. → <b>False</b></li>
+<li>Context view shows internal decomposition. → <b>False</b></li>
+<li>Deployment view only shows servers. → <b>False</b></li>
+<li>Runtime view is static decomposition. → <b>False</b></li>
+<li>More documentation is always better. → <b>False</b></li>
+<li>All stakeholders need the same documentation. → <b>False</b></li>
+<li>C4 is mandatory for CPSA-F. → <b>False</b></li>
+</ul>
+</section>
+
+<section id="terms"><h2>Key terms</h2>
+<p>Architectural View · Context View · Building Block View · Runtime View · Deployment View · Stakeholder Concern · Notation · Documentation Maintainability</p>
+</section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>Document an insurance claims platform using:</p>
+<ol>
+<li>a context view;</li>
+<li>a building block view;</li>
+<li>a runtime view for claim submission;</li>
+<li>a deployment view;</li>
+<li>a stakeholder-to-view mapping.</li>
+</ol>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>Which five documentation qualities are explicitly named in LG 04-01?</summary><p>Understandability, correctness, efficiency, appropriateness, maintainability.</p></details>
+<details><summary>What are the four R1 architectural views?</summary><p>Context, building block/component, runtime, deployment.</p></details>
+<details><summary>What does a context view primarily show?</summary><p>System boundary, environment, external actors and systems, interfaces crossing the boundary.</p></details>
+<details><summary>What does a building block view primarily show?</summary><p>Static software decomposition.</p></details>
+<details><summary>What does a runtime view primarily show?</summary><p>Dynamic interaction and runtime behavior.</p></details>
+<details><summary>What does a deployment view primarily show?</summary><p>Infrastructure and software-to-infrastructure mapping.</p></details>
+<details><summary>What is the difference between a view and a notation?</summary><p>View = perspective; notation = the language used to express it.</p></details>
+<details><summary>Why should documentation be stakeholder-oriented?</summary><p>Different stakeholders have different concerns.</p></details>
+<details><summary>Why is maintainability important?</summary><p>Stale documentation becomes misleading.</p></details>
+<details><summary>Can multiple notations express the same view?</summary><p>Yes.</p></details>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">LG 04-01, LG 04-02, LG 04-05 — documentation quality and architectural views.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Simon Brown — Visualising Software Architecture with the C4 Model</b><div style="color:var(--muted)">One notation among several; useful for practising view thinking.</div></div>
+<a href="https://www.youtube.com/watch?v=uvnZ46OvJLA" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>C4 model — official site</b><div style="color:var(--muted)">Reference for the notation used in the talk above.</div></div>
+<a href="https://c4model.com/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day active" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-14.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-16.html">Next day →</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 15 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "15";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۷ دوره iSAQB CPSA-F: تحلیل معماری و ارزیابی کیفیت" />
+  <title>iSAQB CPSA-F — روز ۱۷: تحلیل معماری و ارزیابی کیفیت</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-17.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-17.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۷</span>
+      <h1>تحلیل معماری و ارزیابی کیفیت</h1>
+      <p class="subtitle">
+        یک سیستم می‌تواند از نظر عملکردی درست و از نظر معماری ناسالم باشد. یاد بگیرید «به‌نظر مقیاس‌پذیر می‌آید» را با شواهدی جایگزین کنید که ذی‌نفع بتواند بررسی‌شان کند.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> سناریوهای کیفی، معیارها، شواهد کیفی و کمّی</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#why">چرا معماری را تحلیل کنیم؟</a>
+      <a href="#reasons">دلایل تحلیل</a>
+      <a href="#evidence">تحلیل مبتنی بر شواهد</a>
+      <a href="#qual-quant">کیفی در برابر کمّی</a>
+      <a href="#match">تطبیق روش با کیفیت</a>
+      <a href="#scenario">تحلیل مبتنی بر سناریو</a>
+      <a href="#walkthrough">مرور گام‌به‌گام سناریو</a>
+      <a href="#acceptance">آزمون پذیرش به‌عنوان شاهد</a>
+      <a href="#runtime">اندازه‌گیری در زمان اجرا</a>
+      <a href="#coupling">معیارهای کوپلینگ</a>
+      <a href="#context">معیارها به زمینه نیاز دارند</a>
+      <a href="#goodhart">قانون گودهارت</a>
+      <a href="#sources">منابع اطلاعات</a>
+      <a href="#clusters">خوشه‌های خطا و فراوانی تغییر</a>
+      <a href="#costbenefit">تحلیل هزینه-فایده</a>
+      <a href="#atam">ATAM</a>
+      <a href="#testing">تحلیل در برابر تست</a>
+      <a href="#designtime">زمان طراحی در برابر زمان اجرا</a>
+      <a href="#conformance">پیش‌نمایش انطباق</a>
+      <a href="#framework">چارچوب بازبینی Staff Engineer</a>
+      <a href="#exam">دام‌های رایج آزمون</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین عملی</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس باید بتوانید توضیح دهید چرا معماری‌ها تحلیل می‌شوند، تحلیل زمان طراحی را از زمان اجرا تفکیک کنید، برای هر ویژگی کیفی روش تحلیل مناسب انتخاب کنید، تحلیل کیفی و کمّی را از هم جدا کنید، از سناریوهای کیفی استفاده کنید، معیارهای کوپلینگ را تفسیر کنید، منابع شواهد را بشناسید، تفاوت تحلیل و انطباق را توضیح دهید و یک ارزیابی سبک معماری انجام دهید.</p>
+        <div class="callout info"><strong>تطابق رسمی</strong>LG 05-01، LG 05-02. مرتبط با LG 05-03.</div>
+      </section>
+
+      <section id="why">
+        <h2>چرا معماری را تحلیل کنیم؟</h2>
+        <div class="callout info"><strong>پرسش اصلی</strong>آیا این معماری واقعاً از آنچه سیستم نیاز دارد پشتیبانی می‌کند؟</div>
+        <p>یک سیستم می‌تواند از نظر عملکردی درست اما از نظر معماری ناسالم باشد:</p>
+        <pre><code>Features work,
+but deployments take 4 hours,
+one failure breaks checkout,
+and changes touch 12 modules.</code></pre>
+      </section>
+
+      <section id="reasons">
+        <h2>دلایل تحلیل</h2>
+        <ul>
+          <li>شناسایی ریسک‌ها و فرصت‌های بهبود؛</li>
+          <li>تعیین اینکه آیا نیازمندی‌ها برآورده شده‌اند؛</li>
+          <li>ارزیابی انطباق؛</li>
+          <li>راستی‌آزمایی دغدغه‌های ذی‌نفعان.</li>
+        </ul>
+        <p>تحلیل می‌تواند <b>پیش از، حین یا پس از</b> پیاده‌سازی انجام شود.</p>
+      </section>
+
+      <section id="evidence">
+        <h2>تحلیل مبتنی بر شواهد</h2>
+        <p>ضعیف: «این معماری مقیاس‌پذیر به‌نظر می‌رسد.»</p>
+        <p>قوی‌تر:</p>
+        <pre><code>Quality Requirement
+       ↓
+Analysis Method
+       ↓
+Evidence
+       ↓
+Conclusion</code></pre>
+        <pre><code>Requirement:
+p95 latency &lt; 500 ms
+
+Method:
+Load test
+
+Evidence:
+p95 = 420 ms at 2,000 req/s</code></pre>
+      </section>
+
+      <section id="qual-quant">
+        <h2>کیفی در برابر کمّی</h2>
+        <div class="grid-2">
+          <div class="card"><h3>کمّی</h3><pre><code>Latency = 420 ms
+Throughput = 3,000 req/s
+Availability = 99.96%
+Outbound dependencies = 14</code></pre></div>
+          <div class="card"><h3>کیفی</h3><p>قضاوت ساخت‌یافته: بازبینی معماری، مصاحبه، بازبینی امنیتی، مرور سناریو، نظرسنجی ذی‌نفعان.</p></div>
+        </div>
+        <div class="callout exam"><strong>دام</strong>«روش‌های کمّی همیشه برترند» نادرست است. عددِ بدون تفسیر یک نتیجه‌گیری معماری نیست.</div>
+      </section>
+
+      <section id="match">
+        <h2>تطبیق روش با کیفیت</h2>
+        <table>
+          <thead><tr><th>کیفیت</th><th>روش ممکن</th></tr></thead>
+          <tbody>
+            <tr><td>کارایی</td><td>آزمون بار، معیارهای زمان اجرا</td></tr>
+            <tr><td>دسترس‌پذیری</td><td>آزمون خرابی، معیارهای uptime</td></tr>
+            <tr><td>امنیت</td><td>تحلیل تهدید، تست نفوذ</td></tr>
+            <tr><td>قابلیت نگهداشت</td><td>بازبینی کد، معیارهای کوپلینگ</td></tr>
+            <tr><td>کاربردپذیری</td><td>آزمون کاربر</td></tr>
+            <tr><td>قابلیت تغییر</td><td>سناریوهای تغییر</td></tr>
+            <tr><td>قابلیت استقرار</td><td>تحلیل خط لوله</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="scenario">
+        <h2>تحلیل مبتنی بر سناریو</h2>
+        <p>به‌جای «سیستم باید قابل نگهداشت باشد»:</p>
+        <pre><code>Stimulus:
+Add a new payment provider.
+
+Response:
+Implement without modifying order logic.
+
+Measure:
+Completed within 3 developer-days.</code></pre>
+        <h3>ساختار سناریوی کیفی</h3>
+        <pre><code>Source
+Stimulus
+Environment
+Artifact
+Response
+Response Measure</code></pre>
+        <pre><code>Source:
+Payment Provider
+
+Stimulus:
+Provider unavailable
+
+Environment:
+Peak traffic
+
+Artifact:
+Checkout workflow
+
+Response:
+Orders remain accepted
+
+Measure:
+Checkout availability &gt;= 99.95%</code></pre>
+      </section>
+
+      <section id="walkthrough">
+        <h2>مرور گام‌به‌گام سناریو</h2>
+        <pre><code>Checkout
+   ↓
+Payment
+   ↓
+Notification</code></pre>
+        <p>اگر Notification در دسترس نباشد و checkout به‌صورت همگام منتظر بماند، دسترس‌پذیری تهدید می‌شود. این مرور بدون نوشتن حتی یک خط کد مسئله را پیدا می‌کند.</p>
+      </section>
+
+      <section id="acceptance">
+        <h2>آزمون پذیرش به‌عنوان شاهد</h2>
+        <p>نیازمندی: بازیابی از خرابی worker ظرف ۶۰ ثانیه.</p>
+        <pre><code>1. Start workload.
+2. Kill worker.
+3. Observe recovery.
+4. Measure interruption.
+
+Result:
+Recovery = 42 seconds</code></pre>
+      </section>
+
+      <section id="runtime">
+        <h2>اندازه‌گیری در زمان اجرا</h2>
+        <pre><code>p50
+p95
+p99
+error rate
+CPU
+memory
+queue depth
+retry count</code></pre>
+        <div class="callout exam"><strong>مراقب باشید</strong>میانگین‌ها تأخیر دنباله (tail latency) را پنهان می‌کنند. میانگین سالم با p99 فاجعه‌بار یک مشکل واقعی برای کاربر است.</div>
+      </section>
+
+      <section id="coupling">
+        <h2>معیارهای کوپلینگ</h2>
+        <div class="grid-2">
+          <div class="card"><h3>ورودی / afferent</h3><p>چند عنصر دیگر به این مؤلفه وابسته‌اند؟</p></div>
+          <div class="card"><h3>خروجی / efferent</h3><p>این مؤلفه به چند عنصر دیگر وابسته است؟</p></div>
+        </div>
+        <p>کوپلینگ خروجی بالا می‌تواند نشانه در معرض خطا بودن، خودمختاری کم، تست دشوارتر و استقرار دشوارتر باشد.</p>
+      </section>
+
+      <section id="context">
+        <h2>معیارها به زمینه نیاز دارند</h2>
+        <p>تعداد بالای وابستگی خودبه‌خود بد بودن معماری را ثابت نمی‌کند — ممکن است آن مؤلفه به‌درستی نقش ارکستریتور داشته باشد.</p>
+        <div class="callout info"><strong>قاعده سرانگشتی</strong>معیارها شاهدند، نه حکم.</div>
+      </section>
+
+      <section id="goodhart">
+        <h2>قانون گودهارت</h2>
+        <p>وقتی یک معیار به هدفی سفت‌وسخت تبدیل شود، تیم‌ها به‌جای کیفیت، عدد را بهینه می‌کنند.</p>
+        <pre><code>Every service must have &lt;= 3 dependencies.</code></pre>
+        <p>تیم‌ها ممکن است یک MegaGateway بسازند: عدد بهتر می‌شود و معماری بدتر.</p>
+      </section>
+
+      <section id="sources">
+        <h2>منابع اطلاعات</h2>
+        <p>نیازمندی‌ها · مستندات معماری · مدل‌ها · کد منبع · معیارهای کد · تست‌ها و نتایج · خوشه‌های نقص · لاگ‌ها · معیارهای زمان اجرا · تاریخچه نسخه‌ها.</p>
+      </section>
+
+      <section id="clusters">
+        <h2>خوشه‌های خطا و فراوانی تغییر</h2>
+        <pre><code>Billing: 3 defects
+Customer: 5 defects
+Integration: 46 defects</code></pre>
+        <p>این بد بودن معماری را ثابت نمی‌کند، اما نشانه‌ای قوی برای بررسی است.</p>
+        <pre><code>Highly volatile component
++
+high inbound coupling
+=
+potential architecture risk</code></pre>
+      </section>
+
+      <section id="costbenefit">
+        <h2>تحلیل هزینه-فایده (R3)</h2>
+        <pre><code>Distributed cache
+
+Benefit:
+- lower latency
+- less DB load
+
+Cost:
++ operations
++ invalidation complexity</code></pre>
+        <p>تحلیل معماری می‌پرسد آیا فایده ارزش هزینه را دارد.</p>
+      </section>
+
+      <section id="atam">
+        <h2>ATAM (R3)</h2>
+        <p>برای CPSA-F تسلط عمیق بر ATAM لازم نیست. ایده پایه: ارزیابی معماری در برابر ویژگی‌های کیفی و شناسایی ریسک‌ها، مصالحه‌ها، نقاط حساسیت و تصمیم‌های مهم.</p>
+      </section>
+
+      <section id="testing">
+        <h2>تحلیل در برابر تست</h2>
+        <div class="grid-2">
+          <div class="card"><h3>تست</h3><p>آیا سیستم پیاده‌سازی‌شده درست رفتار می‌کند؟</p></div>
+          <div class="card"><h3>تحلیل معماری</h3><p>آیا ساختار از تغییر آینده پشتیبانی می‌کند؟ آیا وابستگی‌ها مناسب‌اند؟ آیا اهداف کیفی برآورده شده‌اند؟ آیا پیاده‌سازی منطبق است؟</p></div>
+        </div>
+      </section>
+
+      <section id="designtime">
+        <h2>زمان طراحی در برابر زمان اجرا</h2>
+        <div class="grid-2">
+          <div class="card"><h3>زمان طراحی</h3><p>نمودارها، سناریوها، استدلال درباره وابستگی‌ها، بازبینی طراحی.</p></div>
+          <div class="card"><h3>زمان اجرا</h3><p>آزمون بار، معیارها، لاگ‌ها، trace‌ها، آزمون خرابی.</p></div>
+        </div>
+        <p>ارزیابی‌های قوی هر دو را ترکیب می‌کنند.</p>
+      </section>
+
+      <section id="conformance">
+        <h2>پیش‌نمایش انطباق</h2>
+        <p>انطباق می‌پرسد آیا پیاده‌سازی با تصمیم‌ها و طراحی معماری مطابقت دارد.</p>
+        <pre><code>UI → Application → Domain</code></pre>
+        <p>اگر Domain کد UI را import کند، انطباق نقض شده است. <b>انحراف (drift)</b> یعنی دور شدن پیاده‌سازی از معماری موردنظر؛ <b>فرسایش (erosion)</b> یعنی انباشت انحراف‌ها و تضعیف ویژگی‌های مهم. روز ۱۸ عمیق‌تر به این موضوع می‌پردازد.</p>
+      </section>
+
+      <section id="framework">
+        <h2>چارچوب بازبینی Staff Engineer</h2>
+        <ol>
+          <li>محرک‌ها را شناسایی کنید.</li>
+          <li>سناریوها را شناسایی کنید.</li>
+          <li>ساختار را بررسی کنید.</li>
+          <li>شواهد جمع کنید.</li>
+          <li>ریسک‌ها را شناسایی کنید.</li>
+          <li>اقدام پیشنهاد دهید.</li>
+        </ol>
+        <pre><code>Accept
+Measure
+Prototype
+Refactor
+Add guardrail
+Revisit decision</code></pre>
+        <p>یافته‌ها را در قالبی ثابت منتقل کنید:</p>
+        <pre><code>Observation
+Evidence
+Risk
+Affected Quality
+Recommendation
+Validation</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>یافته‌ای بدون شاهد فقط یک نظر است؛ یافته‌ای بدون پیشنهاد فقط یک شکایت. این قالب شش‌خطی هر دو را الزامی می‌کند.</div>
+      </section>
+
+      <section id="exam">
+        <h2>دام‌های رایج آزمون CPSA-F</h2>
+        <ul>
+          <li>تحلیل فقط پس از پیاده‌سازی رخ می‌دهد. → <b>نادرست</b></li>
+          <li>تحلیل فقط عملکرد را بررسی می‌کند. → <b>نادرست</b></li>
+          <li>روش‌های کمّی همیشه برترند. → <b>نادرست</b></li>
+          <li>کوپلینگ بالا بد بودن معماری را ثابت می‌کند. → <b>نادرست</b></li>
+          <li>تحلیل سناریو به محیط عملیات نیاز دارد. → <b>نادرست</b></li>
+          <li>تست و تحلیل معماری یکی هستند. → <b>نادرست</b></li>
+          <li>ATAM باید عمیقاً تسلط یابد. → <b>نادرست</b></li>
+        </ul>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی</h2>
+        <p>تحلیل معماری · تحلیل کیفیت · تحلیل مبتنی بر سناریو · تحلیل کمّی · تحلیل کیفی · معیار معماری · وابستگی ورودی · وابستگی خروجی · انطباق معماری · فرسایش معماری</p>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>یک پورتال مشتری با این مشخصات:</p>
+        <pre><code>p95 = 1.2 s
+60% of classes depend on Document Provider SDK
+Notification outages caused incidents
+Authorization exists in UI and backend
+Document Service has 18 outbound dependencies</code></pre>
+        <ol>
+          <li>چهار ریسک شناسایی کنید.</li>
+          <li>هر کدام را به یک ویژگی کیفی نگاشت کنید.</li>
+          <li>هر یافته را کیفی یا کمّی طبقه‌بندی کنید.</li>
+          <li>برای هر ریسک یک روش تحلیل انتخاب کنید.</li>
+          <li>یک سناریوی دسترس‌پذیری و یک سناریوی قابلیت تغییر بنویسید.</li>
+          <li>بالاترین ریسک را اولویت‌بندی و توجیه کنید.</li>
+        </ol>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>تحلیل معماری چه می‌پرسد؟</summary><p>اینکه آیا معماری واقعاً از کیفیت‌های موردنیاز پشتیبانی می‌کند.</p></details>
+        <details><summary>تحلیل چه زمانی می‌تواند انجام شود؟</summary><p>پیش از، حین یا پس از پیاده‌سازی.</p></details>
+        <details><summary>کیفی در برابر کمّی؟</summary><p>قضاوت ساخت‌یافته در برابر شواهد عددی؛ تحلیل قوی هر دو را ترکیب می‌کند.</p></details>
+        <details><summary>سناریوی کیفی چیست؟</summary><p>منبع، محرک، محیط، مصنوع، پاسخ، معیار پاسخ — که کیفیت انتزاعی را قابل تحلیل می‌کند.</p></details>
+        <details><summary>چرا میانگین‌ها خطرناک‌اند؟</summary><p>مشکلات tail latency را که کاربر واقعاً تجربه می‌کند پنهان می‌کنند.</p></details>
+        <details><summary>کوپلینگ خروجی بالا چه چیزی را نشان می‌دهد؟</summary><p>احتمال در معرض خطا بودن، خودمختاری کم، تست و استقرار دشوارتر — یک نشانه، نه یک حکم.</p></details>
+        <details><summary>قانون گودهارت در معماری یعنی چه؟</summary><p>وقتی معیار به هدف تبدیل شود، تیم‌ها به‌جای کیفیت عدد را بهینه می‌کنند.</p></details>
+        <details><summary>تحلیل در برابر تست؟</summary><p>تست رفتار را بررسی می‌کند؛ تحلیل ساختار، وابستگی‌ها، کیفیت‌ها و انطباق را.</p></details>
+        <details><summary>انحراف در برابر فرسایش؟</summary><p>انحراف = فاصله گرفتن؛ فرسایش = تضعیف انباشته.</p></details>
+        <details><summary>یافته‌ها چگونه باید منتقل شوند؟</summary><p>مشاهده، شاهد، ریسک، کیفیت متأثر، پیشنهاد، اعتبارسنجی.</p></details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">LG 05-01، LG 05-02 — تحلیل معماری و ارزیابی کیفیت.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — Analyzing Architecture: Macro Techniques</b>
+            <div style="color:var(--muted)">Software Architecture Monday، درس ۹.</div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=h1So8tVukS8" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>ارتباط با CPSA-A: ARCEVAL</b>
+            <div style="color:var(--muted)">ماژول سطح پیشرفته مخصوص ارزیابی معماری.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-arceval/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day active" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-16.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-18.fa.html">روز بعد ←</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۷ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "17";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

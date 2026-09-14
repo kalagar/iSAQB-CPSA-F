@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 16: Interfaces, Architecture Decisions and ADRs" />
+  <title>iSAQB CPSA-F — Day 16: Interfaces, Architecture Decisions &amp; ADRs</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-16.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-16.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 16</span>
+  <h1>Interfaces, Architecture Decisions &amp; ADRs</h1>
+  <p class="subtitle">An interface is a contract, not a signature — and a decision without rationale is a decision nobody can safely revisit. Document both the way a Staff Engineer would.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Interface contracts, semantic coupling, decision rationale, ADRs</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a><a href="#contract">Interface as contract</a><a href="#example">Example: payment interface</a><a href="#internal-external">Internal vs external</a><a href="#provided-required">Provided vs required</a><a href="#semantic">Semantic coupling</a><a href="#versioning">Versioning &amp; compatibility</a><a href="#questions">Staff Engineer interface questions</a><a href="#decision">What is an architectural decision?</a><a href="#significance">Architectural significance</a><a href="#why-document">Why document decisions?</a><a href="#adr">ADR basics</a><a href="#adr-example">Example ADR</a><a href="#status">ADR status</a><a href="#interdependencies">Decision interdependencies</a><a href="#when-not">When not to write an ADR</a><a href="#minutes">ADRs are not meeting minutes</a><a href="#feedback">ADRs and feedback loops</a><a href="#combined">Interface docs + ADRs</a><a href="#exam">Common CPSA-F exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Practical exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain what belongs in interface documentation, distinguish internal from external interfaces, separate contracts from implementation details, explain why architecture decisions need rationale, describe ADR purpose and structure, identify dependencies between decisions, and use ADRs as a Staff Engineer tool.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 04-06 — Document Interfaces (R1). LG 04-08 — Explain and Document Architectural Decisions (R1–R2).</div>
+</section>
+
+<section id="contract"><h2>Interface as an architectural contract</h2>
+<p>An interface is more than a method signature.</p>
+<pre><code>Building Block A
+      |
+      | Interface Contract
+      v
+Building Block B</code></pre>
+<p>Useful contracts may include semantics, input constraints, output guarantees, error behavior, timing expectations, security, idempotency, versioning, and pre-/postconditions.</p>
+</section>
+
+<section id="example"><h2>Example: payment interface</h2>
+<pre><code>Purpose:
+Authorize and capture a payment.
+
+Request:
+POST /payments
+
+Required:
+orderId
+amount
+currency
+paymentMethodToken
+
+Errors:
+409 PAYMENT_ALREADY_PROCESSED
+422 PAYMENT_DECLINED
+503 PAYMENT_PROVIDER_UNAVAILABLE
+
+Idempotency:
+Idempotency-Key required
+
+Security:
+OAuth2 service identity</code></pre>
+<p>Everything above is architecturally relevant: each line changes how a consumer must be built.</p>
+</section>
+
+<section id="internal-external"><h2>Internal vs external interfaces</h2>
+<div class="grid-2">
+<div class="card"><h3>Internal</h3><p>Between building blocks inside the system.</p></div>
+<div class="card"><h3>External</h3><p>Crosses the system boundary.</p></div>
+</div>
+<p>External interfaces often need stronger versioning, compatibility, SLA and security documentation — but “only external interfaces need documentation” is false.</p>
+</section>
+
+<section id="provided-required"><h2>Provided vs required interfaces</h2>
+<pre><code>Order Service
+
+Provides:
+Order API
+
+Requires:
+Payment API
+Inventory API</code></pre>
+<p>This makes dependencies explicit and turns an implicit call graph into something a reviewer can reason about.</p>
+</section>
+
+<section id="semantic"><h2>Semantic coupling</h2>
+<p>Stable syntax does not guarantee low coupling.</p>
+<pre><code>{"status":"READY"}</code></pre>
+<p>If the meaning of <code>READY</code> is undocumented, consumers are coupled to assumptions rather than to a contract. The payload never changes — but the shared understanding silently does.</p>
+</section>
+
+<section id="versioning"><h2>Versioning and compatibility</h2>
+<ul>
+<li>backward-compatible extension;</li>
+<li>explicit API versions;</li>
+<li>event schema evolution;</li>
+<li>deprecation policy;</li>
+<li>compatibility testing.</li>
+</ul>
+</section>
+
+<section id="questions"><h2>Staff Engineer interface questions</h2>
+<pre><code>Who owns it?
+Who consumes it?
+What is guaranteed?
+What can fail?
+How does it evolve?
+Is it idempotent?
+What is the timeout?
+How is it secured?
+How is compatibility validated?</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>These nine questions are a review checklist. An interface that cannot answer them will be answered later by an incident.</div>
+</section>
+
+<section id="decision"><h2>What is an architectural decision?</h2>
+<p>A decision with significant consequences for structure, quality attributes, dependencies, technology, future evolution, or cost of change.</p>
+<pre><code>Use Kafka for order events.
+Use PostgreSQL for transactions.
+Use a modular monolith instead of microservices.
+Use OIDC for authentication.</code></pre>
+</section>
+
+<section id="significance"><h2>Architectural significance</h2>
+<pre><code>High impact?
+Hard to reverse?
+Affects multiple teams?
+Influences quality requirements?
+Constrains future choices?</code></pre>
+<p>If several answers are yes, the decision is probably architectural.</p>
+</section>
+
+<section id="why-document"><h2>Why document decisions?</h2>
+<p>Without rationale, future engineers know <b>what</b> exists but not <b>why</b>.</p>
+<pre><code>Decision:
+Use PostgreSQL.
+
+Reason:
+- strong consistency
+- relational reporting
+- existing operational expertise</code></pre>
+</section>
+
+<section id="adr"><h2>ADR basics</h2>
+<p>Common fields:</p>
+<pre><code>Title
+Status
+Context
+Decision
+Consequences</code></pre>
+<p>Often extended with:</p>
+<pre><code>Options
+Decision Drivers
+Risks
+Validation
+Related Decisions
+Review Date</code></pre>
+<div class="callout info"><strong>Exam note</strong>No single ADR template is mandatory for CPSA-F. What matters is that context, rationale and consequences are preserved.</div>
+</section>
+
+<section id="adr-example"><h2>Example ADR</h2>
+<pre><code># ADR-017: Asynchronous Order-to-SAP Integration
+
+Status:
+Accepted
+
+Context:
+SAP outages must not block order acceptance.
+
+Drivers:
+Availability
+Durability
+Throughput
+
+Options:
+1. Direct REST
+2. Database queue
+3. Kafka
+
+Decision:
+Publish accepted orders to Kafka.
+
+Positive:
++ decouples order acceptance from SAP
++ buffers bursts
+
+Negative:
+- eventual consistency
+- duplicate handling
+- operational complexity
+
+Validation:
+- throughput test
+- broker failure test
+- SAP outage simulation</code></pre>
+</section>
+
+<section id="status"><h2>ADR status</h2>
+<pre><code>Proposed
+Accepted
+Rejected
+Deprecated
+Superseded</code></pre>
+<p>Do not silently rewrite architectural history. Supersede old decisions explicitly so the reasoning chain stays readable.</p>
+</section>
+
+<section id="interdependencies"><h2>Decision interdependencies</h2>
+<pre><code>Use async events
+      ↓
+Need idempotent consumers
+      ↓
+Need event identifiers
+      ↓
+Need schema versioning</code></pre>
+<p>Architecture decisions form a graph, not a list.</p>
+</section>
+
+<section id="when-not"><h2>When not to write an ADR</h2>
+<p>Do not create ADRs for minor implementation details. Good ADR candidates are high-impact, hard to reverse, cross-team, quality-relevant, and likely to be questioned later.</p>
+</section>
+
+<section id="minutes"><h2>ADRs are not meeting minutes</h2>
+<p>Meeting minutes capture conversation. ADRs capture architectural knowledge:</p>
+<pre><code>Context
+Drivers
+Options
+Decision
+Rationale
+Consequences</code></pre>
+</section>
+
+<section id="feedback"><h2>ADRs and feedback loops</h2>
+<pre><code>Assumption:
+Kafka can sustain 20k orders/min.
+
+Validation:
+Representative load test.
+
+Review:
+Before production launch.</code></pre>
+<p>An ADR that names its assumptions and how they will be validated turns a guess into a managed risk.</p>
+</section>
+
+<section id="combined"><h2>Interface documentation + ADRs</h2>
+<div class="grid-2">
+<div class="card"><h3>ADR</h3><p>Explains <b>why</b> — why asynchronous messaging, why Kafka.</p></div>
+<div class="card"><h3>Interface contract</h3><p>Explains <b>how</b> — topic, schema, semantics, ordering, idempotency, versioning.</p></div>
+</div>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2>
+<ul>
+<li>Interface documentation means only method signatures. → <b>False</b></li>
+<li>Only external interfaces need documentation. → <b>False</b></li>
+<li>Every technical decision deserves an ADR. → <b>False</b></li>
+<li>ADRs contain only the final decision. → <b>False</b></li>
+<li>Architecture decisions are independent. → <b>False</b></li>
+<li>One mandatory ADR template exists. → <b>False</b></li>
+</ul>
+</section>
+
+<section id="terms"><h2>Key terms</h2>
+<p>Interface Contract · Internal Interface · External Interface · Provided Interface · Required Interface · Semantic Coupling · Architectural Decision · Decision Rationale · ADR · Consequence · Decision Interdependency</p>
+</section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>For a Fraud Service:</p>
+<ol>
+<li>Define purpose, inputs, outputs, errors, timeout, retry, idempotency, versioning and security.</li>
+<li>Compare synchronous REST vs asynchronous messaging vs a local cache.</li>
+<li>Write a short ADR for your choice.</li>
+<li>Identify three decisions that depend on it.</li>
+</ol>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>What does LG 04-06 require?</summary><p>That interfaces are documented as contracts — not only as syntax.</p></details>
+<details><summary>Why is a method signature insufficient?</summary><p>It omits semantics, errors, timing, security, idempotency and evolution rules.</p></details>
+<details><summary>Provided vs required interface?</summary><p>Provided = capability offered; required = capability depended upon.</p></details>
+<details><summary>What makes a decision architecturally significant?</summary><p>High impact, hard reversal, cross-team consequences, quality influence, or future constraints.</p></details>
+<details><summary>Why preserve rationale?</summary><p>So future engineers know why the decision made sense in its context.</p></details>
+<details><summary>What is an ADR?</summary><p>A documented record of an architectural decision, its context, rationale and consequences.</p></details>
+<details><summary>Name five ADR fields.</summary><p>Title, status, context, decision, consequences.</p></details>
+<details><summary>Why preserve superseded ADRs?</summary><p>They preserve the reasoning history and prevent repeating rejected options.</p></details>
+<details><summary>Why do decision dependencies matter?</summary><p>One decision creates obligations for others; decisions form a graph.</p></details>
+<details><summary>How do ADRs differ from meeting minutes?</summary><p>Minutes record conversation; ADRs record architectural knowledge.</p></details>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">LG 04-06 — Document Interfaces; LG 04-08 — Explain and Document Architectural Decisions.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Architecture Decision Records</b><div style="color:var(--muted)">Software Architecture Monday, Lesson 55.</div></div>
+<a href="https://www.youtube.com/watch?v=LMBqGPLvonU" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>adr.github.io</b><div style="color:var(--muted)">Collection of ADR templates and tooling.</div></div>
+<a href="https://adr.github.io/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day active" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-15.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-17.html">Next day →</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 16 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "16";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

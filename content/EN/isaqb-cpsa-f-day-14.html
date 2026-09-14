@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 14: Cross-Cutting Concerns and Cross-Cutting Concepts" />
+  <title>iSAQB CPSA-F — Day 14: Cross-Cutting Concerns and Cross-Cutting Concepts</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-14.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-14.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 14</span>
+  <h1>Cross-Cutting Concerns and Cross-Cutting Concepts</h1>
+  <p class="subtitle">Identify concerns that cut across the whole architecture, and design coherent concepts—for persistence, communication, error handling, concurrency, UI, security, and observability—like a Staff Engineer.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Cross-cutting concerns, cross-cutting concepts, interdependencies</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a><a href="#what-is">What is a cross-cutting concern?</a><a href="#concept">Concern vs concept</a><a href="#why">Why cross-cutting concerns matter</a><a href="#not-service">Concern ≠ separate service</a><a href="#persistence">Persistence as a concept</a><a href="#communication">Communication as a concept</a><a href="#errors">Error handling</a><a href="#observability">Logging and observability</a><a href="#security">Security</a><a href="#concurrency">Concurrency</a><a href="#ui">UI / GUI</a><a href="#energy">Energy efficiency</a><a href="#interdependencies">Interdependencies</a><a href="#retry">Staff Engineer example: retry policy</a><a href="#standardization">Standardization vs flexibility</a><a href="#reuse">Reuse across systems</a><a href="#exam">Common CPSA-F exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Practical exercise</a><a href="#staffext">Staff Engineer extension</a><a href="#review">Review questions</a><a href="#minitest">Mini exam check</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain cross-cutting concerns, distinguish a concern from a cross-cutting concept, identify cross-cutting concerns in an architecture, design coherent concepts for persistence, communication, error handling, concurrency, UI, security, and observability, identify interdependencies between cross-cutting concepts, recognize common CPSA-F exam traps, and apply these ideas at Staff Engineer level.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 03-10 — Identify, Design and Implement Cross-Cutting Concerns (R1). Related: LG 04-07 — Document and Communicate Cross-Cutting Concerns (R2).</div>
+</section>
+
+<section id="what-is"><h2>What is a cross-cutting concern?</h2>
+<p>A cross-cutting concern affects multiple parts of the architecture rather than belonging neatly to one building block.</p>
+<pre><code>Order Service
+Customer Service
+Payment Service
+Inventory Service</code></pre>
+<p>All may need:</p>
+<pre><code>Logging
+Authentication
+Authorization
+Error handling
+Monitoring
+Tracing
+Configuration
+Persistence rules
+Communication conventions</code></pre>
+<p>These concerns cut across multiple architectural elements.</p>
+</section>
+
+<section id="concept"><h2>Concern vs concept</h2>
+<div class="grid-2">
+<div class="card"><h3>Cross-Cutting Concern</h3><p>The problem or topic that affects several parts of the system.</p><pre><code>How should errors be handled consistently?</code></pre></div>
+<div class="card"><h3>Cross-Cutting Concept</h3><p>The architectural solution used to address that concern.</p><pre><code>Standard error taxonomy
+Correlation IDs
+Retry rules
+Safe API error responses
+Centralized exception mapping
+Structured logging</code></pre></div>
+</div>
+<div class="callout info"><strong>Exam distinction</strong>Concern = what must be addressed. Concept = how the architecture addresses it.</div>
+</section>
+
+<section id="why"><h2>Why cross-cutting concerns matter</h2>
+<p>Without a common concept, teams may solve the same problem differently.</p>
+<pre><code>Order Service    → JSON logs
+Payment Service  → plain-text logs
+Customer Service → stack traces
+Inventory Service→ almost no logging</code></pre>
+<p>Possible consequences:</p>
+<ul>
+<li>difficult troubleshooting;</li>
+<li>inconsistent observability;</li>
+<li>missing correlation across services;</li>
+<li>security leaks;</li>
+<li>duplicated implementation effort.</li>
+</ul>
+<p>A shared logging concept might define:</p>
+<pre><code>Log format
+Log levels
+Mandatory fields
+Correlation IDs
+Sensitive-data policy
+Retention
+Central collection</code></pre>
+</section>
+
+<section id="not-service"><h2>Cross-cutting concern ≠ separate service</h2>
+<p>A cross-cutting concern does not automatically require its own component.</p>
+<p>Logging might be implemented with:</p>
+<ul>
+<li>a shared library;</li>
+<li>a platform SDK;</li>
+<li>an agent;</li>
+<li>a sidecar;</li>
+<li>framework configuration;</li>
+<li>infrastructure policy.</li>
+</ul>
+<p>Security might involve:</p>
+<ul>
+<li>an identity provider;</li>
+<li>API gateway rules;</li>
+<li>application authorization;</li>
+<li>certificate management;</li>
+<li>secret storage;</li>
+<li>audit logging.</li>
+</ul>
+<p>The concept can span multiple architectural elements.</p>
+</section>
+
+<section id="persistence"><h2>Persistence as a cross-cutting concept</h2>
+<p>Persistence is more than choosing a database. A persistence concept can include: data ownership, transaction boundaries, repository conventions, schema migration, caching, concurrency control, consistency, backup and restore, encryption, audit requirements.</p>
+<pre><code>Database:
+PostgreSQL
+
+Ownership:
+Each domain module owns its tables.
+
+Access:
+Only repository adapters access SQL.
+
+Transactions:
+One business use case = one local transaction.
+
+Schema Changes:
+Versioned migrations.
+
+Concurrency:
+Optimistic locking.</code></pre>
+</section>
+
+<section id="communication"><h2>Communication as a cross-cutting concept</h2>
+<p>Questions include: synchronous or asynchronous? REST, messaging, or gRPC? timeout rules? retry rules? idempotency? versioning? authentication? serialization? tracing? error semantics?</p>
+<pre><code>Internal synchronous calls:
+REST/JSON
+
+Default timeout:
+2 seconds
+
+Retries:
+Only idempotent operations
+
+Correlation:
+X-Correlation-ID propagated
+
+Versioning:
+Backward-compatible APIs</code></pre>
+</section>
+
+<section id="errors"><h2>Error handling</h2>
+<p>Without a common concept:</p>
+<pre><code>Service A → HTTP 500 for everything
+Service B → internal stack traces
+Service C → swallows exceptions
+Service D → retries forever</code></pre>
+<p>A stronger concept:</p>
+<pre><code>Business errors
+→ explicit domain error codes
+
+Transient technical errors
+→ bounded retry
+
+Permanent technical errors
+→ fail fast + alert
+
+Public API
+→ no internal stack traces
+
+Logs
+→ technical detail + correlation ID</code></pre>
+<p>This improves reliability, supportability, security, and observability.</p>
+</section>
+
+<section id="observability"><h2>Logging and observability</h2>
+<p>A system-wide observability concept may define:</p>
+<div class="grid-2">
+<div class="card"><h3>Logging</h3><pre><code>Structured JSON
+Correlation ID
+Service name
+Environment
+Severity
+No passwords/tokens</code></pre></div>
+<div class="card"><h3>Metrics</h3><pre><code>Request rate
+Error rate
+Latency
+Queue depth
+Database pool usage</code></pre></div>
+</div>
+<pre><code>Tracing:
+Client
+ ↓ trace-id
+API Gateway
+ ↓
+Order
+ ↓
+Payment</code></pre>
+<p>At Staff Engineer level, observability is architectural because it determines whether teams can understand production behavior.</p>
+</section>
+
+<section id="security"><h2>Security as a cross-cutting concern</h2>
+<p>Questions include:</p>
+<pre><code>Who authenticates users?
+How do services authenticate each other?
+Where is authorization enforced?
+How are secrets stored?
+How is data encrypted?
+What is audited?</code></pre>
+<p>Example concept:</p>
+<pre><code>Authentication:
+Central OpenID Connect provider
+
+Authorization:
+Domain permissions enforced server-side
+
+Service identity:
+OAuth2 client credentials
+
+Secrets:
+Managed secret store
+
+Transport:
+TLS
+
+Audit:
+Security-relevant changes recorded</code></pre>
+<p>Security cannot be solved by adding one "security component."</p>
+</section>
+
+<section id="concurrency"><h2>Concurrency</h2>
+<p>Concurrency is explicitly named in LG 03-10. A concurrency concept may address: threads, async tasks, shared state, synchronization, locking, race conditions, optimistic vs pessimistic concurrency, ordering.</p>
+<pre><code>Order updates:
+Optimistic locking
+
+Background processing:
+Worker pool
+
+Shared mutable state:
+Avoided between requests
+
+Duplicate events:
+Handled idempotently</code></pre>
+</section>
+
+<section id="ui"><h2>UI / GUI</h2>
+<p>A UI concept can define: navigation, state management, validation, accessibility, error presentation, design system, localization.</p>
+<pre><code>Design System:
+Shared component library
+
+Validation:
+Client + authoritative server validation
+
+Accessibility:
+Defined accessibility target
+
+Errors:
+Consistent error component</code></pre>
+</section>
+
+<section id="energy"><h2>Energy efficiency</h2>
+<p>Energy efficiency is explicitly named in the curriculum. Possible architectural concerns: polling frequency, unnecessary network calls, CPU-heavy processing, transferred data volume, workload scheduling, cloud overprovisioning.</p>
+<p>Instead of:</p>
+<pre><code>Every client polls every second</code></pre>
+<p>consider push notifications or adaptive polling, depending on requirements.</p>
+</section>
+
+<section id="interdependencies"><h2>Interdependencies between cross-cutting concepts</h2>
+<p>Cross-cutting concepts are not independent.</p>
+<pre><code>Security
+   ↓
+Encrypted communication
+   ↓
+Higher CPU cost
+   ↓
+Performance impact</code></pre>
+<pre><code>Retry strategy
+   ↓
+More requests
+   ↓
+Higher load
+   ↓
+Possible cascading failure</code></pre>
+<pre><code>Detailed logging
+   ↓
+Better observability
+   ↓
+More storage
+   ↓
+Higher cost
+   ↓
+Potential privacy risk</code></pre>
+<p>The official curriculum expects architects to identify and assess these interdependencies.</p>
+</section>
+
+<section id="retry"><h2>Staff Engineer example: retry policy</h2>
+<p>Suppose every team independently decides:</p>
+<pre><code>Retry failed calls 5 times immediately.</code></pre>
+<p>If Payment Service fails:</p>
+<pre><code>20 upstream instances
+        ↓
+each retries 5 times
+        ↓
+traffic multiplier
+        ↓
+Payment receives even more load</code></pre>
+<p>This can create a retry storm.</p>
+<p>A shared resilience concept might define:</p>
+<pre><code>Retries:
+Maximum 2
+
+Backoff:
+Exponential + jitter
+
+Allowed for:
+Idempotent transient operations only
+
+Timeout:
+Per call + overall request budget
+
+Circuit breaker:
+For unstable dependencies</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>This is typical Staff Engineer-level cross-team architecture work: one bad local decision, replicated across 20 callers, becomes a systemic outage.</div>
+</section>
+
+<section id="standardization"><h2>Standardization vs flexibility</h2>
+<p>A useful model is:</p>
+<pre><code>Standardize architectural rules
+Allow flexibility inside those rules</code></pre>
+<p>Mandatory:</p>
+<pre><code>All services propagate trace IDs.
+All logs are structured.
+Secrets are not stored in source code.</code></pre>
+<p>Flexible:</p>
+<pre><code>Java → Logback
+Python → structlog
+Node → pino</code></pre>
+<p>The architecture defines required behavior, not necessarily one implementation library.</p>
+</section>
+
+<section id="reuse"><h2>Reuse across systems</h2>
+<p>Cross-cutting concepts may be reused across systems.</p>
+<pre><code>Company Authentication Concept
+Company Logging Standard
+API Error Model
+Deployment Concept
+Observability Standard</code></pre>
+<p>Benefits: reduced design effort, easier onboarding, consistent operations, stronger governance, fewer repeated mistakes.</p>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2><ol>
+<li><b>A cross-cutting concern always needs its own component.</b> — False.</li>
+<li><b>Cross-cutting concerns are only infrastructure topics.</b> — False.</li>
+<li><b>Cross-cutting concepts are independent.</b> — False.</li>
+<li><b>Persistence means selecting a database.</b> — Too narrow.</li>
+<li><b>Every team can define logging independently without architectural impact.</b> — False.</li>
+<li><b>Cross-cutting concepts cannot be reused across systems.</b> — False.</li>
+<li><b>Standardization requires exactly one implementation library.</b> — False.</li>
+</ol></section>
+
+<section id="terms"><h2>Key terms to remember</h2><div class="terms">
+<div class="term"><b>Cross-Cutting Concern</b><span>A concern affecting multiple architectural elements.</span></div>
+<div class="term"><b>Cross-Cutting Concept</b><span>A coherent architectural solution for a cross-cutting concern.</span></div>
+<div class="term"><b>Interdependency</b><span>A relationship where one architectural concept influences another.</span></div>
+<div class="term"><b>Consistency</b><span>Uniform application of architectural rules across relevant parts of the system.</span></div>
+<div class="term"><b>Reuse</b><span>Applying an established concept across multiple systems.</span></div>
+<div class="term"><b>Governance</b><span>Mechanisms used to ensure architectural rules are followed.</span></div>
+</div></section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>You review an e-commerce architecture:</p>
+<pre><code>Web
+ ↓
+API Gateway
+ ↓
+────────────────────────────
+| Orders | Payment | Search |
+────────────────────────────
+       ↓
+    Databases</code></pre>
+<p>You discover: each service uses a different log format; only Payment has distributed tracing; each service chooses its own timeout; Orders retries every failed request five times; Payment never retries; authentication is checked only at the gateway; database migrations are manual; user-facing errors sometimes contain Java stack traces.</p>
+<ol>
+<li>Identify at least six cross-cutting concerns.</li>
+<li>Which inconsistencies create the greatest risk?</li>
+<li>Design a minimal communication concept.</li>
+<li>Design a minimal error-handling concept.</li>
+<li>Design a minimal observability concept.</li>
+<li>Which concepts interact with security?</li>
+<li>Which decisions should be organization-wide?</li>
+<li>Which implementation choices can remain team-specific?</li>
+</ol>
+</section>
+
+<section id="staffext"><h2>Staff Engineer extension</h2>
+<p>Create a concept map:</p>
+<pre><code>                Security
+                /      \
+               /        \
+      Communication    Logging
+           |              |
+           |              |
+      Error Handling — Observability
+           |
+           |
+       Persistence</code></pre>
+<p>For each connection, explain the interdependency.</p>
+<p>Example:</p>
+<pre><code>Logging ↔ Security
+
+Logging needs enough detail for investigations.
+
+But logs can expose:
+- tokens
+- passwords
+- personal data
+
+Therefore the logging concept must include security/privacy rules.</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>A concept map turns a list of buzzwords into a set of trade-offs a team can actually reason about and govern.</div>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>What is a cross-cutting concern?</summary><p>A concern that affects multiple parts of the architecture.</p></details>
+<details><summary>What is the difference between a concern and a cross-cutting concept?</summary><p>Concern = problem/topic; concept = architectural solution.</p></details>
+<details><summary>Name six cross-cutting concerns.</summary><p>Persistence, communication, GUI, error handling, concurrency, energy efficiency, logging, security, observability.</p></details>
+<details><summary>Why is logging cross-cutting?</summary><p>Because many components must produce compatible operational information.</p></details>
+<details><summary>Does every concern require a separate service?</summary><p>No.</p></details>
+<details><summary>Why assess interdependencies?</summary><p>Because one concept can influence qualities or constraints of another.</p></details>
+<details><summary>How can retries affect performance and availability?</summary><p>Retries may improve resilience but can increase load and create retry storms.</p></details>
+<details><summary>What can a persistence concept contain besides database choice?</summary><p>Ownership, transactions, migrations, locking, consistency, caching, backup, access patterns, encryption.</p></details>
+<details><summary>Can cross-cutting concepts be reused?</summary><p>Yes.</p></details>
+<details><summary>Why do organization-wide rules matter for Staff Engineers?</summary><p>They reduce inconsistent local decisions and improve operability, security, maintainability, and alignment.</p></details>
+</section>
+
+<section id="minitest"><h2>Mini exam check</h2>
+<div class="question-set">
+<details class="question"><summary>Which statement best describes a cross-cutting concern?</summary><div class="answer"><b>Answer:</b> A concern affecting multiple architectural elements. It need not belong to one class, be a microservice, or be relevant only to infrastructure.</div></details>
+<details class="question"><summary>Which is explicitly listed in LG 03-10?</summary><div class="answer"><b>Answer:</b> Persistence. Variable naming, Git branching, and unit-test naming are not architectural cross-cutting concerns.</div></details>
+<details class="question"><summary>Which statement is correct?</summary><div class="answer"><b>Answer:</b> Architects should identify and assess interdependencies between cross-cutting concepts. Concepts do influence each other, not every component needs its own error strategy, and concepts can be reused.</div></details>
+<details class="question"><summary>Why define a common logging concept?</summary><div class="answer"><b>Answer:</b> It reduces inconsistency and supports system-wide observability. It does not mandate one framework, replace monitoring, or require a separate service.</div></details>
+<details class="question"><summary>A policy requires sensitive data never to appear in logs. What does this demonstrate?</summary><div class="answer"><b>Answer:</b> Cross-cutting concepts can have interdependencies (logging ↔ security). This is not about layers reducing coupling, isolating every concern, or deployment tiers.</div></details>
+</div>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">LG 03-10 — Identify, Design and Implement Cross-Cutting Concerns; LG 04-07 — Document and Communicate Cross-Cutting Concerns.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Governing Architectural Constraints</b><div style="color:var(--muted)">Software Architecture Monday, Lesson 213.</div></div>
+<a href="https://www.developertoarchitect.com/lessons/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day active" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-13.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-15.html">Next day →</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 14 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "14";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۵ دوره iSAQB CPSA-F: مستندسازی معماری و نماهای معماری" />
+  <title>iSAQB CPSA-F — روز ۱۵: مستندسازی معماری و نماهای معماری</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-15.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-15.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۵</span>
+      <h1>مستندسازی معماری و نماهای معماری</h1>
+      <p class="subtitle">
+        مستنداتی بنویسید که واقعاً استفاده شوند: قابل‌فهم، درست، کارآمد، مناسب و قابل‌نگهداری — و نمایی را انتخاب کنید که به پرسش واقعی ذی‌نفع پاسخ می‌دهد.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> کیفیت مستندات، نماهای زمینه، بلوک ساختمانی، زمان اجرا و استقرار</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#why">چرا مستندسازی معماری وجود دارد</a>
+      <a href="#quality">الزامات کیفی مستندات</a>
+      <a href="#stakeholder">مستندسازی ذی‌نفع‌محور</a>
+      <a href="#view-notation">نما، نمودار و نمادگذاری</a>
+      <a href="#context">نمای زمینه</a>
+      <a href="#buildingblock">نمای بلوک ساختمانی</a>
+      <a href="#runtime">نمای زمان اجرا</a>
+      <a href="#deployment">نمای استقرار</a>
+      <a href="#fourviews">یک سیستم، چهار نما</a>
+      <a href="#choosing">انتخاب نمای درست</a>
+      <a href="#consistency">سازگاری میان نماها</a>
+      <a href="#template">مستندسازی مبتنی بر قالب</a>
+      <a href="#staff">نگاه Staff Engineer</a>
+      <a href="#exam">دام‌های رایج آزمون</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین عملی</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس باید بتوانید توضیح دهید چرا مستندسازی معماری وجود دارد، الزامات کیفی مستندات فنی خوب را نام ببرید، مستندات را متناسب با نیاز ذی‌نفعان تنظیم کنید، نماهای زمینه، بلوک ساختمانی، زمان اجرا و استقرار را توضیح دهید و به‌کار ببرید، نما را از نمودار و نمادگذاری تفکیک کنید، برای هر دغدغه ذی‌نفع نمای مناسب را انتخاب کنید و دام‌های رایج آزمون CPSA-F درباره مستندسازی را بشناسید.</p>
+        <div class="callout info"><strong>تطابق رسمی</strong>LG 04-01، LG 04-02، LG 04-05 — برنامه درسی CPSA-F 2025.1-rev2.</div>
+      </section>
+
+      <section id="why">
+        <h2>چرا مستندسازی معماری وجود دارد</h2>
+        <p>مستندسازی معماری از طراحی، پیاده‌سازی، ارتباطات، نگهداشت، تکامل، آموزش افراد جدید، تصمیم‌گیری و کاهش ریسک پشتیبانی می‌کند.</p>
+        <pre><code>Architecture
+    ↓
+Different stakeholder concerns
+    ↓
+Different views
+    ↓
+Appropriate documentation</code></pre>
+        <p>یک معماری واحد ممکن است برای توسعه‌دهندگان، تسترها، مدیریت، بهره‌برداری، امنیت و ذی‌نفعان محصول به بازنمایی‌های متفاوتی نیاز داشته باشد. مستندات یک سند واحد برای همه نیست؛ مجموعه‌ای از پاسخ‌ها به پرسش‌های متفاوت است.</p>
+      </section>
+
+      <section id="quality">
+        <h2>الزامات کیفی مستندات</h2>
+        <p>برنامه درسی رسمی بر پنج کیفیت تأکید دارد:</p>
+        <ul>
+          <li><b>قابل‌فهم بودن (Understandability)</b> — آیا مخاطب موردنظر آن را می‌فهمد؟</li>
+          <li><b>درستی (Correctness)</b> — آیا با واقعیت مطابقت دارد؟</li>
+          <li><b>کارآمدی (Efficiency)</b> — آیا خواننده سریع آنچه را لازم دارد پیدا می‌کند؟</li>
+          <li><b>تناسب (Appropriateness)</b> — آیا محتوا برای هدفش مناسب است؟</li>
+          <li><b>قابلیت نگهداشت (Maintainability)</b> — آیا با تلاش معقول می‌توان آن را به‌روز نگه داشت؟</li>
+        </ul>
+        <div class="callout exam"><strong>دام</strong>«مستندات بیشتر همیشه بهتر است» نادرست است. مستندی که کسی نتواند نگهداری کند تبدیل به مستند غلط می‌شود، و مستند غلط از نبود مستند بدتر است.</div>
+      </section>
+
+      <section id="stakeholder">
+        <h2>مستندسازی ذی‌نفع‌محور</h2>
+        <table>
+          <thead><tr><th>ذی‌نفع</th><th>پرسش</th><th>نما</th></tr></thead>
+          <tbody>
+            <tr><td>مدیر محصول</td><td>به کدام سیستم‌های بیرونی وابسته‌ایم؟</td><td>زمینه (Context)</td></tr>
+            <tr><td>توسعه‌دهنده</td><td>کدام مؤلفه مالک مجوز پرداخت است؟</td><td>بلوک ساختمانی</td></tr>
+            <tr><td>SRE</td><td>وقتی پرداخت timeout می‌شود چه اتفاقی می‌افتد؟</td><td>زمان اجرا</td></tr>
+            <tr><td>بهره‌برداری</td><td>سرویس پرداخت کجا اجرا می‌شود؟</td><td>استقرار</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="view-notation">
+        <h2>نما در برابر نمودار در برابر نمادگذاری</h2>
+        <div class="grid-2">
+          <div class="card"><h3>نما (View)</h3><p>یک منظر معماری متمرکز بر دغدغه‌های مشخص.</p></div>
+          <div class="card"><h3>نمودار (Diagram)</h3><p>یک مصنوع بصری برای انتقال بخشی از یک نما.</p></div>
+          <div class="card"><h3>نمادگذاری (Notation)</h3><p>زبان یا قراردادی که با آن ترسیم می‌شود — UML، C4، ArchiMate یا متن ساده.</p></div>
+        </div>
+        <pre><code>View ≠ Diagram ≠ Notation</code></pre>
+        <div class="callout info"><strong>تمایز مهم برای آزمون</strong>نمای زمان اجرا «یک نمودار توالی UML» نیست. همان نما را می‌توان با UML، BPMN، نمودار پویای C4 یا فهرستی از گام‌ها بیان کرد.</div>
+      </section>
+
+      <section id="context">
+        <h2>نمای زمینه (Context View)</h2>
+        <p>سیستم را در محیطش و همراه با رابط‌های بیرونی‌اش نشان می‌دهد.</p>
+        <pre><code>                Customer
+                   |
+                   v
+         +-------------------+
+         | E-Commerce System |
+         +-------------------+
+          |       |        |
+          v       v        v
+      Payment   CRM     Shipping
+      Provider  System   Provider</code></pre>
+        <p>به این پرسش‌ها پاسخ می‌دهد:</p>
+        <ul>
+          <li>چه چیزی درون مرز سیستم ماست؟</li>
+          <li>چه کسی از سیستم استفاده می‌کند؟</li>
+          <li>کدام سیستم‌های بیرونی با آن تعامل دارند؟</li>
+          <li>کدام رابط‌ها از مرز عبور می‌کنند؟</li>
+        </ul>
+        <h3>زمینه کسب‌وکاری در برابر زمینه فنی</h3>
+        <ul>
+          <li><b>زمینه کسب‌وکاری:</b> بازیگران، سیستم‌های کسب‌وکاری، جریان اطلاعات.</li>
+          <li><b>زمینه فنی:</b> پروتکل‌ها، رابط‌ها، سیستم‌های فنی بیرونی.</li>
+        </ul>
+      </section>
+
+      <section id="buildingblock">
+        <h2>نمای بلوک ساختمانی / مؤلفه</h2>
+        <p>تجزیه ایستای نرم‌افزار را توصیف می‌کند.</p>
+        <pre><code>E-Commerce System
+│
+├── Order Management
+│   ├── Order API
+│   ├── Order Application Service
+│   └── Order Repository
+├── Payment
+│   ├── Payment API
+│   └── Payment Provider Adapter
+└── Customer Management
+    ├── Customer API
+    └── Customer Repository</code></pre>
+        <p>پاسخ می‌دهد: بلوک‌های اصلی نرم‌افزار کدام‌اند، چه مسئولیت‌هایی دارند، چگونه به هم مرتبط‌اند و چه رابط‌هایی وجود دارد؟</p>
+        <div class="grid-2">
+          <div class="card"><h3>جعبه سیاه</h3><p>فقط مسئولیت و رابط‌های قابل‌مشاهده از بیرون.</p></div>
+          <div class="card"><h3>جعبه سفید</h3><p>تجزیه درونی و روابط داخلی.</p></div>
+        </div>
+      </section>
+
+      <section id="runtime">
+        <h2>نمای زمان اجرا (Runtime View)</h2>
+        <p>رفتار پویا و همکاری اجزا در زمان اجرا را توصیف می‌کند.</p>
+        <pre><code>Customer
+  |
+  | Place Order
+  v
+Order Service
+  |
+  | Reserve
+  v
+Inventory
+  |
+  | OK
+  v
+Order Service
+  |
+  | Pay
+  v
+Payment</code></pre>
+        <p>سناریوهای مفید: پرداخت موفق، timeout پرداخت، ورود کاربر، تلاش مجدد پیام، failover، واردسازی دسته‌ای.</p>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>نمای زمان اجرا ارزان‌ترین راه برای آشکار کردن کوپلینگ زمانی و انتشار خطاست. اگر یک فراخوانی همگام در مسیر بحرانی ظاهر شود، ریسک دسترس‌پذیری روی وایت‌برد دیده می‌شود نه در محیط عملیات.</div>
+      </section>
+
+      <section id="deployment">
+        <h2>نمای استقرار (Deployment View)</h2>
+        <p>زیرساخت فنی و نگاشت نرم‌افزار روی آن را نشان می‌دهد.</p>
+        <pre><code>+------------------------+
+| Kubernetes Cluster     |
+|  Order Service Pods    |
+|  Payment Service Pods  |
++-----------+------------+
+            |
+            v
++------------------------+
+| PostgreSQL Cluster     |
++------------------------+</code></pre>
+        <p>پاسخ می‌دهد: نرم‌افزار کجا اجرا می‌شود، به چه زیرساختی وابسته است، مؤلفه‌ها چگونه توزیع شده‌اند، چه مرزهای شبکه‌ای وجود دارد و داده کجا ذخیره می‌شود؟</p>
+      </section>
+
+      <section id="fourviews">
+        <h2>یک سیستم، چهار نما</h2>
+        <div class="grid-2">
+          <div class="card"><h3>زمینه</h3><pre><code>Customer → Banking Platform → Credit Bureau</code></pre></div>
+          <div class="card"><h3>بلوک ساختمانی</h3><pre><code>Banking Platform
+├── Accounts
+├── Payments
+├── Loans
+└── Notifications</code></pre></div>
+          <div class="card"><h3>زمان اجرا</h3><pre><code>Customer → Payment API → Fraud Check → Account Service</code></pre></div>
+          <div class="card"><h3>استقرار</h3><pre><code>Payment Service → Kubernetes → PostgreSQL</code></pre></div>
+        </div>
+      </section>
+
+      <section id="choosing">
+        <h2>انتخاب نمای درست</h2>
+        <pre><code>Who is the stakeholder?
+What is their concern?
+Which view answers that concern?
+What detail level is necessary?</code></pre>
+        <table>
+          <thead><tr><th>پرسش ذی‌نفع</th><th>بهترین نما</th></tr></thead>
+          <tbody>
+            <tr><td>چه سیستم‌های بیرونی وجود دارند؟</td><td>زمینه</td></tr>
+            <tr><td>کدام ماژول مالک داده مشتری است؟</td><td>بلوک ساختمانی</td></tr>
+            <tr><td>در فرایند پرداخت چه رخ می‌دهد؟</td><td>زمان اجرا</td></tr>
+            <tr><td>سرویس کجا اجرا می‌شود؟</td><td>استقرار</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="consistency">
+        <h2>سازگاری میان نماها</h2>
+        <p>نماها نباید یکدیگر را نقض کنند.</p>
+        <pre><code>Context:        System → Payment Provider
+Building Block: Payment Adapter → Payment Provider
+Runtime:        Order Service → Payment Provider directly</code></pre>
+        <p>اگر این‌ها متفاوت باشند، خواننده به هیچ‌یک از مستندات اعتماد نمی‌کند — و ناسازگاری معمولاً نشانه آن است که پیاده‌سازی پیش‌تر منحرف شده است.</p>
+      </section>
+
+      <section id="template">
+        <h2>مستندسازی مبتنی بر قالب</h2>
+        <p>یک قالب سبک:</p>
+        <pre><code>1. Context
+2. Architecture Drivers
+3. Building Block View
+4. Runtime Scenarios
+5. Deployment
+6. Cross-Cutting Concepts
+7. Architecture Decisions
+8. Risks</code></pre>
+        <p>arc42 یکی از قالب‌های شناخته‌شده مستندسازی است. آزمون ایده مستندسازی ساخت‌یافته و ذی‌نفع‌محور را می‌سنجد، نه یک محصول خاص را.</p>
+      </section>
+
+      <section id="staff">
+        <h2>نگاه Staff Engineer</h2>
+        <p>مستندسازی بخشی از طراحی معماری است، نه صرفاً فعالیتی پس از آن.</p>
+        <pre><code>Draw runtime scenario
+        ↓
+Discover synchronous dependency
+        ↓
+Availability risk becomes visible
+        ↓
+Architecture changes</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>مستندسازی پیش از پیاده‌سازی یک تکنیک طراحی است. نموداری که نمی‌توانید تمیز رسم کنید معمولاً همان طراحی‌ای است که فکر کردن درباره‌اش را تمام نکرده‌اید.</div>
+      </section>
+
+      <section id="exam">
+        <h2>دام‌های رایج آزمون CPSA-F</h2>
+        <ul>
+          <li>نما همان نمودار UML است. → <b>نادرست</b></li>
+          <li>نمای زمینه تجزیه درونی را نشان می‌دهد. → <b>نادرست</b></li>
+          <li>نمای استقرار فقط سرورها را نشان می‌دهد. → <b>نادرست</b></li>
+          <li>نمای زمان اجرا تجزیه ایستاست. → <b>نادرست</b></li>
+          <li>مستندات بیشتر همیشه بهتر است. → <b>نادرست</b></li>
+          <li>همه ذی‌نفعان به مستندات یکسان نیاز دارند. → <b>نادرست</b></li>
+          <li>C4 برای CPSA-F الزامی است. → <b>نادرست</b></li>
+        </ul>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی</h2>
+        <p>نمای معماری · نمای زمینه · نمای بلوک ساختمانی · نمای زمان اجرا · نمای استقرار · دغدغه ذی‌نفع · نمادگذاری · قابلیت نگهداشت مستندات</p>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>یک پلتفرم خسارت بیمه را با این نماها مستند کنید:</p>
+        <ol>
+          <li>نمای زمینه؛</li>
+          <li>نمای بلوک ساختمانی؛</li>
+          <li>نمای زمان اجرا برای ثبت خسارت؛</li>
+          <li>نمای استقرار؛</li>
+          <li>نگاشت ذی‌نفع به نما.</li>
+        </ol>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>پنج کیفیت مستندسازی که در LG 04-01 صریحاً نام برده شده‌اند کدام‌اند؟</summary><p>قابل‌فهم بودن، درستی، کارآمدی، تناسب، قابلیت نگهداشت.</p></details>
+        <details><summary>چهار نمای سطح R1 کدام‌اند؟</summary><p>زمینه، بلوک ساختمانی/مؤلفه، زمان اجرا، استقرار.</p></details>
+        <details><summary>نمای زمینه اساساً چه چیزی را نشان می‌دهد؟</summary><p>مرز سیستم، محیط، بازیگران و سیستم‌های بیرونی و رابط‌های عبوری از مرز.</p></details>
+        <details><summary>نمای بلوک ساختمانی چه چیزی را نشان می‌دهد؟</summary><p>تجزیه ایستای نرم‌افزار.</p></details>
+        <details><summary>نمای زمان اجرا چه چیزی را نشان می‌دهد؟</summary><p>تعامل پویا و رفتار زمان اجرا.</p></details>
+        <details><summary>نمای استقرار چه چیزی را نشان می‌دهد؟</summary><p>زیرساخت و نگاشت نرم‌افزار به زیرساخت.</p></details>
+        <details><summary>تفاوت نما و نمادگذاری چیست؟</summary><p>نما = منظر؛ نمادگذاری = زبان بیان آن.</p></details>
+        <details><summary>چرا مستندات باید ذی‌نفع‌محور باشد؟</summary><p>چون ذی‌نفعان مختلف دغدغه‌های مختلفی دارند.</p></details>
+        <details><summary>چرا قابلیت نگهداشت مهم است؟</summary><p>مستند کهنه گمراه‌کننده می‌شود.</p></details>
+        <details><summary>آیا چند نمادگذاری می‌توانند یک نما را بیان کنند؟</summary><p>بله.</p></details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">LG 04-01، LG 04-02، LG 04-05 — کیفیت مستندات و نماهای معماری.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Simon Brown — Visualising Software Architecture with the C4 Model</b>
+            <div style="color:var(--muted)">یکی از چند نمادگذاری ممکن؛ برای تمرین تفکر مبتنی بر نما مفید است.</div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=uvnZ46OvJLA" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>سایت رسمی مدل C4</b>
+            <div style="color:var(--muted)">مرجع نمادگذاری مورد استفاده در ویدئوی بالا.</div>
+          </div>
+          <a href="https://c4model.com/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day active" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-14.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-16.fa.html">روز بعد ←</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۵ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "15";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

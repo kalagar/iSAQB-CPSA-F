@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۴ دوره iSAQB CPSA-F: دغدغه‌های فراگیر و مفاهیم فراگیر" />
+  <title>iSAQB CPSA-F — روز ۱۴: دغدغه‌های فراگیر و مفاهیم فراگیر</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-14.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-14.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۴</span>
+      <h1>دغدغه‌های فراگیر و مفاهیم فراگیر</h1>
+      <p class="subtitle">
+        دغدغه‌هایی را شناسایی کنید که کل معماری را در بر می‌گیرند، و مفاهیم منسجمی — برای پایداری، ارتباطات، مدیریت خطا، همزمانی، رابط کاربری، امنیت و رصدپذیری — در سطح Staff Engineer طراحی کنید.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> دغدغه‌های فراگیر، مفاهیم فراگیر، وابستگی‌های متقابل</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#what-is">دغدغه فراگیر چیست؟</a>
+      <a href="#concept">دغدغه در برابر مفهوم</a>
+      <a href="#why">چرا دغدغه‌های فراگیر اهمیت دارند</a>
+      <a href="#not-service">دغدغه فراگیر ≠ سرویس جداگانه</a>
+      <a href="#persistence">پایداری به‌عنوان یک مفهوم</a>
+      <a href="#communication">ارتباطات به‌عنوان یک مفهوم</a>
+      <a href="#errors">مدیریت خطا</a>
+      <a href="#observability">لاگ‌گیری و رصدپذیری</a>
+      <a href="#security">امنیت</a>
+      <a href="#concurrency">همزمانی (Concurrency)</a>
+      <a href="#ui">رابط کاربری</a>
+      <a href="#energy">بهره‌وری انرژی</a>
+      <a href="#interdependencies">وابستگی‌های متقابل</a>
+      <a href="#retry">نمونه Staff Engineer: سیاست تلاش مجدد</a>
+      <a href="#standardization">استانداردسازی در برابر انعطاف‌پذیری</a>
+      <a href="#reuse">استفاده مجدد در سیستم‌ها</a>
+      <a href="#exam">دام‌های رایج آزمون CPSA-F</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین عملی</a>
+      <a href="#staffext">بسط Staff Engineer</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#minitest">آزمون کوتاه</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس، باید بتوانید دغدغه‌های فراگیر را توضیح دهید، یک دغدغه را از یک مفهوم فراگیر تشخیص دهید، دغدغه‌های فراگیر را در یک معماری شناسایی کنید، مفاهیم منسجمی برای پایداری، ارتباطات، مدیریت خطا، همزمانی، رابط کاربری، امنیت و رصدپذیری طراحی کنید، وابستگی‌های متقابل بین مفاهیم فراگیر را شناسایی کنید، دام‌های رایج آزمون CPSA-F را تشخیص دهید، و این ایده‌ها را در سطح Staff Engineer به‌کار ببرید.</p>
+        <div class="callout info"><strong>هم‌راستایی رسمی</strong>LG 03-10 — شناسایی، طراحی و پیاده‌سازی دغدغه‌های فراگیر (R1). مرتبط: LG 04-07 — مستندسازی و ارتباط دغدغه‌های فراگیر (R2).</div>
+      </section>
+
+      <section id="what-is">
+        <h2>دغدغه فراگیر چیست؟</h2>
+        <p>یک دغدغه فراگیر بر چند بخش از معماری اثر می‌گذارد، به‌جای آنکه صرفاً متعلق به یک بلوک سازنده باشد.</p>
+        <pre><code>Order Service
+Customer Service
+Payment Service
+Inventory Service</code></pre>
+        <p>همه این‌ها ممکن است به موارد زیر نیاز داشته باشند:</p>
+        <pre><code>Logging
+Authentication
+Authorization
+Error handling
+Monitoring
+Tracing
+Configuration
+Persistence rules
+Communication conventions</code></pre>
+        <p>این دغدغه‌ها چند عنصر معماری را همزمان در بر می‌گیرند.</p>
+      </section>
+
+      <section id="concept">
+        <h2>دغدغه در برابر مفهوم</h2>
+        <div class="grid-2">
+          <div class="card"><h3>دغدغه فراگیر (Cross-Cutting Concern)</h3><p>مسئله یا موضوعی که چند بخش از سیستم را تحت تأثیر قرار می‌دهد.</p><pre><code>How should errors be handled consistently?</code></pre></div>
+          <div class="card"><h3>مفهوم فراگیر (Cross-Cutting Concept)</h3><p>راه‌حل معماری‌ای که برای پاسخ به آن دغدغه به‌کار می‌رود.</p><pre><code>Standard error taxonomy
+Correlation IDs
+Retry rules
+Safe API error responses
+Centralized exception mapping
+Structured logging</code></pre></div>
+        </div>
+        <div class="callout info"><strong>تمایز مهم برای آزمون</strong>دغدغه = آنچه باید حل شود. مفهوم = چگونگی حل آن توسط معماری.</div>
+      </section>
+
+      <section id="why">
+        <h2>چرا دغدغه‌های فراگیر اهمیت دارند</h2>
+        <p>بدون یک مفهوم مشترک، تیم‌ها ممکن است همان مسئله را به‌شکل‌های متفاوت حل کنند.</p>
+        <pre><code>Order Service    → JSON logs
+Payment Service  → plain-text logs
+Customer Service → stack traces
+Inventory Service→ almost no logging</code></pre>
+        <p>پیامدهای احتمالی:</p>
+        <ul>
+          <li>عیب‌یابی دشوار؛</li>
+          <li>رصدپذیری ناهمگون؛</li>
+          <li>فقدان همبستگی (correlation) بین سرویس‌ها؛</li>
+          <li>افشای اطلاعات امنیتی؛</li>
+          <li>تلاش تکراری در پیاده‌سازی.</li>
+        </ul>
+        <p>یک مفهوم لاگ‌گیری مشترک ممکن است این موارد را تعریف کند:</p>
+        <pre><code>Log format
+Log levels
+Mandatory fields
+Correlation IDs
+Sensitive-data policy
+Retention
+Central collection</code></pre>
+      </section>
+
+      <section id="not-service">
+        <h2>دغدغه فراگیر ≠ سرویس جداگانه</h2>
+        <p>یک دغدغه فراگیر لزوماً به یک مؤلفه مستقل خودش نیاز ندارد.</p>
+        <p>لاگ‌گیری ممکن است با موارد زیر پیاده‌سازی شود:</p>
+        <ul>
+          <li>یک کتابخانه مشترک؛</li>
+          <li>یک SDK پلتفرمی؛</li>
+          <li>یک ایجنت (agent)؛</li>
+          <li>یک سایدکار (sidecar)؛</li>
+          <li>پیکربندی فریم‌ورک؛</li>
+          <li>سیاست زیرساخت.</li>
+        </ul>
+        <p>امنیت ممکن است شامل موارد زیر باشد:</p>
+        <ul>
+          <li>یک ارائه‌دهنده هویت (identity provider)؛</li>
+          <li>قواعد API Gateway؛</li>
+          <li>مجوزدهی در سطح برنامه؛</li>
+          <li>مدیریت گواهی (certificate)؛</li>
+          <li>ذخیره‌سازی رازها (secrets)؛</li>
+          <li>لاگ‌گیری ممیزی (audit).</li>
+        </ul>
+        <p>مفهوم می‌تواند چند عنصر معماری را در بر بگیرد.</p>
+      </section>
+
+      <section id="persistence">
+        <h2>پایداری (Persistence) به‌عنوان یک مفهوم فراگیر</h2>
+        <p>پایداری چیزی بیش از انتخاب یک پایگاه‌داده است. یک مفهوم پایداری می‌تواند شامل این موارد باشد: مالکیت داده، مرزهای تراکنش، قراردادهای repository، مهاجرت schema، کش، کنترل همزمانی، سازگاری (consistency)، پشتیبان‌گیری و بازیابی، رمزنگاری، الزامات ممیزی.</p>
+        <pre><code>Database:
+PostgreSQL
+
+Ownership:
+Each domain module owns its tables.
+
+Access:
+Only repository adapters access SQL.
+
+Transactions:
+One business use case = one local transaction.
+
+Schema Changes:
+Versioned migrations.
+
+Concurrency:
+Optimistic locking.</code></pre>
+      </section>
+
+      <section id="communication">
+        <h2>ارتباطات به‌عنوان یک مفهوم فراگیر</h2>
+        <p>سؤالات شامل این‌هاست: همگام یا ناهمگام؟ REST، پیام‌رسانی یا gRPC؟ قواعد تایم‌اوت؟ قواعد تلاش مجدد؟ ایدم‌پوتنسی؟ نسخه‌بندی؟ احراز هویت؟ سریال‌سازی؟ ردیابی (tracing)؟ معنای خطاها؟</p>
+        <pre><code>Internal synchronous calls:
+REST/JSON
+
+Default timeout:
+2 seconds
+
+Retries:
+Only idempotent operations
+
+Correlation:
+X-Correlation-ID propagated
+
+Versioning:
+Backward-compatible APIs</code></pre>
+      </section>
+
+      <section id="errors">
+        <h2>مدیریت خطا</h2>
+        <p>بدون یک مفهوم مشترک:</p>
+        <pre><code>Service A → HTTP 500 for everything
+Service B → internal stack traces
+Service C → swallows exceptions
+Service D → retries forever</code></pre>
+        <p>یک مفهوم قوی‌تر:</p>
+        <pre><code>Business errors
+→ explicit domain error codes
+
+Transient technical errors
+→ bounded retry
+
+Permanent technical errors
+→ fail fast + alert
+
+Public API
+→ no internal stack traces
+
+Logs
+→ technical detail + correlation ID</code></pre>
+        <p>این کار قابلیت اطمینان، پشتیبان‌پذیری، امنیت و رصدپذیری را بهبود می‌دهد.</p>
+      </section>
+
+      <section id="observability">
+        <h2>لاگ‌گیری و رصدپذیری (Observability)</h2>
+        <p>یک مفهوم رصدپذیری در سطح کل سیستم ممکن است این موارد را تعریف کند:</p>
+        <div class="grid-2">
+          <div class="card"><h3>لاگ‌گیری</h3><pre><code>Structured JSON
+Correlation ID
+Service name
+Environment
+Severity
+No passwords/tokens</code></pre></div>
+          <div class="card"><h3>متریک‌ها</h3><pre><code>Request rate
+Error rate
+Latency
+Queue depth
+Database pool usage</code></pre></div>
+        </div>
+        <pre><code>Tracing:
+Client
+ ↓ trace-id
+API Gateway
+ ↓
+Order
+ ↓
+Payment</code></pre>
+        <p>در سطح Staff Engineer، رصدپذیری موضوعی معماری است زیرا مشخص می‌کند آیا تیم‌ها می‌توانند رفتار محیط عملیاتی را درک کنند یا نه.</p>
+      </section>
+
+      <section id="security">
+        <h2>امنیت به‌عنوان یک دغدغه فراگیر</h2>
+        <p>سؤالات شامل این‌هاست:</p>
+        <pre><code>Who authenticates users?
+How do services authenticate each other?
+Where is authorization enforced?
+How are secrets stored?
+How is data encrypted?
+What is audited?</code></pre>
+        <p>مثال مفهوم:</p>
+        <pre><code>Authentication:
+Central OpenID Connect provider
+
+Authorization:
+Domain permissions enforced server-side
+
+Service identity:
+OAuth2 client credentials
+
+Secrets:
+Managed secret store
+
+Transport:
+TLS
+
+Audit:
+Security-relevant changes recorded</code></pre>
+        <p>امنیت را نمی‌توان صرفاً با افزودن یک «مؤلفه امنیتی» حل کرد.</p>
+      </section>
+
+      <section id="concurrency">
+        <h2>همزمانی (Concurrency)</h2>
+        <p>همزمانی به‌صراحت در LG 03-10 نام برده شده است. یک مفهوم همزمانی می‌تواند به این موارد بپردازد: نخ‌ها (threads)، تسک‌های ناهمگام، وضعیت مشترک، همگام‌سازی، قفل‌گذاری، شرایط رقابتی (race conditions)، همزمانی خوش‌بینانه در برابر بدبینانه، ترتیب (ordering).</p>
+        <pre><code>Order updates:
+Optimistic locking
+
+Background processing:
+Worker pool
+
+Shared mutable state:
+Avoided between requests
+
+Duplicate events:
+Handled idempotently</code></pre>
+      </section>
+
+      <section id="ui">
+        <h2>رابط کاربری (UI / GUI)</h2>
+        <p>یک مفهوم رابط کاربری می‌تواند این موارد را تعریف کند: ناوبری، مدیریت وضعیت، اعتبارسنجی، دسترس‌پذیری (accessibility)، نمایش خطا، سیستم طراحی، بومی‌سازی.</p>
+        <pre><code>Design System:
+Shared component library
+
+Validation:
+Client + authoritative server validation
+
+Accessibility:
+Defined accessibility target
+
+Errors:
+Consistent error component</code></pre>
+      </section>
+
+      <section id="energy">
+        <h2>بهره‌وری انرژی</h2>
+        <p>بهره‌وری انرژی به‌صراحت در برنامه درسی نام برده شده است. دغدغه‌های معماری احتمالی: فرکانس polling، فراخوانی‌های شبکه غیرضروری، پردازش سنگین CPU، حجم داده منتقل‌شده، زمان‌بندی بار کاری، تخصیص بیش‌ازحد منابع ابری (overprovisioning).</p>
+        <p>به‌جای:</p>
+        <pre><code>Every client polls every second</code></pre>
+        <p>با توجه به نیازمندی‌ها، اعلان‌های push یا polling تطبیقی (adaptive) را در نظر بگیرید.</p>
+      </section>
+
+      <section id="interdependencies">
+        <h2>وابستگی‌های متقابل بین مفاهیم فراگیر</h2>
+        <p>مفاهیم فراگیر مستقل از یکدیگر نیستند.</p>
+        <pre><code>Security
+   ↓
+Encrypted communication
+   ↓
+Higher CPU cost
+   ↓
+Performance impact</code></pre>
+        <pre><code>Retry strategy
+   ↓
+More requests
+   ↓
+Higher load
+   ↓
+Possible cascading failure</code></pre>
+        <pre><code>Detailed logging
+   ↓
+Better observability
+   ↓
+More storage
+   ↓
+Higher cost
+   ↓
+Potential privacy risk</code></pre>
+        <p>برنامه درسی رسمی انتظار دارد معماران این وابستگی‌های متقابل را شناسایی و ارزیابی کنند.</p>
+      </section>
+
+      <section id="retry">
+        <h2>نمونه Staff Engineer: سیاست تلاش مجدد (Retry Policy)</h2>
+        <p>فرض کنید هر تیم به‌طور مستقل تصمیم می‌گیرد:</p>
+        <pre><code>Retry failed calls 5 times immediately.</code></pre>
+        <p>اگر Payment Service از کار بیفتد:</p>
+        <pre><code>20 upstream instances
+        ↓
+each retries 5 times
+        ↓
+traffic multiplier
+        ↓
+Payment receives even more load</code></pre>
+        <p>این می‌تواند یک طوفان تلاش مجدد (retry storm) ایجاد کند.</p>
+        <p>یک مفهوم تاب‌آوری مشترک ممکن است این موارد را تعریف کند:</p>
+        <pre><code>Retries:
+Maximum 2
+
+Backoff:
+Exponential + jitter
+
+Allowed for:
+Idempotent transient operations only
+
+Timeout:
+Per call + overall request budget
+
+Circuit breaker:
+For unstable dependencies</code></pre>
+        <div class="callout staff"><strong>دیدگاه Staff Engineer</strong>این نمونه‌ی معمول کار معماری بین‌تیمی در سطح Staff Engineer است: یک تصمیم محلی نادرست که در ۲۰ فراخوان‌کننده تکرار می‌شود، به یک قطعی سیستمی تبدیل می‌شود.</div>
+      </section>
+
+      <section id="standardization">
+        <h2>استانداردسازی در برابر انعطاف‌پذیری</h2>
+        <p>یک مدل مفید این است:</p>
+        <pre><code>Standardize architectural rules
+Allow flexibility inside those rules</code></pre>
+        <p>الزامی:</p>
+        <pre><code>All services propagate trace IDs.
+All logs are structured.
+Secrets are not stored in source code.</code></pre>
+        <p>انعطاف‌پذیر:</p>
+        <pre><code>Java → Logback
+Python → structlog
+Node → pino</code></pre>
+        <p>معماری رفتار موردنیاز را تعریف می‌کند، نه لزوماً یک کتابخانه پیاده‌سازی واحد را.</p>
+      </section>
+
+      <section id="reuse">
+        <h2>استفاده مجدد در سیستم‌ها</h2>
+        <p>مفاهیم فراگیر می‌توانند در سیستم‌های مختلف استفاده مجدد شوند.</p>
+        <pre><code>Company Authentication Concept
+Company Logging Standard
+API Error Model
+Deployment Concept
+Observability Standard</code></pre>
+        <p>مزایا: کاهش تلاش طراحی، تسهیل onboarding، عملیات یکدست، حاکمیت (governance) قوی‌تر، کاهش تکرار اشتباهات.</p>
+      </section>
+
+      <section id="exam">
+        <h2>دام‌های رایج آزمون CPSA-F</h2>
+        <ol>
+          <li><b>یک دغدغه فراگیر همیشه به مؤلفه‌ی خودش نیاز دارد.</b> — نادرست.</li>
+          <li><b>دغدغه‌های فراگیر فقط موضوعات زیرساختی هستند.</b> — نادرست.</li>
+          <li><b>مفاهیم فراگیر مستقل از هم هستند.</b> — نادرست.</li>
+          <li><b>پایداری یعنی انتخاب یک پایگاه‌داده.</b> — بیش‌ازحد محدود.</li>
+          <li><b>هر تیم می‌تواند لاگ‌گیری را مستقل تعریف کند بدون تأثیر معماری.</b> — نادرست.</li>
+          <li><b>مفاهیم فراگیر نمی‌توانند در سیستم‌های مختلف استفاده مجدد شوند.</b> — نادرست.</li>
+          <li><b>استانداردسازی به معنای استفاده از دقیقاً یک کتابخانه پیاده‌سازی است.</b> — نادرست.</li>
+        </ol>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی برای به‌خاطرسپاری</h2>
+        <div class="terms">
+          <div class="term"><b>دغدغه فراگیر (Cross-Cutting Concern)</b><span>دغدغه‌ای که چند عنصر معماری را تحت تأثیر قرار می‌دهد.</span></div>
+          <div class="term"><b>مفهوم فراگیر (Cross-Cutting Concept)</b><span>راه‌حل معماری منسجم برای یک دغدغه فراگیر.</span></div>
+          <div class="term"><b>وابستگی متقابل (Interdependency)</b><span>رابطه‌ای که در آن یک مفهوم معماری بر مفهوم دیگری اثر می‌گذارد.</span></div>
+          <div class="term"><b>سازگاری (Consistency)</b><span>اعمال یکدست قواعد معماری در بخش‌های مرتبط سیستم.</span></div>
+          <div class="term"><b>استفاده مجدد (Reuse)</b><span>به‌کارگیری یک مفهوم تثبیت‌شده در چند سیستم.</span></div>
+          <div class="term"><b>حاکمیت (Governance)</b><span>مکانیزم‌هایی که تضمین می‌کنند قواعد معماری رعایت می‌شوند.</span></div>
+        </div>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>در حال بازبینی یک معماری تجارت الکترونیک هستید:</p>
+        <pre><code>Web
+ ↓
+API Gateway
+ ↓
+────────────────────────────
+| Orders | Payment | Search |
+────────────────────────────
+       ↓
+    Databases</code></pre>
+        <p>متوجه می‌شوید: هر سرویس از قالب لاگ متفاوتی استفاده می‌کند؛ فقط Payment ردیابی توزیع‌شده (distributed tracing) دارد؛ هر سرویس تایم‌اوت خودش را انتخاب می‌کند؛ Orders هر درخواست ناموفق را پنج بار تلاش مجدد می‌کند؛ Payment هرگز تلاش مجدد نمی‌کند؛ احراز هویت فقط در Gateway بررسی می‌شود؛ مهاجرت‌های پایگاه‌داده دستی است؛ خطاهای رو-به-کاربر گاهی حاوی stack trace جاوا هستند.</p>
+        <ol>
+          <li>حداقل شش دغدغه فراگیر را شناسایی کنید.</li>
+          <li>کدام ناهماهنگی‌ها بزرگ‌ترین ریسک را ایجاد می‌کنند؟</li>
+          <li>یک مفهوم ارتباطی حداقلی طراحی کنید.</li>
+          <li>یک مفهوم مدیریت خطای حداقلی طراحی کنید.</li>
+          <li>یک مفهوم رصدپذیری حداقلی طراحی کنید.</li>
+          <li>کدام مفاهیم با امنیت تعامل دارند؟</li>
+          <li>کدام تصمیمات باید در سطح سازمان گرفته شوند؟</li>
+          <li>کدام انتخاب‌های پیاده‌سازی می‌توانند مختص هر تیم باقی بمانند؟</li>
+        </ol>
+      </section>
+
+      <section id="staffext">
+        <h2>بسط Staff Engineer</h2>
+        <p>یک نقشه مفهومی (concept map) بسازید:</p>
+        <pre><code>                Security
+                /      \
+               /        \
+      Communication    Logging
+           |              |
+           |              |
+      Error Handling — Observability
+           |
+           |
+       Persistence</code></pre>
+        <p>برای هر اتصال، وابستگی متقابل را توضیح دهید.</p>
+        <p>مثال:</p>
+        <pre><code>Logging ↔ Security
+
+Logging needs enough detail for investigations.
+
+But logs can expose:
+- tokens
+- passwords
+- personal data
+
+Therefore the logging concept must include security/privacy rules.</code></pre>
+        <div class="callout staff"><strong>دیدگاه Staff Engineer</strong>یک نقشه مفهومی، فهرستی از اصطلاحات پرطمطراق را به مجموعه‌ای از مصالحه‌هایی تبدیل می‌کند که یک تیم واقعاً می‌تواند درباره‌شان استدلال و حاکمیت کند.</div>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>دغدغه فراگیر چیست؟</summary><p>دغدغه‌ای که چند بخش از معماری را تحت تأثیر قرار می‌دهد.</p></details>
+        <details><summary>تفاوت یک دغدغه و یک مفهوم فراگیر چیست؟</summary><p>دغدغه = مسئله/موضوع؛ مفهوم = راه‌حل معماری.</p></details>
+        <details><summary>شش دغدغه فراگیر نام ببرید.</summary><p>پایداری، ارتباطات، رابط کاربری، مدیریت خطا، همزمانی، بهره‌وری انرژی، لاگ‌گیری، امنیت، رصدپذیری.</p></details>
+        <details><summary>چرا لاگ‌گیری فراگیر است؟</summary><p>زیرا بسیاری از مؤلفه‌ها باید اطلاعات عملیاتی سازگار با یکدیگر تولید کنند.</p></details>
+        <details><summary>آیا هر دغدغه به یک سرویس جداگانه نیاز دارد؟</summary><p>خیر.</p></details>
+        <details><summary>چرا باید وابستگی‌های متقابل را ارزیابی کرد؟</summary><p>زیرا یک مفهوم می‌تواند بر ویژگی‌ها یا محدودیت‌های مفهومی دیگر اثر بگذارد.</p></details>
+        <details><summary>تلاش‌های مجدد چگونه می‌توانند بر کارایی و دسترس‌پذیری اثر بگذارند؟</summary><p>تلاش مجدد می‌تواند تاب‌آوری را بهبود دهد اما می‌تواند بار را افزایش داده و طوفان تلاش مجدد ایجاد کند.</p></details>
+        <details><summary>یک مفهوم پایداری علاوه بر انتخاب پایگاه‌داده چه چیزهایی می‌تواند شامل شود؟</summary><p>مالکیت، تراکنش‌ها، مهاجرت‌ها، قفل‌گذاری، سازگاری، کش، پشتیبان‌گیری، الگوهای دسترسی، رمزنگاری.</p></details>
+        <details><summary>آیا مفاهیم فراگیر می‌توانند استفاده مجدد شوند؟</summary><p>بله.</p></details>
+        <details><summary>چرا قواعد سراسری سازمان برای Staff Engineerها اهمیت دارد؟</summary><p>این قواعد تصمیمات محلی ناهماهنگ را کاهش داده و قابلیت بهره‌برداری، امنیت، نگهداشت‌پذیری و همسویی را بهبود می‌بخشند.</p></details>
+      </section>
+
+      <section id="minitest">
+        <h2>آزمون کوتاه</h2>
+        <div class="question-set">
+          <details class="question"><summary>کدام گزینه بهترین توصیف یک دغدغه فراگیر است؟</summary><div class="answer"><b>پاسخ:</b> دغدغه‌ای که چند عنصر معماری را تحت تأثیر قرار می‌دهد. لازم نیست متعلق به یک کلاس باشد، یک میکروسرویس باشد، یا فقط به زیرساخت مربوط باشد.</div></details>
+          <details class="question"><summary>کدام مورد به‌صراحت در LG 03-10 فهرست شده است؟</summary><div class="answer"><b>پاسخ:</b> پایداری (Persistence). نام‌گذاری متغیر، شاخه‌بندی Git، و نام‌گذاری تست واحد دغدغه‌های فراگیر معماری نیستند.</div></details>
+          <details class="question"><summary>کدام گزینه درست است؟</summary><div class="answer"><b>پاسخ:</b> معماران باید وابستگی‌های متقابل بین مفاهیم فراگیر را شناسایی و ارزیابی کنند. مفاهیم واقعاً بر یکدیگر اثر می‌گذارند، هر مؤلفه نیازی به استراتژی خطای خودش ندارد، و مفاهیم می‌توانند استفاده مجدد شوند.</div></details>
+          <details class="question"><summary>چرا یک مفهوم لاگ‌گیری مشترک تعریف می‌شود؟</summary><div class="answer"><b>پاسخ:</b> ناهماهنگی را کاهش داده و از رصدپذیری سراسری سیستم پشتیبانی می‌کند. این کار یک فریم‌ورک واحد را الزامی نمی‌کند، جایگزین پایش نمی‌شود، و به یک سرویس جداگانه نیاز ندارد.</div></details>
+          <details class="question"><summary>یک سیاست الزام می‌کند داده‌های حساس هرگز در لاگ‌ها ظاهر نشوند. این نشان‌دهنده چیست؟</summary><div class="answer"><b>پاسخ:</b> مفاهیم فراگیر می‌توانند وابستگی متقابل داشته باشند (لاگ‌گیری ↔ امنیت). این موضوع درباره کاهش کوپلینگ توسط لایه‌ها، جداسازی هر دغدغه، یا سطوح استقرار نیست.</div></details>
+        </div>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">LG 03-10 — شناسایی، طراحی و پیاده‌سازی دغدغه‌های فراگیر؛ LG 04-07 — مستندسازی و ارتباط دغدغه‌های فراگیر.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — Governing Architectural Constraints</b>
+            <div style="color:var(--muted)">Software Architecture Monday، درس ۲۱۳.</div>
+          </div>
+          <a href="https://www.developertoarchitect.com/lessons/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day active" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-13.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-15.fa.html">روز بعد ←</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۴ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "14";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

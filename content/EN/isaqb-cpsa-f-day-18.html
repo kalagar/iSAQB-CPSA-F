@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 18: Architecture Conformance, Structural Decay and Fitness Functions" />
+  <title>iSAQB CPSA-F — Day 18: Architecture Conformance, Structural Decay &amp; Fitness Functions</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-18.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-18.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 18</span>
+  <h1>Architecture Conformance, Structural Decay &amp; Fitness Functions</h1>
+  <p class="subtitle">Intended architecture and implemented architecture drift apart one shortcut at a time. Turn decisions into rules, and rules into checks that run by themselves.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Conformance, drift, erosion, architecture rules, fitness functions</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#objectives">Learning objectives</a><a href="#focus">Official CPSA-F focus</a><a href="#intended">Intended vs implemented</a><a href="#conformance">Architecture conformance</a><a href="#why">Why conformance matters</a><a href="#drift">Drift vs erosion</a><a href="#decay">How structural decay happens</a><a href="#explicit">Rules must be explicit</a><a href="#chain">Decision → rule → verification</a><a href="#methods">The three conformance methods</a><a href="#tests">Architecture tests</a><a href="#java">Layered example</a><a href="#microservice">Microservice example</a><a href="#guardrails">Guardrails vs gates</a><a href="#exceptions">Architecture exceptions</a><a href="#fitness">Fitness functions</a><a href="#vs-test">Fitness function vs ordinary test</a><a href="#structural">Structural vs operational</a><a href="#triggered">Triggered vs continuous</a><a href="#ffda">Fitness-function-driven architecture</a><a href="#runtime">Runtime conformance</a><a href="#views">Conformance across views</a><a href="#signals">Structural decay signals</a><a href="#traps-design">Shared utility trap &amp; cycles</a><a href="#categories">Rule categories</a><a href="#overgovernance">Avoid over-governance</a><a href="#automate">What to automate</a><a href="#exam">Common CPSA-F exam traps</a><a href="#terms">Key terms</a><a href="#exercise">Practical exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="objectives">
+<h2>Learning objectives</h2>
+<p class="lead">By the end of this lesson, you should be able to explain architecture conformance, distinguish intended from implemented architecture, recognize drift and erosion, explain code review / architecture review / tool-supported analysis, convert decisions into explicit rules, understand architecture tests and fitness functions, distinguish structural from operational checks, distinguish triggered from continuous checks, and design lightweight architecture guardrails.</p>
+<div class="callout info"><strong>Official alignment</strong>LG 05-03 — Evaluate Conformance to Architectural Decisions (R2). Related: LG 05-01, LG 05-02.</div>
+</section>
+
+<section id="focus"><h2>Official CPSA-F focus</h2>
+<p>The core expectation: <b>assess whether the implementation conforms to architecture design and architectural decisions.</b></p>
+<p>The curriculum explicitly names code reviews, architecture reviews, and tool-supported analysis. Fitness functions are a practical extension that supports continuous feedback — useful, but not the wording of the learning goal.</p>
+</section>
+
+<section id="intended"><h2>Intended vs implemented architecture</h2>
+<div class="grid-2">
+<div class="card"><h3>Intended</h3><p>What we designed and decided.</p></div>
+<div class="card"><h3>Implemented</h3><p>What the code and runtime actually do.</p></div>
+</div>
+<p>Healthy architecture keeps them reasonably aligned — not identical, but not contradictory.</p>
+</section>
+
+<section id="conformance"><h2>Architecture conformance</h2>
+<p>Conformance asks: does the implemented system obey the intended rules and decisions?</p>
+<pre><code>Domain must not depend on UI.
+Only Payment Adapter may use the payment SDK.
+Services may not read another service's database directly.
+All external communication must use TLS.
+All events must contain eventId and schemaVersion.</code></pre>
+</section>
+
+<section id="why"><h2>Why conformance matters</h2>
+<p>Without checks:</p>
+<pre><code>Design documentation
+        ≠
+Source code
+        ≠
+Runtime behavior</code></pre>
+<p>Consequences: stale documentation, hidden dependencies, weakened boundaries, degraded quality attributes.</p>
+</section>
+
+<section id="drift"><h2>Drift vs erosion</h2>
+<div class="grid-2">
+<div class="card"><h3>Drift</h3><p>Implementation moves away from the intended design.</p><pre><code>One service bypasses another's
+API and reads its database.</code></pre></div>
+<div class="card"><h3>Erosion</h3><p>Accumulated deviations weaken architectural properties.</p><pre><code>Many services now read
+each other's databases.</code></pre></div>
+</div>
+<pre><code>Small deviations
+      ↓
+Repeated exceptions
+      ↓
+Drift
+      ↓
+Accumulation
+      ↓
+Erosion</code></pre>
+</section>
+
+<section id="decay"><h2>How structural decay happens</h2>
+<p>Usually through local shortcuts:</p>
+<pre><code>"We only need one direct DB query."</code></pre>
+<p>Later:</p>
+<pre><code>"We already do it in one place."</code></pre>
+<p>Eventually:</p>
+<pre><code>Many services
+     ↓
+Shared Database</code></pre>
+</section>
+
+<section id="explicit"><h2>Architecture rules must be explicit</h2>
+<p>Weak: <i>“Keep the architecture clean.”</i></p>
+<p>Strong:</p>
+<pre><code>Domain must not depend on:
+- web
+- persistence implementation
+- messaging implementation</code></pre>
+<p>Now the rule can be reviewed, tested and automated.</p>
+</section>
+
+<section id="chain"><h2>Decision → rule → verification</h2>
+<pre><code>Architecture Decision
+       ↓
+Architecture Rule
+       ↓
+Verification Method
+       ↓
+Feedback</code></pre>
+<p>Example ADR: <i>each domain module owns its persistence.</i> Derived rule: <i>cross-module database access is forbidden.</i></p>
+</section>
+
+<section id="methods"><h2>The three conformance methods</h2>
+<div class="grid-2">
+<div class="card"><h3>1 · Code review</h3><p>Checks dependency direction, boundary violations, direct infrastructure access, security rules, interface contracts.</p><p><b>Strength:</b> contextual judgment, catches semantic problems. <b>Limit:</b> manual, inconsistent, easy to miss.</p></div>
+<div class="card"><h3>2 · Architecture review</h3><pre><code>Do module boundaries still match?
+Have new dependencies appeared?
+Are cross-cutting concepts consistent?
+Are teams bypassing interfaces?</code></pre></div>
+<div class="card"><h3>3 · Tool-supported analysis</h3><pre><code>Dependency analysis
+Static architecture analysis
+Cycle detection
+Forbidden-dependency checks
+Code metrics</code></pre><p>Best for objective, repeatable structural rules.</p></div>
+</div>
+</section>
+
+<section id="tests"><h2>Architecture tests</h2>
+<pre><code>assert no classes in "domain"
+       depend on classes in "infrastructure"</code></pre>
+<pre><code>assert payment-sdk
+       is only referenced from "payment-adapter"</code></pre>
+<p>Architecture tests make architectural rules executable.</p>
+</section>
+
+<section id="java"><h2>Layered example</h2>
+<pre><code>domain
+application
+infrastructure
+web</code></pre>
+<pre><code>web → application
+application → domain
+infrastructure → domain
+
+domain → nothing technical</code></pre>
+<p>Possible checks: domain may not depend on the web framework; domain may not depend on the persistence framework; web may not access repositories directly.</p>
+<div class="callout info"><strong>Exam note</strong>ArchUnit is a common Java tool, but the exam concept is <i>tool-supported analysis</i>, not the product name.</div>
+</section>
+
+<section id="microservice"><h2>Microservice example</h2>
+<p>Decision: services own their data.</p>
+<pre><code>Intended:
+Order → Order DB
+Payment → Payment DB
+Customer → Customer DB
+
+Violation:
+Order → Payment DB directly</code></pre>
+<p>Possible enforcement: DB credentials, network policy, repository review, infrastructure checks, access logs.</p>
+</section>
+
+<section id="guardrails"><h2>Guardrails vs gates</h2>
+<div class="grid-2">
+<div class="card"><h3>Gate</h3><p>Blocks the change.</p><pre><code>Forbidden dependency
+→ build fails</code></pre></div>
+<div class="card"><h3>Guardrail</h3><p>Guides behavior and allows controlled exceptions.</p><pre><code>Violation
+→ warning
+→ ADR required</code></pre></div>
+</div>
+<div class="callout exam"><strong>Trap</strong>“All rules should block the build” is false. Reserve gates for objective, high-value, regression-prone rules.</div>
+</section>
+
+<section id="exceptions"><h2>Architecture exceptions</h2>
+<p>Better than quietly ignoring a rule:</p>
+<pre><code>Rule violated
+        ↓
+Explain why
+        ↓
+Assess consequence
+        ↓
+Record exception
+        ↓
+Set expiry/review condition</code></pre>
+</section>
+
+<section id="fitness"><h2>Fitness functions</h2>
+<p>A fitness function objectively assesses an architectural characteristic.</p>
+<div class="grid-2">
+<div class="card"><h3>Structural</h3><pre><code>No domain → infrastructure
+dependencies</code></pre></div>
+<div class="card"><h3>Performance</h3><pre><code>p95 latency &lt; 500 ms</code></pre></div>
+<div class="card"><h3>Resilience</h3><pre><code>Recovery &lt; 60 s</code></pre></div>
+<div class="card"><h3>Security</h3><pre><code>No public endpoint
+without authentication</code></pre></div>
+</div>
+</section>
+
+<section id="vs-test"><h2>Fitness function vs ordinary test</h2>
+<pre><code>Unit test:
+calculatePrice() returns 42.00
+
+Fitness function:
+No module violates allowed dependency direction.</code></pre>
+<div class="callout info"><strong>The key question</strong>Is the check protecting an architectural characteristic?</div>
+</section>
+
+<section id="structural"><h2>Structural vs operational</h2>
+<div class="grid-2">
+<div class="card"><h3>Structural</h3><p>No cycles; domain independent of frameworks; vendor SDK only in adapters.</p></div>
+<div class="card"><h3>Operational</h3><p>p95 latency; availability; failover time; queue age.</p></div>
+</div>
+</section>
+
+<section id="triggered"><h2>Triggered vs continuous</h2>
+<div class="grid-2">
+<div class="card"><h3>Triggered</h3><pre><code>Pull Request
+→ CI
+→ architecture dependency test</code></pre></div>
+<div class="card"><h3>Continuous</h3><pre><code>Production
+→ observability
+→ p95 latency
+→ threshold</code></pre></div>
+</div>
+</section>
+
+<section id="ffda"><h2>Fitness-function-driven architecture</h2>
+<pre><code>Define desired characteristic
+       ↓
+Define measurable fitness function
+       ↓
+Change architecture
+       ↓
+Measure
+       ↓
+Repeat</code></pre>
+<pre><code>Goal:
+Reduce Orders–Payments coupling.
+
+Fitness function:
+Payment SDK imports outside adapter = 0</code></pre>
+</section>
+
+<section id="runtime"><h2>Runtime conformance</h2>
+<pre><code>Decision:
+Checkout should not depend on Notification availability.
+
+Runtime fitness function:
+Given Notification unavailable,
+checkout acceptance remains within SLO.</code></pre>
+<p>Some architecture decisions can only be validated dynamically — static analysis cannot verify every decision.</p>
+</section>
+
+<section id="views"><h2>Conformance across views</h2>
+<ul>
+<li><b>Building Block:</b> dependency rules.</li>
+<li><b>Runtime:</b> interaction and failure behavior.</li>
+<li><b>Deployment:</b> infrastructure placement and boundaries.</li>
+<li><b>Context:</b> undocumented external dependencies.</li>
+</ul>
+</section>
+
+<section id="signals"><h2>Structural decay signals</h2>
+<pre><code>Increasing dependency cycles
+Growing shared utility module
+More cross-module DB access
+Increasing architecture exceptions
+Frequent changes across many modules
+Docs contradicting code</code></pre>
+</section>
+
+<section id="traps-design"><h2>Shared utility trap &amp; cyclic dependencies</h2>
+<pre><code>shared-utils
+├── SecurityUtils
+├── DatabaseUtils
+├── PaymentHelper
+└── OrderRules</code></pre>
+<p>At first: reuse. Later: a coupling hub.</p>
+<pre><code>Orders → Payments
+Payments → Customers
+Customers → Orders</code></pre>
+<p>Potential consequences: hard independent change, difficult testing, unclear ownership. Useful fitness function:</p>
+<pre><code>Number of module cycles = 0</code></pre>
+</section>
+
+<section id="categories"><h2>Architecture rule categories</h2>
+<p>Dependency rules · technology rules · data ownership rules · communication rules · security rules · operational rules · deployment rules. Different rules require different verification mechanisms.</p>
+</section>
+
+<section id="overgovernance"><h2>Avoid over-governance</h2>
+<pre><code>Bad:
+500 mandatory rules
++ manual approval for every decision
+
+Better:
+Few high-value rules
++ automation where possible
++ clear rationale
++ explicit exception process</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>The goal is high architectural integrity with low coordination overhead. Every rule you add is a tax every team pays forever — charge it only where it buys something.</div>
+</section>
+
+<section id="automate"><h2>What to automate</h2>
+<p>Good candidates are objective, repeated, important, cheap to check, and likely to regress.</p>
+<ul>
+<li>no dependency cycles;</li>
+<li>no cross-service DB access;</li>
+<li>required event fields;</li>
+<li>no forbidden package dependencies.</li>
+</ul>
+</section>
+
+<section id="exam"><h2>Common CPSA-F exam traps</h2>
+<ul>
+<li>Conformance means checking that requirements are correct. → <b>False</b></li>
+<li>Conformance can only be checked manually. → <b>False</b></li>
+<li>Code review is irrelevant. → <b>False</b></li>
+<li>Any deviation is automatically bad. → <b>Too absolute</b></li>
+<li>“Fitness function” is the exact wording of LG 05-03. → <b>False</b></li>
+<li>All rules should block the build. → <b>False</b></li>
+<li>Static analysis can verify every decision. → <b>False</b></li>
+<li>Documentation alone proves conformance. → <b>False</b></li>
+</ul>
+</section>
+
+<section id="terms"><h2>Key terms</h2>
+<p>Architecture Conformance · Architecture Drift · Architecture Erosion · Architecture Rule · Architecture Test · Fitness Function · Structural Fitness Function · Operational Fitness Function · Triggered Fitness Function · Continuous Fitness Function · Guardrail · Gate</p>
+</section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>Given these rules:</p>
+<pre><code>1. Domain must not depend on the web framework.
+2. Presentation may not access repositories directly.
+3. Payment SDK only in PaymentAdapter.
+4. Domain modules must not depend cyclically.
+5. Customer PII must never be logged.</code></pre>
+<p>And these findings:</p>
+<pre><code>6 domain classes import the persistence framework.
+3 controllers call repositories directly.
+Payment SDK imported in 9 application classes.
+Orders ↔ Customers form a cycle.
+One production log contains customer email addresses.</code></pre>
+<ol>
+<li>Classify each violation.</li>
+<li>Decide which can be statically automated.</li>
+<li>Decide which needs runtime or log analysis.</li>
+<li>Identify the greatest modularity risk.</li>
+<li>Define the architecture tests.</li>
+<li>Define a fitness function for PII logging.</li>
+<li>Decide which checks should block CI.</li>
+</ol>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>What does architecture conformance evaluate?</summary><p>Whether the implementation follows the intended architecture design and decisions.</p></details>
+<details><summary>Which three methods are explicitly relevant to LG 05-03?</summary><p>Code reviews, architecture reviews, tool-supported analysis.</p></details>
+<details><summary>Drift vs erosion?</summary><p>Drift = deviation from intent; erosion = accumulated deviation weakening architectural properties.</p></details>
+<details><summary>Why make rules explicit?</summary><p>Only an explicit rule can be reviewed, tested or automated.</p></details>
+<details><summary>What is an architecture test?</summary><p>An executable check of an architectural rule, typically on structure or dependencies.</p></details>
+<details><summary>What is a fitness function?</summary><p>An objective assessment of an architectural characteristic.</p></details>
+<details><summary>Structural vs operational fitness functions?</summary><p>Structure and dependencies vs runtime behavior such as latency, availability, recovery.</p></details>
+<details><summary>Triggered vs continuous?</summary><p>Triggered runs on an event such as a pull request; continuous observes production.</p></details>
+<details><summary>Why can static analysis not validate every decision?</summary><p>Some decisions are about runtime behavior and only show under real conditions.</p></details>
+<details><summary>Why is over-governance dangerous?</summary><p>It raises coordination cost, slows teams and pushes work around the rules rather than through them.</p></details>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum</b><div style="color:var(--muted)">LG 05-03 — Evaluate Conformance to Architectural Decisions.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Fitness Function-Driven Architecture</b><div style="color:var(--muted)">Software Architecture Monday, Lesson 215. See also lessons 73 and 139.</div></div>
+<a href="https://developertoarchitect.com/lessons/lesson215.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day active" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-17.html">← Previous day</a><a class="navbtn" href="isaqb-cpsa-f-day-19.html">Next day →</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 18 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "18";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

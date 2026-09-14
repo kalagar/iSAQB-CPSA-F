@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۲۱ دوره iSAQB CPSA-F: بازبینی آزمون و ترمیم هدفمند — تمایزهایی که بیشترین خطا را می‌سازند" />
+  <title>iSAQB CPSA-F — روز ۲۱: بازبینی آزمون و ترمیم هدفمند</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-21.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-21.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۲۱</span>
+      <h1>بازبینی آزمون و ترمیم هدفمند</h1>
+      <p class="subtitle">
+        هشت تمایزی را که بیشترین خطای آزمون را می‌سازند اصلاح کنید — و سپس آن‌ها را در یک بازبینی واقع‌گرایانه معماری برای پلتفرم خسارت بیمه به‌کار ببرید.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> تمایزهای پرخطا، تمرین‌های تشخیصی، مطالعه موردی کامل</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#driver">نیازمندی در برابر محرک</a>
+      <a href="#drivertest">آزمون شناسایی محرک</a>
+      <a href="#quality-constraint">نیازمندی کیفی در برابر محدودیت</a>
+      <a href="#scenario">سناریو در برابر گزاره مبهم</a>
+      <a href="#cohesion">انسجام در برابر کوپلینگ</a>
+      <a href="#lowcoupling">آیا کوپلینگ کم همیشه بهتر است؟</a>
+      <a href="#changecoupling">کوپلینگ تغییر</a>
+      <a href="#views">زمینه، بلوک ساختمانی، زمان اجرا و استقرار</a>
+      <a href="#notation">نما در برابر نمادگذاری</a>
+      <a href="#concept">دغدغه در برابر مفهوم فراگیر</a>
+      <a href="#adr">تصمیم در برابر ADR</a>
+      <a href="#analysis">تحلیل در برابر انطباق</a>
+      <a href="#drift">انحراف در برابر فرسایش</a>
+      <a href="#tradeoff">تفکر مصالحه‌محور</a>
+      <a href="#framework">چارچوب تصمیم Staff Engineer</a>
+      <a href="#drills">تمرین‌های تشخیصی</a>
+      <a href="#case">مطالعه موردی: پلتفرم خسارت بیمه</a>
+      <a href="#risks">ریسک‌ها</a>
+      <a href="#scenarios">سناریوهای کیفی</a>
+      <a href="#adrs">ADRهای پیشنهادی</a>
+      <a href="#rules">قواعد معماری</a>
+      <a href="#gates">کدام قواعد باید CI را مسدود کنند؟</a>
+      <a href="#takeaway">جمع‌بندی Staff Engineer</a>
+      <a href="#traps">دام‌های پیشرفته آزمون</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#miniexam">آزمون کوتاه دشوار</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="driver">
+        <h2>نیازمندی در برابر محرک معماری</h2>
+        <p class="lead">روزهای ۱ تا ۲۰ کامل شده‌اند. امروز روز ترمیم است: تمایزهای زیر جایی‌اند که بیشتر خطاهای CPSA-F واقعاً رخ می‌دهند، و هر کدام یک مهارت بازبینی واقعی هم هست.</p>
+        <div class="grid-2">
+          <div class="card"><h3>نیازمندی</h3><p>یک نیاز را بیان می‌کند.</p><pre><code>Users can export invoices as PDF.</code></pre></div>
+          <div class="card"><h3>محرک معماری</h3><p>نیازمندی، محدودیت، ریسک یا فرضی که به‌طور مادی بر معماری اثر می‌گذارد.</p><pre><code>Order acceptance must remain
+available if SAP is unavailable.</code></pre></div>
+        </div>
+        <p>مورد دوم می‌تواند بر سبک ارتباط، وابستگی‌های زمان اجرا، پایداری، یکپارچه‌سازی و مدیریت خطا اثر بگذارد.</p>
+        <div class="callout info"><strong>تمایز مهم برای آزمون</strong>هر نیازمندی محرک معماری نیست.</div>
+      </section>
+
+      <section id="drivertest">
+        <h2>آزمون شناسایی محرک</h2>
+        <p>بپرسید آیا این مورد بر این‌ها اثر می‌گذارد:</p>
+        <pre><code>system structure
+distribution
+data ownership
+technology choice
+runtime interaction
+quality trade-offs
+deployment
+security boundaries</code></pre>
+        <p>اگر بله، احتمال محرک معماری بودنش بیشتر است.</p>
+      </section>
+
+      <section id="quality-constraint">
+        <h2>نیازمندی کیفی در برابر محدودیت</h2>
+        <div class="grid-2">
+          <div class="card"><h3>نیازمندی کیفی</h3><p>توصیف می‌کند سیستم <b>چقدر خوب</b> باید رفتار کند.</p><pre><code>95% of API requests must
+complete in &lt; 500 ms.</code></pre></div>
+          <div class="card"><h3>محدودیت</h3><p>فضای راه‌حل را محدود می‌کند.</p><pre><code>The system must run on the
+corporate Kubernetes platform.</code></pre></div>
+        </div>
+        <div class="callout info"><strong>میان‌بر</strong>نیازمندی کیفی = رفتار مطلوب. محدودیت = انتخاب‌های محدودشده.</div>
+      </section>
+
+      <section id="scenario">
+        <h2>سناریوی کیفی در برابر گزاره مبهم</h2>
+        <p>ضعیف:</p>
+        <pre><code>The system must be reliable.</code></pre>
+        <p>قوی:</p>
+        <pre><code>Source:      Payment provider
+Stimulus:    Provider becomes unavailable
+Environment: Peak traffic
+Artifact:    Checkout workflow
+Response:    Orders remain accepted
+Measure:     Order acceptance availability &gt;= 99.95%</code></pre>
+        <p>سناریو همان چیزی است که کیفیت را قابل تحلیل می‌کند.</p>
+      </section>
+
+      <section id="cohesion">
+        <h2>انسجام در برابر کوپلینگ</h2>
+        <div class="grid-2">
+          <div class="card"><h3>انسجام — درون</h3><pre><code>Payment Module
+├── Payment authorization
+├── Payment capture
+└── Payment refund</code></pre><p>انسجام پایین:</p><pre><code>Utility Module
+├── Payment authorization
+├── Email generation
+├── Customer search
+├── PDF export
+└── Tax calculation</code></pre></div>
+          <div class="card"><h3>کوپلینگ — میان</h3><pre><code>Order Service
+   ├── Payment
+   ├── Inventory
+   ├── Notification
+   └── Fraud</code></pre></div>
+        </div>
+        <div class="callout info"><strong>میان‌بر</strong>انسجام = درون یک بلوک ساختمانی. کوپلینگ = میان بلوک‌های ساختمانی.</div>
+      </section>
+
+      <section id="lowcoupling">
+        <h2>آیا کوپلینگ کم همیشه بهتر است؟</h2>
+        <p><b>خیر.</b> معماری به‌دنبال کوپلینگ <b>مناسب</b> است، نه کوپلینگ صفر. کوپلینگ مسئله‌دار معمولاً:</p>
+        <ul>
+          <li>غیرضروری است؛</li>
+          <li>پنهان است؛</li>
+          <li>ناپایدار است؛</li>
+          <li>دوطرفه است؛</li>
+          <li>از نظر معنایی مبهم است.</li>
+        </ul>
+      </section>
+
+      <section id="changecoupling">
+        <h2>کوپلینگ تغییر</h2>
+        <div class="callout staff"><strong>پرسش Staff Engineer</strong>کدام مؤلفه‌ها باید با هم تغییر کنند؟</div>
+        <p>اگر افزودن یک ارائه‌دهنده پرداخت مستلزم تغییر در Order، Customer، Notification و Billing باشد، ماژولاریتی ضعیف است — فارغ از اینکه نمودار وابستگی چه ادعایی دارد.</p>
+      </section>
+
+      <section id="views">
+        <h2>زمینه، بلوک ساختمانی، زمان اجرا و استقرار</h2>
+        <table>
+          <thead><tr><th>پرسش</th><th>نما</th></tr></thead>
+          <tbody>
+            <tr><td>چه کسی/چه چیزی با سیستم تعامل دارد؟</td><td>زمینه</td></tr>
+            <tr><td>بخش‌های نرم‌افزاری کدام‌اند؟</td><td>بلوک ساختمانی</td></tr>
+            <tr><td>در یک سناریو چه رخ می‌دهد؟</td><td>زمان اجرا</td></tr>
+            <tr><td>نرم‌افزار کجا اجرا می‌شود؟</td><td>استقرار</td></tr>
+          </tbody>
+        </table>
+        <ul>
+          <li><b>زمینه:</b> مرز سیستم، بازیگران بیرونی، سیستم‌های بیرونی، رابط‌های بیرونی.</li>
+          <li><b>بلوک ساختمانی:</b> ساختار ایستای نرم‌افزار، مسئولیت‌ها، روابط، رابط‌ها.</li>
+          <li><b>زمان اجرا:</b> تعامل پویا، توالی، انتشار خطا، همزمانی.</li>
+          <li><b>استقرار:</b> زیرساخت، گره‌ها، محیط‌های اجرا، نگاشت نرم‌افزار به زیرساخت.</li>
+        </ul>
+      </section>
+
+      <section id="notation">
+        <h2>نما در برابر نمادگذاری</h2>
+        <pre><code>Runtime View ≠ UML Sequence Diagram</code></pre>
+        <p>نمای زمان اجرا را می‌توان با UML، BPMN، نمودارهای پویای C4 یا متن ساده بیان کرد. نما = منظر. نمادگذاری = زبان.</p>
+      </section>
+
+      <section id="concept">
+        <h2>دغدغه در برابر مفهوم فراگیر</h2>
+        <div class="grid-2">
+          <div class="card"><h3>دغدغه</h3><p>مسئله یا موضوع.</p><pre><code>How should retries work?</code></pre></div>
+          <div class="card"><h3>مفهوم فراگیر</h3><p>راه‌حل سازگار در سطح کل معماری.</p><pre><code>Retries:
+- transient failures only
+- maximum 2
+- exponential backoff
+- jitter
+- idempotent operations only</code></pre></div>
+        </div>
+        <div class="callout info"><strong>میان‌بر</strong>دغدغه = آنچه باید حل شود. مفهوم = نحوه حل سازگار آن.</div>
+      </section>
+
+      <section id="adr">
+        <h2>تصمیم در برابر ADR</h2>
+        <div class="grid-2">
+          <div class="card"><h3>تصمیم</h3><pre><code>Use asynchronous SAP integration.</code></pre></div>
+          <div class="card"><h3>ADR</h3><pre><code>Title
+Status
+Context
+Options
+Decision
+Rationale
+Consequences</code></pre></div>
+        </div>
+        <div class="callout info"><strong>میان‌بر</strong>تصمیم = انتخاب. ADR = ثبت مستند.</div>
+      </section>
+
+      <section id="analysis">
+        <h2>تحلیل معماری در برابر انطباق</h2>
+        <div class="grid-2">
+          <div class="card"><h3>تحلیل</h3><p><i>آیا این معماری کیفیت‌های موردنیاز را برآورده می‌کند؟</i></p><p>آزمون کارایی · مرور سناریو · تحلیل وابستگی · بازبینی امنیتی.</p></div>
+          <div class="card"><h3>انطباق</h3><p><i>آیا پیاده‌سازی هنوز از معماری موردنظر پیروی می‌کند؟</i></p><p>بررسی وابستگی‌های ممنوع · بازبینی معماری کد · تحلیل ساختاری ابزارمحور.</p></div>
+        </div>
+        <div class="callout info"><strong>میان‌بر</strong>تحلیل = برای هدف به‌قدر کافی خوب است؟ انطباق = از قصد معماری پیروی می‌کند؟</div>
+      </section>
+
+      <section id="drift">
+        <h2>انحراف در برابر فرسایش</h2>
+        <div class="grid-2">
+          <div class="card"><h3>انحراف</h3><p>فاصله گرفتن از معماری موردنظر.</p><pre><code>One service bypasses another
+service API and directly
+accesses its database.</code></pre></div>
+          <div class="card"><h3>فرسایش</h3><p>انحراف انباشته ویژگی‌های معماری را تضعیف می‌کند.</p><pre><code>Many services now directly
+access one another's databases.</code></pre></div>
+        </div>
+      </section>
+
+      <section id="tradeoff">
+        <h2>تفکر مصالحه‌محور</h2>
+        <pre><code>Asynchronous messaging
+
+Benefits:
++ availability
++ temporal decoupling
++ buffering
+
+Costs:
+- eventual consistency
+- duplicate handling
+- operational complexity</code></pre>
+        <div class="callout info"><strong>پرسش درست</strong>نه «آیا پیام‌رسانی خوب است؟» بلکه: آیا پیام‌رسانی محرک‌های معماری را آن‌قدر بهبود می‌دهد که هزینه‌هایش توجیه شود؟</div>
+      </section>
+
+      <section id="framework">
+        <h2>چارچوب تصمیم Staff Engineer</h2>
+        <ol>
+          <li>محرک‌های معماری کدام‌اند؟</li>
+          <li>چه گزینه‌هایی وجود دارد؟</li>
+          <li>کدام کیفیت‌ها بهتر می‌شوند؟</li>
+          <li>کدام کیفیت‌ها بدتر می‌شوند؟</li>
+          <li>چه فرض‌هایی می‌گذاریم؟</li>
+          <li>چه شواهدی داریم؟</li>
+          <li>این تصمیم چقدر برگشت‌پذیر است؟</li>
+          <li>چگونه آن را اعتبارسنجی می‌کنیم؟</li>
+        </ol>
+      </section>
+
+      <section id="drills">
+        <h2>تمرین‌های تشخیصی تمایزهای پرخطا</h2>
+        <div class="question-set">
+          <details class="question"><summary>«داده مشتری باید درون اتحادیه اروپا بماند.» — نیازمندی کیفی یا محدودیت؟</summary><div class="answer"><b>پاسخ: محدودیت.</b> فضای راه‌حل را محدود می‌کند، نه اینکه کیفیت رفتار را توصیف کند.</div></details>
+          <details class="question"><summary>«۹۵٪ درخواست‌ها باید در ۵۰۰ میلی‌ثانیه کامل شوند.» — نیازمندی کیفی یا محدودیت؟</summary><div class="answer"><b>پاسخ: نیازمندی کیفی.</b> رفتار مطلوب قابل اندازه‌گیری است.</div></details>
+          <details class="question"><summary>«چه سیستم‌های بیرونی با ما تعامل دارند؟» — نمای زمینه یا زمان اجرا؟</summary><div class="answer"><b>پاسخ: نمای زمینه.</b></div></details>
+          <details class="question"><summary>«وقتی Fraud Service تایم‌اوت می‌شود چه رخ می‌دهد؟» — نمای زمینه یا زمان اجرا؟</summary><div class="answer"><b>پاسخ: نمای زمان اجرا.</b></div></details>
+          <details class="question"><summary>«حداکثر ۲ تلاش مجدد، exponential backoff، jitter، فقط خطاهای گذرا.» — دغدغه یا مفهوم؟</summary><div class="answer"><b>پاسخ: مفهوم فراگیر.</b> این راه‌حل سازگار است، نه صورت‌مسئله.</div></details>
+          <details class="question"><summary>«لایه دامنه یک آداپتور پایگاه داده را import می‌کند.» — نتیجه تحلیل یا نقض انطباق؟</summary><div class="answer"><b>پاسخ: نقض انطباق.</b> پیاده‌سازی با یک قاعده موردنظر در تضاد است.</div></details>
+          <details class="question"><summary>«Payment Service پانزده وابستگی خروجی دارد.» — اثبات معماری بد یا یک نشانه؟</summary><div class="answer"><b>پاسخ: نشانه‌ای که به زمینه نیاز دارد.</b> ممکن است این مؤلفه به‌درستی نقش ارکستریتور داشته باشد.</div></details>
+          <details class="question"><summary>«از Kafka برای رویدادهای سفارش استفاده کنید.» — ADR کامل یا تصمیم بدون دلیل؟</summary><div class="answer"><b>پاسخ: تصمیم معماری بدون دلیل کافی.</b> زمینه، گزینه‌ها و پیامدها ندارد.</div></details>
+        </div>
+      </section>
+
+      <section id="case">
+        <h2>مطالعه موردی Staff Engineer — پلتفرم خسارت بیمه</h2>
+        <pre><code>Web
+ ↓
+Claims Service
+ ├── Customer DB
+ ├── Fraud API
+ ├── Payment API
+ ├── Document Provider SDK
+ └── Kafka</code></pre>
+        <p>شواهد:</p>
+        <pre><code>- Fraud API occasionally takes 8 seconds.
+- Claims availability target is 99.95%.
+- 14 classes directly use the Document Provider SDK.
+- A new document provider will be added this year.
+- Several services directly read Customer DB.
+- Teams use different retry policies.
+- Customer email addresses have appeared in logs.</code></pre>
+        <h3>محرک‌های معماری</h3>
+        <ol>
+          <li>دسترس‌پذیری خسارت &gt;= ۹۹٫۹۵٪</li>
+          <li>افزودن آسان ارائه‌دهنده جدید اسناد</li>
+          <li>حفاظت از داده شخصی مشتری</li>
+          <li>تأخیر و دسترس‌پذیری ارائه‌دهنده تشخیص تقلب</li>
+          <li>تکامل مستقل سرویس‌ها</li>
+        </ol>
+      </section>
+
+      <section id="risks">
+        <h2>ریسک‌ها</h2>
+        <h3>تأخیر Fraud API</h3>
+        <pre><code>Claims
+  ↓ synchronous
+Fraud API</code></pre>
+        <p>تأثیر بالقوه: تأخیر خسارت، دسترس‌پذیری، اتمام منابع. گزینه‌ها: timeout همگام سخت‌گیرانه، ارزیابی ناهمگام تقلب، پذیرش-سپس-ارزیابی، یا fallback / circuit breaker — بسته به معناشناسی کسب‌وکار. پاسخ جهانی وجود ندارد؛ زمینه تعیین می‌کند.</p>
+
+        <h3>کوپلینگ ارائه‌دهنده اسناد</h3>
+        <pre><code>14 classes import provider SDK.</code></pre>
+        <pre><code>DocumentProvider port
+        ↓
+Provider A Adapter
+Provider B Adapter</code></pre>
+        <p>این کار تغییرات مختص فروشنده را محلی می‌کند.</p>
+
+        <h3>پایگاه داده مشترک مشتری</h3>
+        <pre><code>Claims Service
+Payment Service
+Other Services
+      ↓
+Customer DB</code></pre>
+        <p>ریسک‌ها: کوپلینگ پنهان، انتشار تغییر شما، ابهام مالکیت، استقرار مستقل دشوارتر.</p>
+
+        <h3>ناهماهنگی تلاش مجدد</h3>
+        <pre><code>Team A → 5 immediate retries
+Team B → no retry
+Team C → 10-second fixed retry</code></pre>
+        <p>مفهوم تاب‌آوری نامزد:</p>
+        <pre><code>Retry transient failures only
+Maximum 2
+Exponential backoff
+Jitter
+Idempotent operations only
+Metrics required</code></pre>
+
+        <h3>PII در لاگ‌ها</h3>
+        <p>امنیت، حریم خصوصی، انطباق مقرراتی و عملیات را متأثر می‌کند.</p>
+        <pre><code>No sensitive fields
+Structured logs
+Correlation IDs
+Approved allowlist
+Automated scanning</code></pre>
+      </section>
+
+      <section id="scenarios">
+        <h2>سناریوهای کیفی</h2>
+        <div class="grid-2">
+          <div class="card"><h3>دسترس‌پذیری</h3><pre><code>Source:      Fraud provider
+Stimulus:    Provider unavailable
+Environment: Peak traffic
+Artifact:    Claims submission
+Response:    Predefined fallback
+             behavior without
+             exhausting request
+             threads
+Measure:     Claims availability
+             &gt;= 99.95%</code></pre></div>
+          <div class="card"><h3>قابلیت تغییر</h3><pre><code>Source:      Product team
+Stimulus:    Add Document
+             Provider B
+Environment: Normal development
+Artifact:    Document integration
+Response:    Implement a new
+             adapter without
+             changing claims
+             domain logic
+Measure:     Completed within
+             5 developer-days</code></pre></div>
+        </div>
+      </section>
+
+      <section id="adrs">
+        <h2>ADRهای پیشنهادی</h2>
+        <div class="grid-2">
+          <div class="card"><h3>ADR ۱ — جداسازی SDK ارائه‌دهنده اسناد پشت یک پورت</h3><p><b>زمینه:</b> ۱۴ کلاس مستقیماً به SDK مختص ارائه‌دهنده وابسته‌اند.</p><p><b>محرک:</b> ارائه‌دهنده جدید باید کارآمد اضافه شود.</p><p><b>تصمیم:</b> معرفی رابط <code>DocumentProvider</code> و آداپتورهای مختص ارائه‌دهنده.</p><p><b>فواید:</b> وابستگی محلی‌شده به فروشنده، تست آسان‌تر، جایگزینی بهتر. <b>هزینه‌ها:</b> تلاش مهاجرت، انتزاع اضافی.</p></div>
+          <div class="card"><h3>ADR ۲ — سیاست استاندارد تلاش مجدد</h3><p><b>زمینه:</b> تیم‌ها رفتار تلاش مجدد ناهماهنگ دارند.</p><p><b>محرک:</b> تاب‌آوری بدون توفان تلاش مجدد.</p><p><b>تصمیم:</b> پذیرش قواعد مشترک تلاش مجدد.</p></div>
+          <div class="card"><h3>ADR ۳ — مالکیت داده مشتری</h3><p><b>زمینه:</b> چند سرویس مستقیماً Customer DB را می‌خوانند.</p><p><b>محرک:</b> تکامل مستقل سرویس‌ها.</p><p><b>تصمیم:</b> محدود کردن دسترسی مستقیم به پایگاه داده به مؤلفه مالک و رابط آن.</p></div>
+        </div>
+      </section>
+
+      <section id="rules">
+        <h2>قواعد مناسب معماری</h2>
+        <pre><code>Rule 1:
+Provider SDK imports allowed only in document adapters.
+
+Rule 2:
+Services may not access Customer DB directly
+except the owning component.
+
+Rule 3:
+PII fields are forbidden in application logs.</code></pre>
+        <p>راستی‌آزمایی: آزمون وابستگی ایستا، مجوزهای پایگاه داده و شبکه، پویش سیاست لاگ.</p>
+      </section>
+
+      <section id="gates">
+        <h2>کدام قواعد باید CI را مسدود کنند؟</h2>
+        <p>نامزدهای قوی برای دروازه:</p>
+        <ul>
+          <li>استفاده از SDK ارائه‌دهنده بیرون از آداپتور؛</li>
+          <li>وابستگی ممنوع بین ماژول‌ها؛</li>
+          <li>الگوهای شناخته‌شده لاگ‌گیری داده حساس.</li>
+        </ul>
+        <p>چون عینی، مهم، تکرارپذیر و مستعد بازگشت‌اند.</p>
+      </section>
+
+      <section id="takeaway">
+        <h2>جمع‌بندی Staff Engineer</h2>
+        <p>یک Staff Engineer نباید این مسئله را با کدنویسی شخصی هر آداپتور حل کند. اهرم بالاتر:</p>
+        <pre><code>Clarify drivers
+        ↓
+Make trade-offs explicit
+        ↓
+Create shared decisions
+        ↓
+Define boundaries
+        ↓
+Automate important guardrails
+        ↓
+Let teams implement independently</code></pre>
+      </section>
+
+      <section id="traps">
+        <h2>دام‌های پیشرفته آزمون</h2>
+        <ol>
+          <li>نیازمندی قابل اندازه‌گیری خودبه‌خود محرک معماری است. → <b>نادرست</b></li>
+          <li>کوپلینگ بالا همیشه یعنی طراحی بد. → <b>نادرست</b></li>
+          <li>نمودار زمان اجرا همان نمای زمان اجراست. → <b>نادرست</b></li>
+          <li>دغدغه فراگیر باید به سرویس مشترک تبدیل شود. → <b>نادرست</b></li>
+          <li>ADR تصمیم خوب را تضمین می‌کند. → <b>نادرست</b></li>
+          <li>تحلیل معماری و انطباق مترادف‌اند. → <b>نادرست</b></li>
+          <li>انحراف همیشه یعنی شکست معماری. → <b>بیش از حد مطلق</b></li>
+        </ol>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>چه چیزی محرک معماری را از نیازمندی معمولی جدا می‌کند؟</summary><p>محرک به‌طور مادی بر تصمیم‌ها یا ساختار معماری اثر می‌گذارد.</p></details>
+        <details><summary>چه چیزی نیازمندی کیفی را از محدودیت جدا می‌کند؟</summary><p>نیازمندی کیفی رفتار مطلوب سیستم را مشخص می‌کند؛ محدودیت فضای راه‌حل را محدود می‌کند.</p></details>
+        <details><summary>تفاوت انسجام و کوپلینگ چیست؟</summary><p>انسجام یعنی هم‌بستگی درونی؛ کوپلینگ یعنی وابستگی میان عناصر.</p></details>
+        <details><summary>آیا کوپلینگ کم همیشه هدف است؟</summary><p>خیر. هدف کوپلینگ مناسب و کنترل‌شده است.</p></details>
+        <details><summary>کدام نما به «هنگام timeout چه رخ می‌دهد؟» پاسخ می‌دهد؟</summary><p>نمای زمان اجرا.</p></details>
+        <details><summary>کدام نما به «چه سیستم‌های بیرونی وجود دارند؟» پاسخ می‌دهد؟</summary><p>نمای زمینه.</p></details>
+        <details><summary>نما در برابر نمادگذاری؟</summary><p>نما = منظر؛ نمادگذاری = زبان بیان.</p></details>
+        <details><summary>دغدغه در برابر مفهوم فراگیر؟</summary><p>دغدغه = مسئله/موضوع؛ مفهوم = راه‌حل منسجم.</p></details>
+        <details><summary>تصمیم در برابر ADR؟</summary><p>تصمیم = انتخاب؛ ADR = ثبت مستند.</p></details>
+        <details><summary>تحلیل معماری در برابر انطباق معماری؟</summary><p>تحلیل می‌پرسد آیا معماری اهداف را برآورده می‌کند؛ انطباق می‌پرسد آیا پیاده‌سازی از قصد معماری پیروی می‌کند.</p></details>
+        <details><summary>انحراف در برابر فرسایش؟</summary><p>انحراف = فاصله گرفتن؛ فرسایش = تضعیف انباشته.</p></details>
+        <details><summary>چرا معیارهای معماری می‌توانند گمراه کنند؟</summary><p>به زمینه نیاز دارند و قابل دستکاری‌اند.</p></details>
+        <details><summary>چرا مصالحه‌ها در معماری مرکزی‌اند؟</summary><p>بهبود یک کیفیت اغلب بر کیفیت دیگری اثر می‌گذارد.</p></details>
+        <details><summary>چه چیزی یک قاعده معماری را نامزد خوبی برای خودکارسازی می‌کند؟</summary><p>قواعد عینی، مهم، تکرارپذیر، ارزان برای بررسی و مستعد بازگشت.</p></details>
+        <details><summary>نقش Staff Engineer در حکمرانی معماری چیست؟</summary><p>توانمندسازی تصمیم‌گیری توزیع‌شده و سازگار از طریق محرک‌ها، ارتباطات، حفاظ‌ها و شواهد.</p></details>
+      </section>
+
+      <section id="miniexam">
+        <h2>آزمون کوتاه دشوار</h2>
+
+        <p><b>پرسش ۱.</b> «خسارت‌ها باید ۹۹٫۹۵٪ مواقع در دسترس باشند.»</p>
+        <ol type="A"><li>خودبه‌خود یک محرک معماری</li><li>یک نیازمندی کیفی و بالقوه یک محرک معماری</li><li>یک محدودیت</li><li>یک نمای زمان اجرا</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — رفتار کیفی قابل اندازه‌گیری؛ محرک بودن به میزان تأثیر بستگی دارد.</p></details>
+
+        <p><b>پرسش ۲.</b> «برنامه باید روی پلتفرم Kubernetes سازمانی اجرا شود.»</p>
+        <ol type="A"><li>نیازمندی کیفی</li><li>محدودیت</li><li>سناریوی زمان اجرا</li><li>معیار معماری</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — فضای راه‌حل را محدود می‌کند.</p></details>
+
+        <p><b>پرسش ۳.</b> کدام مورد اساساً درباره انسجام است؟</p>
+        <ol type="A"><li>Order Service شش سرویس را فراخوانی می‌کند</li><li>Payment Module منطق پرداخت و منطق نامرتبط خروجی PDF را دارد</li><li>Fraud API تأخیر بالایی دارد</li><li>دو سرویس یک پروتکل مشترک دارند</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — مسئولیت‌های نامرتبط درون یک بلوک ساختمانی.</p></details>
+
+        <p><b>پرسش ۴.</b> کدام نما توضیح می‌دهد یک درخواست مشتری چگونه از شش سرویس عبور می‌کند؟</p>
+        <ol type="A"><li>زمینه</li><li>زمان اجرا</li><li>استقرار</li><li>بلوک ساختمانی</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — تعامل پویا همان نمای زمان اجراست.</p></details>
+
+        <p><b>پرسش ۵.</b> تیمی حداکثر ۲ تلاش مجدد، exponential backoff، jitter و رفتار مخصوص خطاهای گذرا را تعریف می‌کند.</p>
+        <ol type="A"><li>دغدغه فراگیر</li><li>مفهوم فراگیر</li><li>نمای زمینه</li><li>معیار معماری</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — این راه‌حل سازگار است، نه صورت‌مسئله.</p></details>
+
+        <p><b>پرسش ۶.</b> «از Kafka برای رویدادهای OrderCreated استفاده کنید.»</p>
+        <ol type="A"><li>ADR کامل</li><li>تصمیم معماری اما نه یک ثبت تصمیم کامل</li><li>سناریوی کیفی</li><li>نمای استقرار</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — بدون زمینه، گزینه، دلیل یا پیامد.</p></details>
+
+        <p><b>پرسش ۷.</b> آزمون بار نشان می‌دهد p95 برابر ۱٫۴ ثانیه است در حالی که نیازمندی p95 کمتر از ۷۰۰ میلی‌ثانیه است.</p>
+        <ol type="A"><li>انطباق معماری</li><li>تحلیل کیفیت معماری</li><li>مستندسازی استقرار</li><li>طراحی فراگیر</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>ب</b> — سنجش برآورده شدن هدف کیفی، تحلیل است.</p></details>
+
+        <p><b>پرسش ۸.</b> یک بررسی ایستا <code>domain → infrastructure</code> را با وجود قاعده صریح ممنوعیت تشخیص می‌دهد.</p>
+        <ol type="A"><li>بررسی انطباق معماری</li><li>تحلیل کسب‌وکار</li><li>استخراج نیازمندی</li><li>آزمون کاربر</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — پیاده‌سازی در برابر قصد معماری بررسی می‌شود.</p></details>
+
+        <p><b>پرسش ۹.</b> یک سرویس API سرویس دیگر را دور می‌زند و مستقیماً به پایگاه داده آن دسترسی پیدا می‌کند.</p>
+        <ol type="A"><li>انحراف معماری</li><li>خودبه‌خود فرسایش معماری</li><li>سناریوی کیفی</li><li>سبک معماری</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — یک انحراف منفرد، انحراف است نه هنوز فرسایش.</p></details>
+
+        <p><b>پرسش ۱۰.</b> پس از سال‌ها، بسیاری از سرویس‌ها مستقیماً به پایگاه داده یکدیگر دسترسی دارند و استقرار مستقل دشوار است.</p>
+        <ol type="A"><li>فرسایش معماری</li><li>مدل‌سازی زمینه</li><li>پالایش جعبه سفید</li><li>نیازمندی کیفی</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>الف</b> — انحراف انباشته ویژگی‌های معماری را تضعیف کرده است.</p></details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F نسخه 2025.1</b>
+            <div style="color:var(--muted)">از ۱ آوریل ۲۰۲۵ برای آموزش سطح Foundation الزامی است؛ ساختار آن حول وظایف معماری — شفاف‌سازی نیازمندی‌ها، طراحی، ارتباطات و ارزیابی — سامان یافته است.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — Analyzing Tradeoffs</b>
+            <div style="color:var(--muted)">Software Architecture Monday، درس ۱۴۵ — تحلیل مصالحه با استفاده از دانه‌بندی سرویس.</div>
+          </div>
+          <a href="https://developertoarchitect.com/lessons/lesson145.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day active" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-20.fa.html">→ روز قبل</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۲۱ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "21";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

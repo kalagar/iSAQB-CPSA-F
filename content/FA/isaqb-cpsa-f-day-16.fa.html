@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۶ دوره iSAQB CPSA-F: رابط‌ها، تصمیم‌های معماری و ADR" />
+  <title>iSAQB CPSA-F — روز ۱۶: رابط‌ها، تصمیم‌های معماری و ADR</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-16.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-16.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۶</span>
+      <h1>رابط‌ها، تصمیم‌های معماری و ADR</h1>
+      <p class="subtitle">
+        رابط یک قرارداد است، نه یک امضای متد — و تصمیمی بدون دلیل، تصمیمی است که هیچ‌کس نمی‌تواند با اطمینان بازبینی‌اش کند. هر دو را آن‌گونه مستند کنید که یک Staff Engineer مستند می‌کند.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> قرارداد رابط، کوپلینگ معنایی، دلیل تصمیم، ADR</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#objectives">اهداف یادگیری</a>
+      <a href="#contract">رابط به‌عنوان قرارداد</a>
+      <a href="#example">نمونه: رابط پرداخت</a>
+      <a href="#internal-external">رابط درونی و بیرونی</a>
+      <a href="#provided-required">رابط ارائه‌شده و موردنیاز</a>
+      <a href="#semantic">کوپلینگ معنایی</a>
+      <a href="#versioning">نسخه‌بندی و سازگاری</a>
+      <a href="#questions">پرسش‌های Staff Engineer درباره رابط</a>
+      <a href="#decision">تصمیم معماری چیست؟</a>
+      <a href="#significance">اهمیت معماری</a>
+      <a href="#why-document">چرا تصمیم‌ها را مستند کنیم؟</a>
+      <a href="#adr">مبانی ADR</a>
+      <a href="#adr-example">نمونه ADR</a>
+      <a href="#status">وضعیت ADR</a>
+      <a href="#interdependencies">وابستگی میان تصمیم‌ها</a>
+      <a href="#when-not">چه زمانی ADR ننویسیم</a>
+      <a href="#minutes">ADR صورت‌جلسه نیست</a>
+      <a href="#feedback">ADR و حلقه‌های بازخورد</a>
+      <a href="#combined">مستند رابط + ADR</a>
+      <a href="#exam">دام‌های رایج آزمون</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#exercise">تمرین عملی</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="objectives">
+        <h2>اهداف یادگیری</h2>
+        <p class="lead">در پایان این درس باید بتوانید توضیح دهید چه چیزی به مستند رابط تعلق دارد، رابط درونی را از بیرونی تفکیک کنید، قرارداد را از جزئیات پیاده‌سازی جدا کنید، توضیح دهید چرا تصمیم‌های معماری به دلیل نیاز دارند، هدف و ساختار ADR را شرح دهید، وابستگی میان تصمیم‌ها را شناسایی کنید و از ADR به‌عنوان ابزار Staff Engineer استفاده کنید.</p>
+        <div class="callout info"><strong>تطابق رسمی</strong>LG 04-06 — مستندسازی رابط‌ها (R1). LG 04-08 — تبیین و مستندسازی تصمیم‌های معماری (R1–R2).</div>
+      </section>
+
+      <section id="contract">
+        <h2>رابط به‌عنوان قرارداد معماری</h2>
+        <p>یک رابط چیزی بیش از امضای متد است.</p>
+        <pre><code>Building Block A
+      |
+      | Interface Contract
+      v
+Building Block B</code></pre>
+        <p>قراردادهای مفید ممکن است شامل معناشناسی، محدودیت ورودی، تضمین خروجی، رفتار خطا، انتظارات زمانی، امنیت، خاصیت idempotency، نسخه‌بندی و پیش‌شرط/پس‌شرط باشند.</p>
+      </section>
+
+      <section id="example">
+        <h2>نمونه: رابط پرداخت</h2>
+        <pre><code>Purpose:
+Authorize and capture a payment.
+
+Request:
+POST /payments
+
+Required:
+orderId
+amount
+currency
+paymentMethodToken
+
+Errors:
+409 PAYMENT_ALREADY_PROCESSED
+422 PAYMENT_DECLINED
+503 PAYMENT_PROVIDER_UNAVAILABLE
+
+Idempotency:
+Idempotency-Key required
+
+Security:
+OAuth2 service identity</code></pre>
+        <p>هر خط بالا از نظر معماری مهم است: هر کدام نحوه ساخت مصرف‌کننده را تغییر می‌دهد.</p>
+      </section>
+
+      <section id="internal-external">
+        <h2>رابط درونی در برابر بیرونی</h2>
+        <div class="grid-2">
+          <div class="card"><h3>درونی</h3><p>میان بلوک‌های ساختمانی داخل سیستم.</p></div>
+          <div class="card"><h3>بیرونی</h3><p>از مرز سیستم عبور می‌کند.</p></div>
+        </div>
+        <p>رابط‌های بیرونی معمولاً به مستندسازی قوی‌تری در زمینه نسخه‌بندی، سازگاری، SLA و امنیت نیاز دارند — اما این گزاره که «فقط رابط‌های بیرونی نیاز به مستند دارند» نادرست است.</p>
+      </section>
+
+      <section id="provided-required">
+        <h2>رابط ارائه‌شده در برابر موردنیاز</h2>
+        <pre><code>Order Service
+
+Provides:
+Order API
+
+Requires:
+Payment API
+Inventory API</code></pre>
+        <p>این کار وابستگی‌ها را صریح می‌کند و گراف فراخوانی ضمنی را به چیزی تبدیل می‌کند که بازبین می‌تواند درباره‌اش استدلال کند.</p>
+      </section>
+
+      <section id="semantic">
+        <h2>کوپلینگ معنایی</h2>
+        <p>پایداری نحو، کوپلینگ پایین را تضمین نمی‌کند.</p>
+        <pre><code>{"status":"READY"}</code></pre>
+        <p>اگر معنای <code>READY</code> مستند نشده باشد، مصرف‌کننده به‌جای قرارداد به فرض‌ها کوپل می‌شود. محتوای پیام هرگز تغییر نمی‌کند — اما درک مشترک بی‌سروصدا تغییر می‌کند.</p>
+      </section>
+
+      <section id="versioning">
+        <h2>نسخه‌بندی و سازگاری</h2>
+        <ul>
+          <li>توسعه سازگار با نسخه قبل؛</li>
+          <li>نسخه‌بندی صریح API؛</li>
+          <li>تکامل شمای رویداد؛</li>
+          <li>سیاست منسوخ‌سازی؛</li>
+          <li>آزمون سازگاری.</li>
+        </ul>
+      </section>
+
+      <section id="questions">
+        <h2>پرسش‌های Staff Engineer درباره رابط</h2>
+        <pre><code>Who owns it?
+Who consumes it?
+What is guaranteed?
+What can fail?
+How does it evolve?
+Is it idempotent?
+What is the timeout?
+How is it secured?
+How is compatibility validated?</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>این نُه پرسش یک چک‌لیست بازبینی‌اند. رابطی که نتواند به آن‌ها پاسخ دهد، بعداً توسط یک حادثه عملیاتی پاسخ داده می‌شود.</div>
+      </section>
+
+      <section id="decision">
+        <h2>تصمیم معماری چیست؟</h2>
+        <p>تصمیمی با پیامدهای مهم برای ساختار، ویژگی‌های کیفی، وابستگی‌ها، فناوری، تکامل آینده یا هزینه تغییر.</p>
+        <pre><code>Use Kafka for order events.
+Use PostgreSQL for transactions.
+Use a modular monolith instead of microservices.
+Use OIDC for authentication.</code></pre>
+      </section>
+
+      <section id="significance">
+        <h2>اهمیت معماری</h2>
+        <pre><code>High impact?
+Hard to reverse?
+Affects multiple teams?
+Influences quality requirements?
+Constrains future choices?</code></pre>
+        <p>اگر پاسخ چند مورد مثبت باشد، تصمیم احتمالاً معماری است.</p>
+      </section>
+
+      <section id="why-document">
+        <h2>چرا تصمیم‌ها را مستند کنیم؟</h2>
+        <p>بدون دلیل، مهندسان آینده می‌دانند <b>چه چیزی</b> وجود دارد اما نمی‌دانند <b>چرا</b>.</p>
+        <pre><code>Decision:
+Use PostgreSQL.
+
+Reason:
+- strong consistency
+- relational reporting
+- existing operational expertise</code></pre>
+      </section>
+
+      <section id="adr">
+        <h2>مبانی ADR</h2>
+        <p>فیلدهای رایج:</p>
+        <pre><code>Title
+Status
+Context
+Decision
+Consequences</code></pre>
+        <p>که اغلب گسترش می‌یابد به:</p>
+        <pre><code>Options
+Decision Drivers
+Risks
+Validation
+Related Decisions
+Review Date</code></pre>
+        <div class="callout info"><strong>نکته آزمون</strong>هیچ قالب واحدی از ADR برای CPSA-F الزامی نیست. آنچه اهمیت دارد حفظ زمینه، دلیل و پیامدهاست.</div>
+      </section>
+
+      <section id="adr-example">
+        <h2>نمونه ADR</h2>
+        <pre><code># ADR-017: Asynchronous Order-to-SAP Integration
+
+Status:
+Accepted
+
+Context:
+SAP outages must not block order acceptance.
+
+Drivers:
+Availability
+Durability
+Throughput
+
+Options:
+1. Direct REST
+2. Database queue
+3. Kafka
+
+Decision:
+Publish accepted orders to Kafka.
+
+Positive:
++ decouples order acceptance from SAP
++ buffers bursts
+
+Negative:
+- eventual consistency
+- duplicate handling
+- operational complexity
+
+Validation:
+- throughput test
+- broker failure test
+- SAP outage simulation</code></pre>
+      </section>
+
+      <section id="status">
+        <h2>وضعیت ADR</h2>
+        <pre><code>Proposed
+Accepted
+Rejected
+Deprecated
+Superseded</code></pre>
+        <p>تاریخ معماری را بی‌سروصدا بازنویسی نکنید. تصمیم‌های قدیمی را صریحاً جایگزین (superseded) کنید تا زنجیره استدلال خوانا بماند.</p>
+      </section>
+
+      <section id="interdependencies">
+        <h2>وابستگی میان تصمیم‌ها</h2>
+        <pre><code>Use async events
+      ↓
+Need idempotent consumers
+      ↓
+Need event identifiers
+      ↓
+Need schema versioning</code></pre>
+        <p>تصمیم‌های معماری یک گراف می‌سازند، نه یک فهرست.</p>
+      </section>
+
+      <section id="when-not">
+        <h2>چه زمانی ADR ننویسیم</h2>
+        <p>برای جزئیات کوچک پیاده‌سازی ADR نسازید. نامزدهای خوب ADR پرتأثیر، سخت‌برگشت، بین‌تیمی، مرتبط با کیفیت و محتمل برای زیر سؤال رفتن در آینده‌اند.</p>
+      </section>
+
+      <section id="minutes">
+        <h2>ADR صورت‌جلسه نیست</h2>
+        <p>صورت‌جلسه گفت‌وگو را ثبت می‌کند؛ ADR دانش معماری را:</p>
+        <pre><code>Context
+Drivers
+Options
+Decision
+Rationale
+Consequences</code></pre>
+      </section>
+
+      <section id="feedback">
+        <h2>ADR و حلقه‌های بازخورد</h2>
+        <pre><code>Assumption:
+Kafka can sustain 20k orders/min.
+
+Validation:
+Representative load test.
+
+Review:
+Before production launch.</code></pre>
+        <p>ADR‌ای که فرض‌هایش و نحوه اعتبارسنجی آن‌ها را نام ببرد، یک حدس را به ریسکی مدیریت‌شده تبدیل می‌کند.</p>
+      </section>
+
+      <section id="combined">
+        <h2>مستند رابط + ADR</h2>
+        <div class="grid-2">
+          <div class="card"><h3>ADR</h3><p><b>چرا</b> را توضیح می‌دهد — چرا پیام‌رسانی ناهمگام، چرا Kafka.</p></div>
+          <div class="card"><h3>قرارداد رابط</h3><p><b>چگونه</b> را توضیح می‌دهد — topic، شما، معناشناسی، ترتیب، idempotency، نسخه‌بندی.</p></div>
+        </div>
+      </section>
+
+      <section id="exam">
+        <h2>دام‌های رایج آزمون CPSA-F</h2>
+        <ul>
+          <li>مستند رابط یعنی فقط امضای متدها. → <b>نادرست</b></li>
+          <li>فقط رابط‌های بیرونی به مستند نیاز دارند. → <b>نادرست</b></li>
+          <li>هر تصمیم فنی سزاوار یک ADR است. → <b>نادرست</b></li>
+          <li>ADR فقط تصمیم نهایی را در بر می‌گیرد. → <b>نادرست</b></li>
+          <li>تصمیم‌های معماری مستقل‌اند. → <b>نادرست</b></li>
+          <li>یک قالب ADR الزامی وجود دارد. → <b>نادرست</b></li>
+        </ul>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی</h2>
+        <p>قرارداد رابط · رابط درونی · رابط بیرونی · رابط ارائه‌شده · رابط موردنیاز · کوپلینگ معنایی · تصمیم معماری · دلیل تصمیم · ADR · پیامد · وابستگی میان تصمیم‌ها</p>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی</h2>
+        <p>برای یک سرویس تشخیص تقلب (Fraud Service):</p>
+        <ol>
+          <li>هدف، ورودی‌ها، خروجی‌ها، خطاها، timeout، تلاش مجدد، idempotency، نسخه‌بندی و امنیت را تعریف کنید.</li>
+          <li>REST همگام، پیام‌رسانی ناهمگام و کش محلی را مقایسه کنید.</li>
+          <li>برای انتخاب خود یک ADR کوتاه بنویسید.</li>
+          <li>سه تصمیم وابسته به آن را شناسایی کنید.</li>
+        </ol>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>LG 04-06 چه چیزی را الزام می‌کند؟</summary><p>اینکه رابط‌ها به‌عنوان قرارداد مستند شوند، نه صرفاً به‌عنوان نحو.</p></details>
+        <details><summary>چرا امضای متد کافی نیست؟</summary><p>معناشناسی، خطاها، زمان‌بندی، امنیت، idempotency و قواعد تکامل را حذف می‌کند.</p></details>
+        <details><summary>رابط ارائه‌شده در برابر موردنیاز؟</summary><p>ارائه‌شده = قابلیتی که عرضه می‌شود؛ موردنیاز = قابلیتی که به آن وابسته‌ایم.</p></details>
+        <details><summary>چه چیزی یک تصمیم را از نظر معماری مهم می‌کند؟</summary><p>تأثیر بالا، برگشت دشوار، پیامد بین‌تیمی، اثر بر کیفیت یا محدودسازی آینده.</p></details>
+        <details><summary>چرا دلیل تصمیم را حفظ کنیم؟</summary><p>تا مهندسان آینده بدانند تصمیم در زمینه خودش چرا منطقی بوده است.</p></details>
+        <details><summary>ADR چیست؟</summary><p>ثبت مستند یک تصمیم معماری همراه با زمینه، دلیل و پیامدها.</p></details>
+        <details><summary>پنج فیلد ADR را نام ببرید.</summary><p>عنوان، وضعیت، زمینه، تصمیم، پیامدها.</p></details>
+        <details><summary>چرا ADRهای جایگزین‌شده را نگه داریم؟</summary><p>تاریخچه استدلال را حفظ می‌کنند و از تکرار گزینه‌های ردشده جلوگیری می‌کنند.</p></details>
+        <details><summary>چرا وابستگی تصمیم‌ها مهم است؟</summary><p>هر تصمیم برای تصمیم‌های دیگر الزام ایجاد می‌کند؛ تصمیم‌ها گراف‌اند.</p></details>
+        <details><summary>تفاوت ADR با صورت‌جلسه چیست؟</summary><p>صورت‌جلسه گفت‌وگو را ثبت می‌کند؛ ADR دانش معماری را.</p></details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F</b>
+            <div style="color:var(--muted)">LG 04-06 — مستندسازی رابط‌ها؛ LG 04-08 — تبیین و مستندسازی تصمیم‌های معماری.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — Architecture Decision Records</b>
+            <div style="color:var(--muted)">Software Architecture Monday، درس ۵۵.</div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=LMBqGPLvonU" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>adr.github.io</b>
+            <div style="color:var(--muted)">مجموعه‌ای از قالب‌ها و ابزارهای ADR.</div>
+          </div>
+          <a href="https://adr.github.io/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day active" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-15.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-17.fa.html">روز بعد ←</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۶ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "16";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

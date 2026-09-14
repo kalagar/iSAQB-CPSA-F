@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۱۹ دوره iSAQB CPSA-F: بازبینی کامل برنامه درسی I — استدلال معماری از نیازمندی تا انطباق" />
+  <title>iSAQB CPSA-F — روز ۱۹: بازبینی کامل برنامه درسی I</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-19.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-19.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۱۹</span>
+      <h1>بازبینی کامل برنامه درسی I</h1>
+      <p class="subtitle">
+        روزهای ۱ تا ۱۸ در یک مدل استدلالی واحد: نیازمندی‌ها به محرک تبدیل می‌شوند، محرک‌ها به تصمیم، تصمیم‌ها به ساختار، و ساختار در برابر واقعیت بررسی می‌شود.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> بازبینی یکپارچه، تمایزهای پرتکرار، آزمون کوتاه</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#model">مدل استدلال</a>
+      <a href="#requirements">نیازمندی‌ها، محدودیت‌ها، محرک‌ها</a>
+      <a href="#assumptions">فرض‌های صریح</a>
+      <a href="#decisions">تصمیم‌های معماری</a>
+      <a href="#significance">اهمیت معماری</a>
+      <a href="#structures">ساختارها و بلوک‌های ساختمانی</a>
+      <a href="#blackwhite">جعبه سیاه و جعبه سفید</a>
+      <a href="#dependencies">وابستگی‌ها</a>
+      <a href="#interfaces">رابط‌ها</a>
+      <a href="#crosscutting">مفاهیم فراگیر</a>
+      <a href="#patterns">الگوها و مصالحه‌ها</a>
+      <a href="#feedback">حلقه‌های بازخورد و ریسک</a>
+      <a href="#documentation">مستندسازی و نماها</a>
+      <a href="#analysis">تحلیل</a>
+      <a href="#metrics">معیارها و گودهارت</a>
+      <a href="#conformance">انطباق و قواعد</a>
+      <a href="#staffmodel">مدل Staff Engineer</a>
+      <a href="#distinctions">تمایزهای پرتکرار</a>
+      <a href="#traps">دام‌های پرتکرار</a>
+      <a href="#case">مطالعه موردی یکپارچه</a>
+      <a href="#minimock">آزمون کوتاه — ۱۰ پرسش</a>
+      <a href="#strategy">راهبرد آمادگی برای روز ۲۰</a>
+      <a href="#review">پرسش‌های مروری</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="model">
+        <h2>مدل استدلال معماری امروز</h2>
+        <p class="lead">این بازبینی روزهای ۱ تا ۱۸ را تکرار نمی‌کند؛ آن‌ها را به یک زنجیره واحد متصل می‌کند که می‌توانید در آزمون و در بازبینی واقعی، در هر دو جهت طی کنید.</p>
+        <pre><code>Requirements
+    ↓
+Architecture Drivers
+    ↓
+Architectural Decisions
+    ↓
+Structures &amp; Building Blocks
+    ↓
+Interfaces
+    ↓
+Cross-Cutting Concepts
+    ↓
+Documentation
+    ↓
+Analysis &amp; Evaluation
+    ↓
+Conformance
+    ↓
+Feedback &amp; Evolution</code></pre>
+      </section>
+
+      <section id="requirements">
+        <h2>نیازمندی‌ها، محدودیت‌ها و محرک‌ها</h2>
+        <pre><code>Functional requirement:
+Users can submit insurance claims.
+
+Quality requirement:
+95% of claims should be accepted within 2 seconds.
+
+Constraint:
+Customer data must remain inside the EU.
+
+Organizational constraint:
+The team already operates PostgreSQL and Kubernetes.</code></pre>
+        <p><b>محرک معماری</b> نیازمندی، محدودیت، ریسک یا فرضی است که به‌طور مادی بر تصمیم‌های معماری اثر می‌گذارد.</p>
+        <div class="callout info"><strong>تمایز مهم برای آزمون</strong>نیازمندی خودبه‌خود محرک معماری نیست.</div>
+      </section>
+
+      <section id="assumptions">
+        <h2>فرض‌های صریح</h2>
+        <p>معماری معمولاً پیش از دانستن همه حقایق طراحی می‌شود.</p>
+        <pre><code>Assumption:
+Peak traffic will remain below 3,000 requests/second.</code></pre>
+        <pre><code>What do we know?
+What do we assume?
+What evidence do we have?
+What would invalidate the decision?</code></pre>
+      </section>
+
+      <section id="decisions">
+        <h2>تصمیم‌های معماری</h2>
+        <pre><code>Driver:
+SAP outages must not block order acceptance.
+
+Decision:
+Use asynchronous order-to-SAP processing.</code></pre>
+        <p>یک ثبت تصمیم قوی شامل این‌هاست:</p>
+        <pre><code>Context
+Drivers
+Options
+Decision
+Rationale
+Consequences</code></pre>
+      </section>
+
+      <section id="significance">
+        <h2>اهمیت معماری</h2>
+        <p>هر انتخاب فنی معماری نیست. یک انتخاب با تأثیر بالا، هزینه بازگشت بالا، پیامد بین‌تیمی، اثر بر ویژگی‌های کیفی یا محدودیت بلندمدت اهمیت بیشتری پیدا می‌کند.</p>
+        <pre><code>Impact × Uncertainty × Reversal Cost</code></pre>
+      </section>
+
+      <section id="structures">
+        <h2>ساختارها و بلوک‌های ساختمانی</h2>
+        <pre><code>E-Commerce Platform
+├── Order Management
+├── Payment
+├── Inventory
+└── Customer Management</code></pre>
+        <p>تجزیه خوب به‌دنبال انسجام بالا، کوپلینگ مناسب، مسئولیت‌های روشن و مرزهای قابل‌فهم است.</p>
+        <div class="callout exam"><strong>دام</strong>هدف حداقل کوپلینگ نیست. هدف کوپلینگ <b>مناسب</b> است.</div>
+      </section>
+
+      <section id="blackwhite">
+        <h2>جعبه سیاه در برابر جعبه سفید</h2>
+        <div class="grid-2">
+          <div class="card"><h3>جعبه سیاه</h3><pre><code>Payment Service
+Responsibility:
+Process payments.
+
+Provides:
+Payment API</code></pre></div>
+          <div class="card"><h3>جعبه سفید</h3><pre><code>Payment Service
+├── Payment API
+├── Authorization Logic
+├── Provider Adapter
+└── Payment Repository</code></pre></div>
+        </div>
+        <p>همین چیزی است که پالایش گام‌به‌گام را ممکن می‌کند.</p>
+      </section>
+
+      <section id="dependencies">
+        <h2>وابستگی‌ها مهم‌اند</h2>
+        <pre><code>Orders → Payments
+Orders → Inventory
+Orders → Notifications
+Orders → Fraud</code></pre>
+        <pre><code>Which dependencies are required?
+Which are synchronous?
+Which are replaceable?
+Which can fail?
+Which propagate change?</code></pre>
+      </section>
+
+      <section id="interfaces">
+        <h2>رابط‌ها</h2>
+        <p>رابط یک قرارداد معماری است. مستندسازی مفید ممکن است شامل این موارد باشد:</p>
+        <pre><code>Purpose
+Semantics
+Inputs
+Outputs
+Errors
+Timeout
+Security
+Idempotency
+Versioning
+Side effects</code></pre>
+        <pre><code>Order Service
+
+Provides:
+Order API
+
+Requires:
+Payment API
+Inventory API</code></pre>
+        <div class="callout info"><strong>به‌یاد داشته باشید</strong>نحو رابط ≠ معناشناسی رابط.</div>
+      </section>
+
+      <section id="crosscutting">
+        <h2>مفاهیم فراگیر</h2>
+        <pre><code>Logging
+Security
+Persistence
+Communication
+Error handling
+Concurrency
+Observability
+Configuration
+UI conventions
+Energy efficiency</code></pre>
+        <p><b>دغدغه</b> مسئله است؛ <b>مفهوم فراگیر</b> راه‌حل معماری سراسری. مفاهیم بر یکدیگر اثر می‌گذارند:</p>
+        <div class="grid-2">
+          <div class="card"><pre><code>More retries
+    ↓
+Higher resilience to
+transient failure
+    ↓
+More load
+    ↓
+Possible cascading failure</code></pre></div>
+          <div class="card"><pre><code>Detailed logging
+    ↓
+Better observability
+    ↓
+More stored data
+    ↓
+Higher privacy risk</code></pre></div>
+        </div>
+      </section>
+
+      <section id="patterns">
+        <h2>الگوها و مصالحه‌ها</h2>
+        <p>میکروسرویس‌ها ممکن است استقرار مستقل، خودمختاری تیم و مقیاس‌پذیری مستقل را بهبود دهند — و پیچیدگی عملیاتی، اشکال‌زدایی توزیع‌شده، سازگاری داده و مواجهه با خطای شبکه را بدتر کنند.</p>
+        <pre><code>Caching
+  ↓
++ performance
++ scalability
+- freshness
+- consistency complexity</code></pre>
+        <div class="callout exam"><strong>دام</strong>انتخاب الگو باید از محرک‌های معماری پیروی کند، نه از مد روز. الگو خودبه‌خود بهترین‌روش نیست.</div>
+      </section>
+
+      <section id="feedback">
+        <h2>حلقه‌های بازخورد و ریسک</h2>
+        <pre><code>Assumption
+    ↓
+Decision
+    ↓
+Prototype / Test / Review
+    ↓
+Evidence
+    ↓
+Refined Decision</code></pre>
+        <p>حلقه‌های بازخورد کوتاه بیشترین ارزش را برای تصمیم‌های پرتأثیر، نامطمئن و سخت‌برگشت دارند.</p>
+      </section>
+
+      <section id="documentation">
+        <h2>مستندسازی و نماها</h2>
+        <p>مستندات خوب قابل‌فهم، درست، کارآمد، مناسب و قابل‌نگهداری است.</p>
+        <table>
+          <thead><tr><th>پرسش ذی‌نفع</th><th>نما</th></tr></thead>
+          <tbody>
+            <tr><td>وابستگی‌های بیرونی؟</td><td>زمینه</td></tr>
+            <tr><td>مالکیت مؤلفه؟</td><td>بلوک ساختمانی</td></tr>
+            <tr><td>تعامل هنگام خطا؟</td><td>زمان اجرا</td></tr>
+            <tr><td>جای‌گذاری زیرساخت؟</td><td>استقرار</td></tr>
+          </tbody>
+        </table>
+        <pre><code>View ≠ Diagram ≠ Notation</code></pre>
+      </section>
+
+      <section id="analysis">
+        <h2>تحلیل معماری</h2>
+        <p>تحلیل می‌پرسد آیا معماری واقعاً از کیفیت‌های موردنیاز پشتیبانی می‌کند. می‌تواند پیش از، حین یا پس از پیاده‌سازی و با تحلیل مبتنی بر سناریو، آزمون پذیرش، اندازه‌گیری زمان اجرا، بازبینی کیفی و معیارها انجام شود.</p>
+        <pre><code>Source
+Stimulus
+Environment
+Artifact
+Response
+Response Measure</code></pre>
+        <pre><code>Source:      Payment provider
+Stimulus:    Provider unavailable
+Environment: Peak traffic
+Artifact:    Checkout
+Response:    Orders remain accepted
+Measure:     Availability &gt;= 99.95%</code></pre>
+      </section>
+
+      <section id="metrics">
+        <h2>معیارها و قانون گودهارت</h2>
+        <pre><code>Inbound dependencies
+Outbound dependencies
+Cycles
+Change frequency
+Defect concentration
+Latency
+Error rate</code></pre>
+        <p>معیارها شاهدند، نه نتیجه‌گیری. یکی را به هدف سفت‌وسخت تبدیل کنید — <code>every service must have &lt;= 3 dependencies</code> — و یک MegaGateway عدد را بهتر و معماری را بدتر خواهد کرد.</p>
+      </section>
+
+      <section id="conformance">
+        <h2>انطباق، قواعد و توابع تناسب</h2>
+        <pre><code>Presentation
+    ↓
+Application
+    ↓
+Domain
+
+Violation:
+Domain → Presentation</code></pre>
+        <p><b>انحراف</b> = فاصله گرفتن پیاده‌سازی از قصد. <b>فرسایش</b> = انحراف انباشته که ویژگی‌های معماری را تضعیف می‌کند.</p>
+        <pre><code>Decision:
+Domain must remain framework-independent.
+
+Rule:
+Domain may not import the web or persistence framework.
+
+Verification:
+Architecture test in CI.</code></pre>
+        <pre><code>Driver → Decision → Rule → Verification → Feedback</code></pre>
+      </section>
+
+      <section id="staffmodel">
+        <h2>مدل معماری Staff Engineer</h2>
+        <pre><code>Clarifies drivers
+        ↓
+Facilitates decisions
+        ↓
+Creates clear boundaries
+        ↓
+Communicates trade-offs
+        ↓
+Builds guardrails
+        ↓
+Collects evidence
+        ↓
+Evolves architecture</code></pre>
+      </section>
+
+      <section id="distinctions">
+        <h2>تمایزهای پرتکرار CPSA-F</h2>
+        <table>
+          <thead><tr><th>مفهوم الف</th><th>مفهوم ب</th><th>تمایز</th></tr></thead>
+          <tbody>
+            <tr><td>نیازمندی</td><td>محدودیت</td><td>نیاز/کیفیت در برابر محدودسازی فضای راه‌حل</td></tr>
+            <tr><td>نیازمندی</td><td>محرک معماری</td><td>محرک به‌طور مادی معماری را شکل می‌دهد</td></tr>
+            <tr><td>دغدغه</td><td>مفهوم فراگیر</td><td>مسئله در برابر راه‌حل معماری</td></tr>
+            <tr><td>نما</td><td>نمودار</td><td>منظر در برابر مصنوع</td></tr>
+            <tr><td>نما</td><td>نمادگذاری</td><td>منظر در برابر زبان</td></tr>
+            <tr><td>بلوک ساختمانی</td><td>نمای زمان اجرا</td><td>ایستا در برابر پویا</td></tr>
+            <tr><td>بلوک ساختمانی</td><td>نمای استقرار</td><td>نرم‌افزار در برابر نگاشت زیرساخت</td></tr>
+            <tr><td>رابط درونی</td><td>رابط بیرونی</td><td>درون در برابر عبور از مرز سیستم</td></tr>
+            <tr><td>تصمیم</td><td>ADR</td><td>تصمیم در برابر ثبت مستند</td></tr>
+            <tr><td>کیفی</td><td>کمّی</td><td>قضاوت در برابر شواهد عددی</td></tr>
+            <tr><td>تحلیل</td><td>انطباق</td><td>ارزیابی کیفیت/ریسک در برابر همسویی</td></tr>
+            <tr><td>انحراف</td><td>فرسایش</td><td>فاصله گرفتن در برابر تضعیف انباشته</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="traps">
+        <h2>دام‌های پرتکرار آزمون</h2>
+        <ol>
+          <li>معماری خوب همه کوپلینگ‌ها را کمینه می‌کند. → <b>نادرست</b></li>
+          <li>مستندات بیشتر همیشه بهتر است. → <b>نادرست</b></li>
+          <li>تصمیم‌های معماری هرگز نباید تغییر کنند. → <b>نادرست</b></li>
+          <li>الگو خودبه‌خود بهترین‌روش است. → <b>نادرست</b></li>
+          <li>تحلیل معماری به نرم‌افزار کامل‌شده نیاز دارد. → <b>نادرست</b></li>
+          <li>معیارها به‌طور عینی کیفیت معماری را ثابت می‌کنند. → <b>نادرست</b></li>
+          <li>بازخورد ذی‌نفعان یعنی توافق همگانی. → <b>نادرست</b></li>
+          <li>دغدغه‌های فراگیر همیشه به سرویس جداگانه نیاز دارند. → <b>نادرست</b></li>
+          <li>نمای زمینه تجزیه درونی را نشان می‌دهد. → <b>نادرست</b></li>
+          <li>انطباق یعنی معماری هرگز نباید تکامل یابد. → <b>نادرست</b></li>
+        </ol>
+      </section>
+
+      <section id="case">
+        <h2>مطالعه موردی یکپارچه Staff Engineer</h2>
+        <pre><code>Current load:      2,000 orders/min
+Future load:       20,000 orders/min
+Availability:      Order acceptance &gt;= 99.95%
+Compliance:        Customer data remains in EU
+Business:          New payment provider within 5 developer-days
+Operational:       SAP has occasional outages</code></pre>
+        <p>پیشنهاد فعلی:</p>
+        <pre><code>Web
+ ↓
+Order Service
+ ├── Payment Provider SDK
+ ├── Inventory
+ ├── Notification
+ └── SAP</code></pre>
+        <h3>محرک‌های بالقوه معماری</h3>
+        <ol>
+          <li>دسترس‌پذیری پذیرش سفارش</li>
+          <li>رشد ۱۰ برابری مورد انتظار</li>
+          <li>قابلیت تغییر ارائه‌دهنده پرداخت</li>
+          <li>ناپایداری SAP</li>
+          <li>محدودیت اقامت داده در اتحادیه اروپا</li>
+        </ol>
+        <h3>ریسک‌ها</h3>
+        <div class="grid-2">
+          <div class="card"><h3>ریسک ۱</h3><pre><code>Order → SAP synchronously</code></pre><p>دسترس‌پذیری را تهدید می‌کند.</p></div>
+          <div class="card"><h3>ریسک ۲</h3><pre><code>Payment SDK embedded
+in Order Service</code></pre><p>قابلیت تغییر را تهدید می‌کند.</p></div>
+          <div class="card"><h3>ریسک ۳</h3><pre><code>Notification synchronous
+in checkout path</code></pre><p>دسترس‌پذیری و تأخیر را تهدید می‌کند.</p></div>
+          <div class="card"><h3>ریسک ۴</h3><p>هیچ شاهدی برای ۲۰٬۰۰۰ سفارش در دقیقه وجود ندارد. اطمینان از مقیاس‌پذیری را تهدید می‌کند.</p></div>
+        </div>
+        <h3>تصمیم‌های نامزد</h3>
+        <pre><code>1. Introduce PaymentProvider interface + adapters.
+2. Decouple SAP using durable asynchronous processing.
+3. Publish notifications asynchronously.
+4. Validate expected load with representative performance tests.
+5. Define EU deployment/data-storage rules explicitly.</code></pre>
+        <h3>نمای بلوک ساختمانی نتیجه</h3>
+        <pre><code>Order Platform
+├── Order API
+├── Order Application
+├── Order Domain
+├── Payment Port
+│   ├── Provider A Adapter
+│   └── Provider B Adapter
+├── SAP Integration
+└── Notification Publisher</code></pre>
+        <h3>نمای زمان اجرا</h3>
+        <pre><code>Client
+  ↓
+Order API
+  ↓
+Order Application
+  ↓
+Persist Order
+  ↓
+Publish SAP Event
+  ↓
+Return Accepted</code></pre>
+        <p>پردازش SAP سپس مستقل انجام می‌شود.</p>
+        <h3>نمونه ADR</h3>
+        <pre><code>Title:
+Asynchronous SAP Integration
+
+Driver:
+Order acceptance &gt;= 99.95%
+
+Decision:
+Persist accepted order and publish a durable integration event.
+
+Consequences:
++ SAP outage no longer blocks acceptance
+- eventual consistency
+- duplicate handling required</code></pre>
+        <h3>سناریوی کیفی</h3>
+        <pre><code>Source:      SAP
+Stimulus:    SAP unavailable for 30 minutes
+Environment: Peak traffic
+Artifact:    Order acceptance workflow
+Response:    Orders continue to be durably accepted and queued
+Measure:     Order acceptance availability &gt;= 99.95%
+             No accepted order is lost
+
+Validation:
+SAP outage simulation + queue durability test</code></pre>
+        <h3>قواعد انطباق</h3>
+        <pre><code>Payment vendor SDK may only be used in payment adapters.
+Order Domain may not depend on infrastructure.
+Order acceptance may not synchronously call SAP.
+All integration events contain eventId, schemaVersion, timestamp.</code></pre>
+        <p>بررسی‌های ممکن: آزمون وابستگی ایستا، اعتبارسنجی شما، آزمون‌های معماری در CI، آزمون‌های تاب‌آوری زمان اجرا.</p>
+      </section>
+
+      <section id="minimock">
+        <h2>آزمون کوتاه — ۱۰ پرسش</h2>
+        <div class="question-set">
+          <details class="question"><summary>کدام گزینه بهترین توصیف محرک معماری است؟</summary><div class="answer"><b>پاسخ:</b> نیازمندی یا محدودیتی که به‌طور مادی بر معماری اثر می‌گذارد — نه هر نیازمندی عملکردی، نه هر قرارداد کدنویسی، و نه فقط نیازمندی‌های کارایی.</div></details>
+          <details class="question"><summary>کدام نما تعامل هنگام خطا در فرایند پرداخت را بهتر توضیح می‌دهد؟</summary><div class="answer"><b>پاسخ:</b> نمای زمان اجرا. زمینه محیط را، بلوک ساختمانی ساختار ایستا را و استقرار زیرساخت را نشان می‌دهد.</div></details>
+          <details class="question"><summary>کدام گزاره درباره ADR درست است؟</summary><div class="answer"><b>پاسخ:</b> دلیل و پیامدهای تصمیم را ثبت می‌کند. جایگزین مستندات معماری نیست، برای هر انتخاب سطح کد لازم نیست، و می‌تواند جایگزین شود.</div></details>
+          <details class="question"><summary>یک سرویس ۱۵ وابستگی خروجی دارد. چه نتیجه‌ای می‌گیرید؟</summary><div class="answer"><b>پاسخ:</b> نشانه‌ای که نیازمند تحلیل زمینه‌ای است — نه اثبات معماری بد، نه الزام به تفکیک، و نه دلیلی برای صفر کردن وابستگی‌ها.</div></details>
+          <details class="question"><summary>کدام مورد یک مفهوم فراگیر است؟</summary><div class="answer"><b>پاسخ:</b> راهبرد سراسری مدیریت خطا. یک متد موجودیت، یک کوئری SQL یا یک قرارداد نام‌گذاری محلی‌اند.</div></details>
+          <details class="question"><summary>کدام گزاره درباره بازخورد درست است؟</summary><div class="answer"><b>پاسخ:</b> بازخورد می‌تواند فرض‌ها را پیش از پیاده‌سازی کامل اعتبارسنجی کند. فقط مخصوص محیط عملیات نیست، تکرار ریسک را حذف نمی‌کند، و بازخورد نیازمند اجماع نیست.</div></details>
+          <details class="question"><summary>کدام مورد مستقیم‌ترین بررسی انطباق معماری است؟</summary><div class="answer"><b>پاسخ:</b> تحلیل وابستگی‌های ممنوع.</div></details>
+          <details class="question"><summary>هدف اصلی سناریوی کیفی چیست؟</summary><div class="answer"><b>پاسخ:</b> ملموس و قابل تحلیل کردن یک کیفیت انتزاعی.</div></details>
+          <details class="question"><summary>کدام گزاره درباره الگوهای معماری درست است؟</summary><div class="answer"><b>پاسخ:</b> تناسب الگو به محرک‌ها و زمینه بستگی دارد. الگوها خودبه‌خود بهترین‌روش نیستند، مصالحه‌ها را حذف نمی‌کنند، و CPSA-F میکروسرویس را ترجیح نمی‌دهد.</div></details>
+          <details class="question"><summary>قوی‌ترین رفتار Staff Engineer کدام است؟</summary><div class="answer"><b>پاسخ:</b> ساخت حفاظ‌ها و توانمندسازی تیم‌ها برای تصمیم‌های سازگار — به‌جای تأیید شخصی هر تصمیم، تمرکز دانش یا جایگزینی مستندات با جلسه.</div></details>
+        </div>
+      </section>
+
+      <section id="strategy">
+        <h2>راهبرد آمادگی برای روز ۲۰</h2>
+        <p>این تمایزها را با دقت مرور کنید:</p>
+        <pre><code>Architecture driver vs requirement
+Quality requirement vs constraint
+Black box vs white box
+Cohesion vs coupling
+Context vs building block vs runtime vs deployment
+Concern vs concept
+Internal vs external interface
+Decision vs ADR
+Qualitative vs quantitative analysis
+Analysis vs conformance
+Drift vs erosion</code></pre>
+        <p>هنگام تردید بپرسید سؤال چه چیزی را می‌سنجد:</p>
+        <pre><code>Definition? Responsibility? Trade-off?
+View? Quality? Decision? Conformance?</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>پاسخی را فقط به‌دلیل مدرن به‌نظر رسیدن انتخاب نکنید. آزمون گزینه‌ای را پاداش می‌دهد که به دغدغه معماریِ واقعاً موردسنجش می‌پردازد.</div>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مروری</h2>
+        <details><summary>چه چیزی یک نیازمندی را به محرک معماری تبدیل می‌کند؟</summary><p>اثر مادی بر تصمیم‌ها یا ساختار معماری.</p></details>
+        <details><summary>چرا فرض‌ها باید صریح باشند؟</summary><p>فرض‌های پنهان ریسک مدیریت‌نشده می‌سازند.</p></details>
+        <details><summary>چه چیزی یک تصمیم را از نظر معماری مهم می‌کند؟</summary><p>تأثیر بالا، هزینه بازگشت، اثر بر کیفیت، پیامد بین‌تیمی یا محدودیت آینده.</p></details>
+        <details><summary>انسجام در برابر کوپلینگ؟</summary><p>انسجام یعنی میزان تعلق مسئولیت‌ها به هم؛ کوپلینگ یعنی وابستگی میان عناصر.</p></details>
+        <details><summary>جعبه سیاه در برابر جعبه سفید؟</summary><p>جعبه سیاه = مسئولیت و رابط‌های بیرونی؛ جعبه سفید = تجزیه درونی.</p></details>
+        <details><summary>چرا معناشناسی رابط مهم است؟</summary><p>نحو پایدار می‌تواند کوپلینگ معنایی را پنهان کند.</p></details>
+        <details><summary>دغدغه در برابر مفهوم فراگیر؟</summary><p>دغدغه = مسئله؛ مفهوم = راه‌حل معماری.</p></details>
+        <details><summary>چرا مفاهیم فراگیر بر هم اثر می‌گذارند؟</summary><p>هر مفهوم می‌تواند کیفیت یا محدودیت دیگری را تحت تأثیر قرار دهد.</p></details>
+        <details><summary>چرا الگوها بهترین‌روش جهانی نیستند؟</summary><p>وابسته به زمینه‌اند.</p></details>
+        <details><summary>فایده حلقه‌های بازخورد کوتاه چیست؟</summary><p>فرض‌های نادرست را زودتر آشکار می‌کنند.</p></details>
+        <details><summary>چهار نمای اصلی کدام‌اند؟</summary><p>زمینه، بلوک ساختمانی، زمان اجرا، استقرار.</p></details>
+        <details><summary>نما در برابر نمادگذاری؟</summary><p>نما = منظر؛ نمادگذاری = زبان.</p></details>
+        <details><summary>تحلیل مبتنی بر سناریو چیست؟</summary><p>ارزیابی معماری با استفاده از سناریوهای کیفی مشخص.</p></details>
+        <details><summary>کیفی در برابر کمّی؟</summary><p>قضاوت ساخت‌یافته در برابر شواهد عددی.</p></details>
+        <details><summary>چرا معیارها به‌تنهایی کافی نیستند؟</summary><p>معیارها به زمینه نیاز دارند و قابل دستکاری‌اند.</p></details>
+        <details><summary>انطباق چه چیزی را ارزیابی می‌کند؟</summary><p>اینکه آیا پیاده‌سازی با قصد معماری همسوست.</p></details>
+        <details><summary>انحراف در برابر فرسایش؟</summary><p>انحراف = فاصله گرفتن؛ فرسایش = تضعیف انباشته.</p></details>
+        <details><summary>تابع تناسب چیست؟</summary><p>ارزیابی عینی یک ویژگی معماری.</p></details>
+        <details><summary>چرا ADRها مفیدند؟</summary><p>زمینه، دلیل، گزینه‌ها و پیامدها را حفظ می‌کنند.</p></details>
+        <details><summary>نقش Staff Engineer در حکمرانی معماری چیست؟</summary><p>توانمندسازی تصمیم‌های خوب توزیع‌شده از طریق حفاظ‌ها، ارتباطات و شواهد.</p></details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource">
+          <div>
+            <b>برنامه درسی رسمی CPSA-F نسخه 2025.1-rev2</b>
+            <div style="color:var(--muted)">معتبر از ۱ آوریل ۲۰۲۵. این بازبینی روزهای ۱ تا ۱۸ را یکپارچه می‌کند.</div>
+          </div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+        <div class="resource" style="margin-top:12px">
+          <div>
+            <b>Mark Richards — Identifying Architectural Characteristics</b>
+            <div style="color:var(--muted)">Software Architecture Monday، درس ۱۸۸.</div>
+          </div>
+          <a href="https://www.youtube.com/watch?v=j11MWnz2vYQ" target="_blank" rel="noopener noreferrer">باز کردن ↗</a>
+        </div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day active" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-18.fa.html">→ روز قبل</a>
+          <a class="navbtn" href="isaqb-cpsa-f-day-20.fa.html">روز بعد ←</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۱۹ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "19";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

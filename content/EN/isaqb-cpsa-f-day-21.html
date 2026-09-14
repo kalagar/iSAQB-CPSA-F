@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 21: Mock Review and Targeted Remediation — the distinctions that cause most exam mistakes" />
+  <title>iSAQB CPSA-F — Day 21: Mock Review &amp; Targeted Remediation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-21.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-21.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 21</span>
+  <h1>Mock Review &amp; Targeted Remediation</h1>
+  <p class="subtitle">Fix the eight distinctions that produce most exam mistakes — then apply them to a realistic Staff Engineer architecture review of an insurance claims platform.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> High-error distinctions, drills, full review case</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#driver">Requirement vs driver</a><a href="#drivertest">Driver identification test</a><a href="#quality-constraint">Quality requirement vs constraint</a><a href="#scenario">Scenario vs vague statement</a><a href="#cohesion">Cohesion vs coupling</a><a href="#lowcoupling">Is low coupling always better?</a><a href="#changecoupling">Change coupling</a><a href="#views">Context vs building block vs runtime vs deployment</a><a href="#notation">View vs notation</a><a href="#concept">Concern vs cross-cutting concept</a><a href="#adr">Decision vs ADR</a><a href="#analysis">Analysis vs conformance</a><a href="#drift">Drift vs erosion</a><a href="#tradeoff">Trade-off thinking</a><a href="#framework">Staff Engineer decision framework</a><a href="#drills">Distinction drills</a><a href="#case">Case: insurance claims platform</a><a href="#risks">Risks</a><a href="#scenarios">Quality scenarios</a><a href="#adrs">Proposed ADRs</a><a href="#rules">Architecture rules</a><a href="#gates">Which rules should block CI?</a><a href="#takeaway">Staff Engineer takeaway</a><a href="#traps">Advanced exam traps</a><a href="#review">Review questions</a><a href="#miniexam">Difficult mini exam</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="driver">
+<h2>Requirement vs architecture driver</h2>
+<p class="lead">Days 1–20 are complete. Today is remediation: the distinctions below are where most CPSA-F mistakes actually happen, and each one is also a real review skill.</p>
+<div class="grid-2">
+<div class="card"><h3>Requirement</h3><p>Expresses a need.</p><pre><code>Users can export invoices as PDF.</code></pre></div>
+<div class="card"><h3>Architecture driver</h3><p>A requirement, constraint, risk or assumption that materially influences architecture.</p><pre><code>Order acceptance must remain
+available if SAP is unavailable.</code></pre></div>
+</div>
+<p>The second may influence communication style, runtime dependencies, persistence, integration and failure handling.</p>
+<div class="callout info"><strong>Exam distinction</strong>Not every requirement is an architecture driver.</div>
+</section>
+
+<section id="drivertest"><h2>Driver identification test</h2>
+<p>Ask whether the item influences:</p>
+<pre><code>system structure
+distribution
+data ownership
+technology choice
+runtime interaction
+quality trade-offs
+deployment
+security boundaries</code></pre>
+<p>If yes, it is more likely to be an architecture driver.</p>
+</section>
+
+<section id="quality-constraint"><h2>Quality requirement vs constraint</h2>
+<div class="grid-2">
+<div class="card"><h3>Quality requirement</h3><p>Describes <b>how well</b> the system should behave.</p><pre><code>95% of API requests must
+complete in &lt; 500 ms.</code></pre></div>
+<div class="card"><h3>Constraint</h3><p>Limits the solution space.</p><pre><code>The system must run on the
+corporate Kubernetes platform.</code></pre></div>
+</div>
+<div class="callout info"><strong>Shortcut</strong>Quality requirement = desired behavior. Constraint = restricted choices.</div>
+</section>
+
+<section id="scenario"><h2>Quality scenario vs vague statement</h2>
+<p>Weak:</p>
+<pre><code>The system must be reliable.</code></pre>
+<p>Strong:</p>
+<pre><code>Source:      Payment provider
+Stimulus:    Provider becomes unavailable
+Environment: Peak traffic
+Artifact:    Checkout workflow
+Response:    Orders remain accepted
+Measure:     Order acceptance availability &gt;= 99.95%</code></pre>
+<p>A scenario is what makes a quality analyzable.</p>
+</section>
+
+<section id="cohesion"><h2>Cohesion vs coupling</h2>
+<div class="grid-2">
+<div class="card"><h3>Cohesion — inside</h3><pre><code>Payment Module
+├── Payment authorization
+├── Payment capture
+└── Payment refund</code></pre><p>Low cohesion:</p><pre><code>Utility Module
+├── Payment authorization
+├── Email generation
+├── Customer search
+├── PDF export
+└── Tax calculation</code></pre></div>
+<div class="card"><h3>Coupling — between</h3><pre><code>Order Service
+   ├── Payment
+   ├── Inventory
+   ├── Notification
+   └── Fraud</code></pre></div>
+</div>
+<div class="callout info"><strong>Shortcut</strong>Cohesion = inside a building block. Coupling = between building blocks.</div>
+</section>
+
+<section id="lowcoupling"><h2>Is low coupling always better?</h2>
+<p><b>No.</b> Architecture seeks <b>appropriate</b> coupling, not zero coupling. Problematic coupling is usually:</p>
+<ul>
+<li>unnecessary;</li>
+<li>hidden;</li>
+<li>unstable;</li>
+<li>bidirectional;</li>
+<li>semantically unclear.</li>
+</ul>
+</section>
+
+<section id="changecoupling"><h2>Change coupling</h2>
+<div class="callout staff"><strong>Staff Engineer question</strong>Which components must change together?</div>
+<p>If adding a payment provider requires edits in Order, Customer, Notification and Billing, modularity is poor — regardless of what the dependency diagram claims.</p>
+</section>
+
+<section id="views"><h2>Context vs building block vs runtime vs deployment</h2>
+<table>
+<thead><tr><th>Question</th><th>View</th></tr></thead>
+<tbody>
+<tr><td>Who/what interacts with the system?</td><td>Context</td></tr>
+<tr><td>What are the software parts?</td><td>Building Block</td></tr>
+<tr><td>What happens during a scenario?</td><td>Runtime</td></tr>
+<tr><td>Where does software run?</td><td>Deployment</td></tr>
+</tbody>
+</table>
+<ul>
+<li><b>Context:</b> system boundary, external actors, external systems, external interfaces.</li>
+<li><b>Building Block:</b> static software structure, responsibilities, relationships, interfaces.</li>
+<li><b>Runtime:</b> dynamic interaction, sequence, failure propagation, concurrency.</li>
+<li><b>Deployment:</b> infrastructure, nodes, runtime environments, software-to-infrastructure mapping.</li>
+</ul>
+</section>
+
+<section id="notation"><h2>View vs notation</h2>
+<pre><code>Runtime View ≠ UML Sequence Diagram</code></pre>
+<p>A runtime view can be expressed using UML, BPMN, C4 dynamic diagrams, or plain text. View = perspective. Notation = language.</p>
+</section>
+
+<section id="concept"><h2>Concern vs cross-cutting concept</h2>
+<div class="grid-2">
+<div class="card"><h3>Concern</h3><p>The problem or topic.</p><pre><code>How should retries work?</code></pre></div>
+<div class="card"><h3>Cross-cutting concept</h3><p>The consistent architecture-wide solution.</p><pre><code>Retries:
+- transient failures only
+- maximum 2
+- exponential backoff
+- jitter
+- idempotent operations only</code></pre></div>
+</div>
+<div class="callout info"><strong>Shortcut</strong>Concern = what must be handled. Concept = how it is handled consistently.</div>
+</section>
+
+<section id="adr"><h2>Decision vs ADR</h2>
+<div class="grid-2">
+<div class="card"><h3>Decision</h3><pre><code>Use asynchronous SAP integration.</code></pre></div>
+<div class="card"><h3>ADR</h3><pre><code>Title
+Status
+Context
+Options
+Decision
+Rationale
+Consequences</code></pre></div>
+</div>
+<div class="callout info"><strong>Shortcut</strong>Decision = the choice. ADR = the documented record.</div>
+</section>
+
+<section id="analysis"><h2>Architecture analysis vs conformance</h2>
+<div class="grid-2">
+<div class="card"><h3>Analysis</h3><p><i>Does this architecture satisfy the required qualities?</i></p><p>Performance test · scenario walkthrough · dependency analysis · security review.</p></div>
+<div class="card"><h3>Conformance</h3><p><i>Does the implementation still follow the intended architecture?</i></p><p>Forbidden dependency checks · architecture code review · tool-supported structural analysis.</p></div>
+</div>
+<div class="callout info"><strong>Shortcut</strong>Analysis = good enough for the goal? Conformance = following architecture intent?</div>
+</section>
+
+<section id="drift"><h2>Drift vs erosion</h2>
+<div class="grid-2">
+<div class="card"><h3>Drift</h3><p>Deviation from intended architecture.</p><pre><code>One service bypasses another
+service API and directly
+accesses its database.</code></pre></div>
+<div class="card"><h3>Erosion</h3><p>Accumulated drift weakens architecture properties.</p><pre><code>Many services now directly
+access one another's databases.</code></pre></div>
+</div>
+</section>
+
+<section id="tradeoff"><h2>Trade-off thinking</h2>
+<pre><code>Asynchronous messaging
+
+Benefits:
++ availability
++ temporal decoupling
++ buffering
+
+Costs:
+- eventual consistency
+- duplicate handling
+- operational complexity</code></pre>
+<div class="callout info"><strong>The right question</strong>Not “is messaging good?” but: does messaging improve the architecture drivers enough to justify the costs?</div>
+</section>
+
+<section id="framework"><h2>Staff Engineer decision framework</h2>
+<ol>
+<li>What are the architecture drivers?</li>
+<li>What options exist?</li>
+<li>What qualities improve?</li>
+<li>What qualities get worse?</li>
+<li>What assumptions are we making?</li>
+<li>What evidence do we have?</li>
+<li>How reversible is the decision?</li>
+<li>How will we validate it?</li>
+</ol>
+</section>
+
+<section id="drills"><h2>High-error distinction drills</h2>
+<div class="question-set">
+<details class="question"><summary>“Customer data must remain inside the EU.” — quality requirement or constraint?</summary><div class="answer"><b>Answer: constraint.</b> It restricts the solution space rather than describing how well the system behaves.</div></details>
+<details class="question"><summary>“95% of requests must complete within 500 ms.” — quality requirement or constraint?</summary><div class="answer"><b>Answer: quality requirement.</b> It is measurable desired behavior.</div></details>
+<details class="question"><summary>“Which external systems interact with us?” — context or runtime view?</summary><div class="answer"><b>Answer: context view.</b></div></details>
+<details class="question"><summary>“What happens when Fraud Service times out?” — context or runtime view?</summary><div class="answer"><b>Answer: runtime view.</b></div></details>
+<details class="question"><summary>“Maximum 2 retries, exponential backoff, jitter, transient failures only.” — concern or concept?</summary><div class="answer"><b>Answer: cross-cutting concept.</b> It is the consistent solution, not the problem statement.</div></details>
+<details class="question"><summary>“The domain layer imports a database adapter.” — analysis result or conformance violation?</summary><div class="answer"><b>Answer: conformance violation.</b> The implementation contradicts an intended rule.</div></details>
+<details class="question"><summary>“Payment Service has 15 outbound dependencies.” — proof of bad architecture or a signal?</summary><div class="answer"><b>Answer: a signal requiring context.</b> The component may legitimately orchestrate.</div></details>
+<details class="question"><summary>“Use Kafka for order events.” — complete ADR or a decision without rationale?</summary><div class="answer"><b>Answer: an architecture decision without sufficient rationale.</b> No context, options or consequences.</div></details>
+</div>
+</section>
+
+<section id="case"><h2>Staff Engineer case — insurance claims platform</h2>
+<pre><code>Web
+ ↓
+Claims Service
+ ├── Customer DB
+ ├── Fraud API
+ ├── Payment API
+ ├── Document Provider SDK
+ └── Kafka</code></pre>
+<p>Evidence:</p>
+<pre><code>- Fraud API occasionally takes 8 seconds.
+- Claims availability target is 99.95%.
+- 14 classes directly use the Document Provider SDK.
+- A new document provider will be added this year.
+- Several services directly read Customer DB.
+- Teams use different retry policies.
+- Customer email addresses have appeared in logs.</code></pre>
+<h3>Architecture drivers</h3>
+<ol>
+<li>Claims availability &gt;= 99.95%</li>
+<li>New document provider must be easy to add</li>
+<li>Protection of customer personal data</li>
+<li>Fraud-provider latency and availability</li>
+<li>Independent service evolution</li>
+</ol>
+</section>
+
+<section id="risks"><h2>Risks</h2>
+<h3>Fraud API latency</h3>
+<pre><code>Claims
+  ↓ synchronous
+Fraud API</code></pre>
+<p>Potential impact: claims latency, availability, resource exhaustion. Options: a strict synchronous timeout, asynchronous fraud evaluation, accept-then-evaluate, or fallback / circuit breaker — depending on business semantics. No universal answer exists; context decides.</p>
+
+<h3>Document provider coupling</h3>
+<pre><code>14 classes import provider SDK.</code></pre>
+<pre><code>DocumentProvider port
+        ↓
+Provider A Adapter
+Provider B Adapter</code></pre>
+<p>This localizes vendor-specific change.</p>
+
+<h3>Shared customer database</h3>
+<pre><code>Claims Service
+Payment Service
+Other Services
+      ↓
+Customer DB</code></pre>
+<p>Risks: hidden coupling, schema-change propagation, ownership ambiguity, harder independent deployment.</p>
+
+<h3>Retry inconsistency</h3>
+<pre><code>Team A → 5 immediate retries
+Team B → no retry
+Team C → 10-second fixed retry</code></pre>
+<p>Candidate resilience concept:</p>
+<pre><code>Retry transient failures only
+Maximum 2
+Exponential backoff
+Jitter
+Idempotent operations only
+Metrics required</code></pre>
+
+<h3>PII in logs</h3>
+<p>Affects security, privacy, compliance and operations.</p>
+<pre><code>No sensitive fields
+Structured logs
+Correlation IDs
+Approved allowlist
+Automated scanning</code></pre>
+</section>
+
+<section id="scenarios"><h2>Quality scenarios</h2>
+<div class="grid-2">
+<div class="card"><h3>Availability</h3><pre><code>Source:      Fraud provider
+Stimulus:    Provider unavailable
+Environment: Peak traffic
+Artifact:    Claims submission
+Response:    Predefined fallback
+             behavior without
+             exhausting request
+             threads
+Measure:     Claims availability
+             &gt;= 99.95%</code></pre></div>
+<div class="card"><h3>Modifiability</h3><pre><code>Source:      Product team
+Stimulus:    Add Document
+             Provider B
+Environment: Normal development
+Artifact:    Document integration
+Response:    Implement a new
+             adapter without
+             changing claims
+             domain logic
+Measure:     Completed within
+             5 developer-days</code></pre></div>
+</div>
+</section>
+
+<section id="adrs"><h2>Proposed ADRs</h2>
+<div class="grid-2">
+<div class="card"><h3>ADR 1 — Isolate the document provider SDK behind a port</h3><p><b>Context:</b> 14 classes directly depend on a provider-specific SDK.</p><p><b>Driver:</b> a new provider must be added efficiently.</p><p><b>Decision:</b> introduce a <code>DocumentProvider</code> interface and provider-specific adapters.</p><p><b>Benefits:</b> localized vendor dependency, easier testing, better replaceability. <b>Costs:</b> migration effort, extra abstraction.</p></div>
+<div class="card"><h3>ADR 2 — Standard retry policy</h3><p><b>Context:</b> teams use inconsistent retry behavior.</p><p><b>Driver:</b> resilience without retry storms.</p><p><b>Decision:</b> adopt shared retry rules.</p></div>
+<div class="card"><h3>ADR 3 — Customer data ownership</h3><p><b>Context:</b> multiple services read Customer DB directly.</p><p><b>Driver:</b> independent service evolution.</p><p><b>Decision:</b> restrict direct DB access to the owning component and its interface.</p></div>
+</div>
+</section>
+
+<section id="rules"><h2>Suitable architecture rules</h2>
+<pre><code>Rule 1:
+Provider SDK imports allowed only in document adapters.
+
+Rule 2:
+Services may not access Customer DB directly
+except the owning component.
+
+Rule 3:
+PII fields are forbidden in application logs.</code></pre>
+<p>Verification: static dependency tests, DB and network permissions, log-policy scanning.</p>
+</section>
+
+<section id="gates"><h2>Which rules should block CI?</h2>
+<p>Strong gate candidates:</p>
+<ul>
+<li>provider SDK used outside an adapter;</li>
+<li>forbidden module dependency;</li>
+<li>known sensitive-data logging patterns.</li>
+</ul>
+<p>Because they are objective, important, repeatable, and likely to regress.</p>
+</section>
+
+<section id="takeaway"><h2>Staff Engineer takeaway</h2>
+<p>A Staff Engineer should not solve this by personally coding every adapter. Higher leverage:</p>
+<pre><code>Clarify drivers
+        ↓
+Make trade-offs explicit
+        ↓
+Create shared decisions
+        ↓
+Define boundaries
+        ↓
+Automate important guardrails
+        ↓
+Let teams implement independently</code></pre>
+</section>
+
+<section id="traps"><h2>Advanced exam traps</h2>
+<ol>
+<li>A measurable requirement is automatically an architecture driver. → <b>False</b></li>
+<li>High coupling always means bad design. → <b>False</b></li>
+<li>A runtime diagram is the same thing as a runtime view. → <b>False</b></li>
+<li>A cross-cutting concern must become a shared service. → <b>False</b></li>
+<li>An ADR guarantees a good decision. → <b>False</b></li>
+<li>Architecture analysis and conformance are synonyms. → <b>False</b></li>
+<li>Drift always means architecture failure. → <b>Too absolute</b></li>
+</ol>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>What distinguishes an architecture driver from an ordinary requirement?</summary><p>A driver materially influences architecture decisions or structure.</p></details>
+<details><summary>What distinguishes a quality requirement from a constraint?</summary><p>A quality requirement specifies desired system behavior; a constraint restricts the solution space.</p></details>
+<details><summary>What is the difference between cohesion and coupling?</summary><p>Cohesion is internal relatedness; coupling is dependency between elements.</p></details>
+<details><summary>Is low coupling always the goal?</summary><p>No. The goal is appropriate, controlled coupling.</p></details>
+<details><summary>Which view answers “What happens during a timeout?”</summary><p>Runtime view.</p></details>
+<details><summary>Which view answers “Which external systems exist?”</summary><p>Context view.</p></details>
+<details><summary>View vs notation?</summary><p>View = perspective; notation = expression language.</p></details>
+<details><summary>Concern vs cross-cutting concept?</summary><p>Concern = problem/topic; concept = coherent solution.</p></details>
+<details><summary>Decision vs ADR?</summary><p>Decision = choice; ADR = documented record.</p></details>
+<details><summary>Architecture analysis vs architecture conformance?</summary><p>Analysis asks whether the architecture satisfies goals; conformance asks whether implementation follows architecture intent.</p></details>
+<details><summary>Drift vs erosion?</summary><p>Drift = deviation; erosion = accumulated degradation.</p></details>
+<details><summary>Why can architecture metrics mislead?</summary><p>Metrics need context and can be gamed.</p></details>
+<details><summary>Why are trade-offs central to architecture?</summary><p>Improving one quality often affects another.</p></details>
+<details><summary>What makes a good candidate for automation as an architecture rule?</summary><p>Objective, important, repeatable, cheap-to-check rules likely to regress.</p></details>
+<details><summary>What is the Staff Engineer's role in architecture governance?</summary><p>Enable consistent distributed decision-making through drivers, communication, guardrails and evidence.</p></details>
+</section>
+
+<section id="miniexam"><h2>Difficult mini exam</h2>
+
+<p><b>Q1.</b> “Claims must be available 99.95% of the time.”</p>
+<ol type="A"><li>Automatically an architecture driver</li><li>A quality requirement and potentially an architecture driver</li><li>A constraint</li><li>A runtime view</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — measurable quality behavior; whether it drives architecture depends on impact.</p></details>
+
+<p><b>Q2.</b> “The application must run on the corporate Kubernetes platform.”</p>
+<ol type="A"><li>Quality requirement</li><li>Constraint</li><li>Runtime scenario</li><li>Architecture metric</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — it restricts the solution space.</p></details>
+
+<p><b>Q3.</b> Which is primarily about cohesion?</p>
+<ol type="A"><li>Order Service calls six services</li><li>Payment Module contains payment and unrelated PDF-export logic</li><li>Fraud API has high latency</li><li>Two services share a protocol</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — unrelated responsibilities inside one building block.</p></details>
+
+<p><b>Q4.</b> Which view explains how a customer request moves through six services?</p>
+<ol type="A"><li>Context</li><li>Runtime</li><li>Deployment</li><li>Building Block</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — dynamic interaction is the runtime view.</p></details>
+
+<p><b>Q5.</b> A team defines maximum 2 retries, exponential backoff, jitter, and transient-failure-only behavior.</p>
+<ol type="A"><li>Cross-cutting concern</li><li>Cross-cutting concept</li><li>Context view</li><li>Architecture metric</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — it is the consistent solution, not the problem.</p></details>
+
+<p><b>Q6.</b> “Use Kafka for OrderCreated events.”</p>
+<ol type="A"><li>Complete ADR</li><li>Architecture decision but not a complete decision record</li><li>Quality scenario</li><li>Deployment view</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — no context, options, rationale or consequences.</p></details>
+
+<p><b>Q7.</b> A load test shows p95 = 1.4 s while the requirement is p95 &lt; 700 ms.</p>
+<ol type="A"><li>Architecture conformance</li><li>Architecture quality analysis</li><li>Deployment documentation</li><li>Cross-cutting design</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — measuring whether a quality goal is met is analysis.</p></details>
+
+<p><b>Q8.</b> A static check detects <code>domain → infrastructure</code> despite an explicit rule forbidding it.</p>
+<ol type="A"><li>Architecture conformance checking</li><li>Business analysis</li><li>Requirements elicitation</li><li>User testing</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — implementation is checked against architecture intent.</p></details>
+
+<p><b>Q9.</b> One service bypasses another service's API and directly accesses its DB.</p>
+<ol type="A"><li>Architecture drift</li><li>Automatically architecture erosion</li><li>Quality scenario</li><li>Architectural style</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — a single deviation is drift, not yet erosion.</p></details>
+
+<p><b>Q10.</b> After years, many services directly access each other's databases and independent deployment is difficult.</p>
+<ol type="A"><li>Architecture erosion</li><li>Context modeling</li><li>White-box refinement</li><li>Quality requirement</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — accumulated drift has degraded architectural properties.</p></details>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum 2025.1</b><div style="color:var(--muted)">Mandatory for Foundation Level training since April 1, 2025; structured around architectural tasks — clarifying requirements, designing, communicating, evaluating.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Analyzing Tradeoffs</b><div style="color:var(--muted)">Software Architecture Monday, Lesson 145 — trade-off analysis using service granularity.</div></div>
+<a href="https://developertoarchitect.com/lessons/lesson145.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day active" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-20.html">← Previous day</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 21 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "21";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
