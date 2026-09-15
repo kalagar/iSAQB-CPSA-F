@@ -1,11 +1,11 @@
 # iSAQB CPSA-F
 
-A static 21-day course site for the iSAQB CPSA-Foundation Level certification, in English and Farsi.
+A static 22-day course site for the iSAQB CPSA-Foundation Level certification, in English and Farsi.
 
 ## Structure
 
 - `index.html` — redirects to `content/EN/index.html`
-- `content/EN/` — English lessons (`isaqb-cpsa-f-day-01.html` … `day-21.html`)
+- `content/EN/` — English lessons (`isaqb-cpsa-f-day-01.html` … `day-22.html`)
 - `content/FA/` — Farsi lessons (`*.fa.html`), RTL
 - `style.css` — shared stylesheet
 - `lang-switch.js` — EN/FA language toggle

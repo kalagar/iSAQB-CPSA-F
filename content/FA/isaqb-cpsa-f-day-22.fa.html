@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۲۲ دوره iSAQB CPSA-F: تمرین‌های سناریویی پیشرفته و تحلیل مصالحه‌های معماری — دفاع از تصمیم با محرک، شواهد و پیامدها" />
+  <title>iSAQB CPSA-F — روز ۲۲: تمرین‌های سناریویی پیشرفته و تحلیل مصالحه</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-22.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-22.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۲۲</span>
+      <h1>تمرین‌های سناریویی پیشرفته و تحلیل مصالحه</h1>
+      <p class="subtitle">
+        از تصمیم‌های معماری با محرک‌ها، شواهد، پیامدها و مصالحه‌های صریح دفاع کنید — سپس آن را روی سناریوهای یکپارچه‌سازی، سازگاری، خودگردانی تیم و مهاجرت از سیستم قدیمی تمرین کنید.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>محور:</strong> مصالحه‌ها، شواهد، حفاظ‌ها، تمرین‌های سناریویی</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#decision">مدل پایه تصمیم‌گیری</a>
+      <a href="#priorities">اولویت‌بندی ویژگی‌های کیفی</a>
+      <a href="#caching">مصالحه کشینگ</a>
+      <a href="#async">مصالحه پیام‌رسانی ناهمگام</a>
+      <a href="#shareddb">مصالحه پایگاه‌داده مشترک</a>
+      <a href="#sap">سناریو: یکپارچه‌سازی با SAP</a>
+      <a href="#payment">سناریو: تعویض‌پذیری ارائه‌دهنده پرداخت</a>
+      <a href="#monolith">سناریو: مونولیت در برابر میکروسرویس</a>
+      <a href="#consistency">سازگاری قوی در برابر دسترس‌پذیری</a>
+      <a href="#security">امنیت در برابر کاربردپذیری</a>
+      <a href="#logging">لاگ‌برداری در برابر حریم خصوصی</a>
+      <a href="#evidence">شواهد بر نظر شخصی مقدم است</a>
+      <a href="#experiment">فرض ← آزمایش</a>
+      <a href="#reversibility">برگشت‌پذیری</a>
+      <a href="#matrix">ماتریس تصمیم</a>
+      <a href="#buildbuy">ساخت در برابر خرید</a>
+      <a href="#autonomy">استانداردسازی در برابر خودگردانی تیم</a>
+      <a href="#guardrail">حفاظ در برابر تجویز</a>
+      <a href="#verification">تصمیم ← قاعده ← راستی‌آزمایی</a>
+      <a href="#traps">تله‌های آزمون</a>
+      <a href="#exercise">تمرین: یکپارچه‌سازی سیستم قدیمی</a>
+      <a href="#template">قالب بازبینی Staff Engineer</a>
+      <a href="#terms">اصطلاحات کلیدی آزمون</a>
+      <a href="#review">پرسش‌های مرور</a>
+      <a href="#miniexam">آزمون کوتاه سناریویی</a>
+      <a href="#resources">منابع</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="decision">
+        <h2>مدل پایه تصمیم‌گیری</h2>
+        <p class="lead">معماری به‌ندرت یک پاسخ جهان‌شمول دارد. هر انتخاب نسبت به نیازمندی‌ها، محدودیت‌ها، محرک‌ها، ریسک‌ها، فرض‌ها و زمینه ارزیابی می‌شود.</p>
+        <pre><code>نیاز → محرک معماری → گزینه‌ها → پیامدهای کیفی
+     → مصالحه → تصمیم → اعتبارسنجی → بازخورد</code></pre>
+        <p>در یک نمونه عینی:</p>
+        <pre><code>نیاز:         Checkout در قطعی SAP سرپا بماند.
+محرک:         دسترس‌پذیری.
+گزینه A:      فراخوانی همگام SAP.
+گزینه B:      یکپارچه‌سازی ناهمگام بادوام.
+تصمیم:        B.
+مزایا:        جداسازی زمانی، دسترس‌پذیری.
+هزینه‌ها:      سازگاری نهایی، تکرار پیام، عملیات.
+اعتبارسنجی:   شبیه‌سازی ۳۰ دقیقه قطعی SAP.</code></pre>
+        <div class="callout exam"><strong>نکته آزمون</strong>تصمیمی که پیامدها و دلایلش نادیده گرفته شود، ناقص است.</div>
+      </section>
+
+      <section id="priorities">
+        <h2>اولویت‌بندی ویژگی‌های کیفی</h2>
+        <p>فرض کنید ذی‌نفعان بر این ترتیب توافق کرده‌اند:</p>
+        <pre><code>دسترس‌پذیری:   بحرانی
+امنیت:         بحرانی
+تغییرپذیری:    مهم
+کارایی:        مهم
+قابلیت انتقال: کم‌اولویت</code></pre>
+        <p>معماری خوب همه کیفیت‌ها را <b>بیشینه نمی‌کند</b>. کیفیت‌ها اغلب با هم در تعارض‌اند؛ بنابراین اولویت ذی‌نفعان — نه سلیقه مهندسی — تعیین می‌کند کدام‌یک برنده شود.</p>
+      </section>
+
+      <section id="caching">
+        <h2>مصالحه کشینگ</h2>
+        <div class="grid-2">
+          <div class="card"><h3>مزایا</h3><pre><code>+ تأخیر کمتر
++ مقیاس‌پذیری خواندن
++ بار کمتر روی پایگاه‌داده</code></pre></div>
+          <div class="card"><h3>هزینه‌ها</h3><pre><code>- داده کهنه
+- پیچیدگی ابطال کش
+- عملیات بیشتر
+- اشکال‌زدایی دشوارتر</code></pre></div>
+        </div>
+        <p>کشینگ تنها زمانی مناسب است که این پیامدها با محرک‌ها سازگار باشند.</p>
+      </section>
+
+      <section id="async">
+        <h2>مصالحه پیام‌رسانی ناهمگام</h2>
+        <div class="grid-2">
+          <div class="card"><h3>مزایا</h3><pre><code>+ جداسازی زمانی
++ بافر کردن بار
++ ایزوله‌سازی خطا
++ دسترس‌پذیری بالقوه بهتر</code></pre></div>
+          <div class="card"><h3>هزینه‌ها</h3><pre><code>- سازگاری نهایی
+- پردازش تکراری
+- مسائل ترتیب پیام
+- دشواری ردیابی
+- پیچیدگی عملیاتی</code></pre></div>
+        </div>
+        <div class="callout exam"><strong>تله</strong>ارتباط ناهمگام به‌طور خودکار به معنای کوپلینگ سست نیست. معنای رویدادها می‌تواند کوپلینگ معنایی قوی بسازد.</div>
+      </section>
+
+      <section id="shareddb">
+        <h2>مصالحه پایگاه‌داده مشترک</h2>
+        <div class="grid-2">
+          <div class="card"><h3>مزایا</h3><pre><code>+ join ساده
++ تراکنش ساده
++ هزینه اولیه کم یکپارچه‌سازی</code></pre></div>
+          <div class="card"><h3>هزینه‌ها</h3><pre><code>- کوپلینگ شِما
+- ابهام در مالکیت داده
+- تغییرات هماهنگ‌شده
+- تکامل مستقل دشوارتر</code></pre></div>
+        </div>
+        <p>پرسش درست «آیا پایگاه‌داده مشترک بد است؟» نیست، بلکه این است که آیا با محرک‌های <i>این</i> سیستم تعارض دارد یا نه.</p>
+      </section>
+
+      <section id="sap">
+        <h2>سناریو — یکپارچه‌سازی با SAP</h2>
+        <p>نیازمندی‌ها:</p>
+        <pre><code>دسترس‌پذیری پذیرش سفارش &gt;= ۹۹٫۹۵٪
+SAP حدود ۲۰ دقیقه در هفته در دسترس نیست
+تأیید سفارش &lt; ۱ ثانیه
+همگام‌سازی با SAP تا ۱۰ دقیقه تأخیر مجاز است
+هیچ سفارش پذیرفته‌شده‌ای نباید گم شود</code></pre>
+        <div class="grid-2">
+          <div class="card"><h3>گزینه A</h3><pre><code>Order Service → REST همگام → SAP</code></pre></div>
+          <div class="card"><h3>گزینه B</h3><pre><code>Order Service → ذخیره سفارش
+  → صف بادوام → SAP Worker → SAP</code></pre></div>
+        </div>
+        <p>محرک‌های غالب: دسترس‌پذیری، تأخیر، ماندگاری داده.</p>
+        <p>گزینه B احتمالاً قوی‌تر است، <b>چون تأخیر در همگام‌سازی صراحتاً پذیرفته شده است</b>. هزینه‌های آن واقعی‌اند: سازگاری نهایی، عملیات صف، مدیریت تکرار و بازیابی.</p>
+      </section>
+
+      <section id="payment">
+        <h2>سناریو — تعویض‌پذیری ارائه‌دهنده پرداخت</h2>
+        <p>کوپلینگ فعلی:</p>
+        <pre><code>Checkout
+├── SDK فروشنده
+├── DTOهای فروشنده
+├── استثناهای فروشنده
+└── Webhookهای فروشنده</code></pre>
+        <p>نیازمندی: افزودن ارائه‌دهنده دوم ظرف پنج نفر-روز.</p>
+        <pre><code>Checkout → Payment Port → Provider Adapter</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>این انتزاع هزینه دارد، اما تغییرپذیری اکنون یک محرک معماری است. انتزاع وقتی موجه است که تنوع مورد انتظار به‌اندازه کافی مهم باشد.</div>
+      </section>
+
+      <section id="monolith">
+        <h2>سناریو — مونولیت در برابر میکروسرویس</h2>
+        <p>زمینه:</p>
+        <pre><code>۱۲ توسعه‌دهنده
+یک محصول
+بار متوسط
+انتشار هر ۲ هفته
+تراکنش‌های قوی
+تیم عملیات کوچک</code></pre>
+        <p>پیش از انتخاب میکروسرویس بپرسید:</p>
+        <ul>
+          <li>کدام مؤلفه‌ها به انتشار مستقل نیاز دارند؟</li>
+          <li>کدام‌ها به مقیاس‌پذیری مستقل نیاز دارند؟</li>
+          <li>آیا مرزهای تیمی باعث مشکل هماهنگی شده‌اند؟</li>
+          <li>آیا ایزوله‌سازی خطا یک محرک اصلی است؟</li>
+          <li>آیا عملیات می‌تواند سیستم توزیع‌شده را پشتیبانی کند؟</li>
+        </ul>
+        <div class="grid-2">
+          <div class="card"><h3>مزایای بالقوه</h3><pre><code>+ استقلال در انتشار
++ مقیاس‌پذیری مستقل
++ مرزهای مالکیت</code></pre></div>
+          <div class="card"><h3>هزینه‌ها</h3><pre><code>- خطای شبکه
+- ردیابی توزیع‌شده
+- پیچیدگی سازگاری
+- سربار عملیاتی</code></pre></div>
+        </div>
+        <div class="callout exam"><strong>تله</strong>میکروسرویس ذاتاً «معماری بهتر» نیست.</div>
+      </section>
+
+      <section id="consistency">
+        <h2>سازگاری قوی در برابر دسترس‌پذیری</h2>
+        <p>نیازمندی‌های موجودی:</p>
+        <pre><code>آخرین قلم کالا نباید دو بار فروخته شود.
+Checkout باید در افراز شبکه سرپا بماند.</code></pre>
+        <p>این دو در تعارض‌اند. کار معماری، پرسیدن این پرسش‌هاست:</p>
+        <pre><code>کدام نیازمندی غالب است؟
+آیا رزرو می‌تواند موقتی باشد؟
+آیا فروش بیش از موجودی قابل جبران است؟
+هزینه کسب‌وکاری ردِ سفارش در برابر ناسازگاری چقدر است؟</code></pre>
+        <p>معماری بدون ورودی ذی‌نفعان نمی‌تواند تعارض اولویت‌ها را حل کند.</p>
+      </section>
+
+      <section id="security">
+        <h2>امنیت در برابر کاربردپذیری</h2>
+        <p>احراز هویت مجدد برای هر عملیات مدیریتی شاید امنیت را بالا ببرد اما کاربردپذیری را تخریب می‌کند. <b>احراز هویت پلکانی (step-up)</b> تنها برای عملیات پرریسک، معمولاً مصالحه بهتری است.</p>
+        <p>حتی معماری امنیت هم مصالحه دارد.</p>
+      </section>
+
+      <section id="logging">
+        <h2>لاگ‌برداری در برابر حریم خصوصی</h2>
+        <p>عملیات، بدنه کامل درخواست‌ها را می‌خواهد؛ حریم خصوصی، افشای داده شخصی را ممنوع می‌کند. یک مفهوم فراگیر هر دو را آشتی می‌دهد:</p>
+        <pre><code>لاگ ساخت‌یافته
+شناسه همبستگی (Correlation ID)
+پنهان‌سازی داده شخصی (PII redaction)
+فهرست مجاز فیلدها
+لاگ حسابرسی جداگانه و محافظت‌شده</code></pre>
+      </section>
+
+      <section id="evidence">
+        <h2>شواهد بر نظر شخصی مقدم است</h2>
+        <p>شواهد مفید معماری:</p>
+        <ul>
+          <li>آزمون بار؛</li>
+          <li>تزریق خطا؛</li>
+          <li>نمونه اولیه؛</li>
+          <li>تله‌متری محیط عملیاتی؛</li>
+          <li>متریک‌های معماری؛</li>
+          <li>تاریخچه حوادث؛</li>
+          <li>تحلیل امنیتی؛</li>
+          <li>تاریخچه تغییرات.</li>
+        </ul>
+        <div class="grid-2">
+          <div class="card"><h3>ضعیف</h3><pre><code>Kafka مقیاس‌پذیر خواهد بود.</code></pre></div>
+          <div class="card"><h3>قوی‌تر</h3><pre><code>آزمون‌های نماینده نشان می‌دهد خط لوله
+رویداد، ۳ برابر پیک مورد انتظار را
+در محدوده تأخیر هدف پردازش می‌کند.</code></pre></div>
+        </div>
+      </section>
+
+      <section id="experiment">
+        <h2>فرض ← آزمایش</h2>
+        <pre><code>فرض:
+PostgreSQL از ۸٬۰۰۰ نوشتن در ثانیه پشتیبانی می‌کند.
+
+آزمایش:
+شِما، ایندکس، تراکنش و بار کاری شبیه محیط عملیاتی.
+
+معیار موفقیت:
+تأخیر نوشتن p95 &lt; ۱۰۰ میلی‌ثانیه در ۸٬۰۰۰ نوشتن بر ثانیه.</code></pre>
+        <p>این کار، نظر شخصی را به بازخورد تبدیل می‌کند.</p>
+      </section>
+
+      <section id="reversibility">
+        <h2>برگشت‌پذیری</h2>
+        <div class="grid-2">
+          <div class="card"><h3>برگشت‌پذیرتر</h3><pre><code>کتابخانه داخلی
+الگوی پیاده‌سازی محلی
+داشبورد پایش</code></pre></div>
+          <div class="card"><h3>کمتر برگشت‌پذیر</h3><pre><code>API عمومی
+افراز داده
+قرارداد رویداد بیرونی
+مرز سرویس با مصرف‌کننده گسترده</code></pre></div>
+        </div>
+        <p>یک اکتشاف مفید:</p>
+        <pre><code>تأثیر × عدم‌قطعیت × هزینه بازگشت</code></pre>
+        <p>مقادیر بالا سزاوار تحلیل عمیق‌تر و اعتبارسنجی زودتر هستند.</p>
+      </section>
+
+      <section id="matrix">
+        <h2>ماتریس تصمیم</h2>
+        <table>
+          <thead><tr><th>معیار</th><th>وزن</th><th>REST</th><th>پیام‌رسانی</th></tr></thead>
+          <tbody>
+            <tr><td>دسترس‌پذیری</td><td>۵</td><td>۲</td><td>۵</td></tr>
+            <tr><td>سازگاری فوری</td><td>۲</td><td>۵</td><td>۲</td></tr>
+            <tr><td>سادگی عملیاتی</td><td>۳</td><td>۵</td><td>۲</td></tr>
+            <tr><td>ایزوله‌سازی خطا</td><td>۴</td><td>۲</td><td>۵</td></tr>
+          </tbody>
+        </table>
+        <div class="callout info"><strong>خواندن ماتریس</strong>اعداد پاسخ را به‌طور عینی اثبات نمی‌کنند. ماتریس، فرض‌ها و اولویت‌ها را آشکار می‌کند.</div>
+      </section>
+
+      <section id="buildbuy">
+        <h2>ساخت در برابر خرید</h2>
+        <p>برای چیزی مانند تبدیل اسناد، این موارد را مقایسه کنید:</p>
+        <pre><code>زمان رسیدن به بازار
+حریم خصوصی
+وابستگی به فروشنده
+قابلیت اطمینان
+هزینه
+عملیات
+قابلیت سفارشی‌سازی</code></pre>
+        <p>معمار باید این پیامدها را صریح کند، نه اینکه از سلیقه مهندسی دفاع کند.</p>
+      </section>
+
+      <section id="autonomy">
+        <h2>استانداردسازی در برابر خودگردانی تیم</h2>
+        <p>شش تیم رویکردهای متفاوتی برای retry، لاگ، ردیابی و احراز هویت انتخاب می‌کنند. خودگردانی حداکثری، انعطاف محلی را بالا می‌برد اما ممکن است عملیات‌پذیری، یکدستی، امنیت و اشتراک دانش را کاهش دهد.</p>
+        <p>معماری در سطح Staff معمولاً از <b>حفاظ (guardrail)</b> استفاده می‌کند:</p>
+        <pre><code>نتایج الزامی:
+- انتشار trace ID
+- حذف فیلدهای حساس
+- محدود بودن تعداد retry
+- اعتبارسنجی claimهای احراز هویت
+
+پیاده‌سازی:
+تیم‌ها آزادی کنترل‌شده خود را حفظ می‌کنند</code></pre>
+      </section>
+
+      <section id="guardrail">
+        <h2>حفاظ در برابر تجویز</h2>
+        <div class="grid-2">
+          <div class="card"><h3>تجویز</h3><pre><code>هر سرویس باید از کتابخانه X
+نسخه Y استفاده کند.</code></pre></div>
+          <div class="card"><h3>حفاظ</h3><pre><code>هر فراخوانی HTTP خروجی باید:
+- timeout داشته باشد؛
+- فقط برای خطاهای واجد شرایط،
+  retry محدود انجام دهد؛
+- متریک تأخیر/خطا منتشر کند.</code></pre></div>
+        </div>
+        <p>حفاظ‌ها کیفیت‌های معماری را حفظ می‌کنند و در عین حال انعطاف پیاده‌سازی را نگه می‌دارند.</p>
+      </section>
+
+      <section id="verification">
+        <h2>تصمیم ← قاعده ← راستی‌آزمایی</h2>
+        <pre><code>تصمیم:        منطق دامنه مستقل از فریم‌ورک بماند.
+قاعده:        پکیج‌های دامنه نباید Spring، JPA یا
+              زیرساخت را import کنند.
+راستی‌آزمایی:  تست معماری در CI.</code></pre>
+        <p>زنجیره کامل:</p>
+        <pre><code>محرک → تصمیم → قاعده → راستی‌آزمایی → بازخورد</code></pre>
+      </section>
+
+      <section id="traps">
+        <h2>تله‌های آزمون</h2>
+        <div class="callout exam"><strong>«همیشه از پیام‌رسانی ناهمگام برای کاهش کوپلینگ استفاده کنید.»</strong>نادرست. این کار شکل‌های دیگری از پیچیدگی و کوپلینگ معنایی می‌آورد.</div>
+        <div class="callout exam"><strong>فناوری پیش از نیازمندی</strong>ضعیف است. ترتیب درست: نیازمندی ← محرک ← گزینه ← انتخاب.</div>
+        <div class="callout exam"><strong>یک متریک = حکم نهایی</strong>نادرست. ۱۸ وابستگی یک نشانه است که به زمینه نیاز دارد.</div>
+        <div class="callout exam"><strong>نبودِ مصالحه</strong>وقتی گزینه‌ای ظاهراً همه کیفیت‌ها را بهتر و همه هزینه‌ها را کمتر می‌کند، مشکوک باشید.</div>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین عملی — یکپارچه‌سازی سیستم قدیمی</h2>
+        <p>سیستم:</p>
+        <pre><code>فرانت‌اند Angular
+بک‌اند Spring Boot
+PostgreSQL
+سیستم بیرونی SOAP
+REST API جدید
+پردازش دسته‌ای (Batch)</code></pre>
+        <p>نیازمندی‌ها:</p>
+        <pre><code>R1. مصرف‌کنندگان فعلی SOAP تا ۱۸ ماه کار کنند.
+R2. مصرف‌کنندگان جدید از REST استفاده کنند.
+R3. بار پیک سه برابر می‌شود.
+R4. سیستم SOAP گاهی ۱۵ ثانیه طول می‌کشد.
+R5. درخواست‌های کاربر در کمتر از ۲ ثانیه کامل شوند.
+R6. داده نباید گم شود.
+R7. کد مختص SOAP باید به‌تدریج حذف شود.</code></pre>
+        <p>وظیفه شما:</p>
+        <ol>
+          <li>چهار محرک اصلی معماری را شناسایی کنید.</li>
+          <li>مقایسه کنید: بک‌اند ← SOAP همگام؛ بک‌اند ← نمای REST ← SOAP همگام؛ بک‌اند ← یکپارچه‌سازی ناهمگام بادوام ← SOAP.</li>
+          <li>دسترس‌پذیری، تأخیر، تغییرپذیری، سازگاری، عملیات و هزینه مهاجرت را مقایسه کنید.</li>
+          <li>یک ADR بنویسید.</li>
+          <li>یک سناریوی کیفی قابل اندازه‌گیری تعریف کنید.</li>
+          <li>یک قاعده معماری خودکار تعریف کنید.</li>
+        </ol>
+        <details><summary>نمایش استدلال ممکن</summary>
+          <p>محرک‌های محتمل:</p>
+          <pre><code>تأخیر کاربر &lt; ۲ ثانیه
+سازگاری با SOAP تا ۱۸ ماه
+عدم از دست رفتن داده
+حذف تدریجی SOAP / تغییرپذیری</code></pre>
+          <p>تصمیم پیشنهادی:</p>
+          <pre><code>یک مرز یکپارچه‌سازی داخلی پایدار معرفی کنید.
+هرجا تأیید فوری SOAP از نظر معنایی لازم نیست،
+از پردازش ناهمگام استفاده کنید.
+آداپترهای قدیمی را ایزوله کنید.</code></pre>
+          <p>مزایا: ایزوله‌سازی سیستم قدیمی، حفاظت از تأخیر کاربر، مسیر مهاجرت.<br />
+          هزینه‌ها: سازگاری نهایی، عملیات بیشتر، پیچیدگی مهاجرت.</p>
+          <p><b>مهم:</b> اگر تأیید فوری SOAP از نظر کارکردی الزامی باشد، پردازش ناهمگام ممکن است اصلاً معتبر نباشد.</p>
+        </details>
+      </section>
+
+      <section id="template">
+        <h2>قالب بازبینی Staff Engineer</h2>
+        <pre><code>۱.  زمینه
+۲.  محرک‌های معماری
+۳.  فرض‌ها
+۴.  گزینه‌ها
+۵.  پیامدهای کیفی
+۶.  ریسک‌ها
+۷.  تصمیم
+۸.  دلیل
+۹.  برنامه اعتبارسنجی
+۱۰. انطباق / حفاظ‌ها</code></pre>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحات کلیدی آزمون</h2>
+        <table>
+          <thead><tr><th>اصطلاح</th><th>معنا</th></tr></thead>
+          <tbody>
+            <tr><td>محرک معماری</td><td>عاملی با تأثیر معنادار بر معماری.</td></tr>
+            <tr><td>مصالحه (Trade-off)</td><td>انتخابی که سود در یک حوزه، پیامد در حوزه دیگر دارد.</td></tr>
+            <tr><td>نیازمندی کیفی</td><td>نیازمندی مربوط به کیفیت‌هایی مانند کارایی، امنیت، قابلیت اطمینان، تغییرپذیری یا کاربردپذیری.</td></tr>
+            <tr><td>محدودیت</td><td>قیدی بر معماری یا فضای راه‌حل.</td></tr>
+            <tr><td>فرض</td><td>چیزی که درست انگاشته می‌شود اما لزوماً راستی‌آزمایی نشده است.</td></tr>
+            <tr><td>ریسک</td><td>پیامد منفی بالقوه ناشی از عدم‌قطعیت.</td></tr>
+            <tr><td>بازخورد</td><td>شواهدی برای اعتبارسنجی یا اصلاح معماری.</td></tr>
+            <tr><td>تصمیم معماری</td><td>یک انتخاب معنادار معماری.</td></tr>
+            <tr><td>انطباق (Conformance)</td><td>هم‌راستایی پیاده‌سازی با معماری موردنظر.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مرور</h2>
+        <details><summary>چرا به‌ندرت یک معماری «بهترین» جهان‌شمول وجود دارد؟</summary><p>انتخاب‌ها به نیازمندی‌ها، محدودیت‌ها، محرک‌ها، ریسک‌ها، فرض‌ها و زمینه وابسته‌اند.</p></details>
+        <details><summary>چه چیزی باید پیش از انتخاب فناوری بیاید؟</summary><p>شفاف‌سازی نیازمندی‌ها و محرک‌ها.</p></details>
+        <details><summary>چرا ارتباط ناهمگام می‌تواند دسترس‌پذیری را بهبود دهد؟</summary><p>می‌تواند وابستگی زمانی به دسترس‌پذیری سیستم پایین‌دستی را حذف کند.</p></details>
+        <details><summary>ارتباط ناهمگام چه مشکلاتی می‌آورد؟</summary><p>سازگاری نهایی، پیام تکراری، ترتیب، ردیابی، عملیات.</p></details>
+        <details><summary>چرا پایگاه‌داده مشترک به‌طور خودکار اشتباه نیست؟</summary><p>در برخی زمینه‌ها تراکنش قوی و سادگی بر هزینه کوپلینگ آن می‌چربد.</p></details>
+        <details><summary>چه زمانی انتزاع از نظر معماری موجه است؟</summary><p>وقتی تنوع مورد انتظار یا محرکی دیگر، هزینه آن را توجیه کند.</p></details>
+        <details><summary>چرا ویژگی‌های کیفی را اولویت‌بندی می‌کنیم؟</summary><p>چون کیفیت‌ها با هم تعارض دارند.</p></details>
+        <details><summary>هدف ماتریس تصمیم چیست؟</summary><p>آشکار کردن اولویت‌ها و پیامدها، نه اثبات ریاضی یک تصمیم.</p></details>
+        <details><summary>چرا تصمیم‌های سخت‌برگشت را زود اعتبارسنجی می‌کنیم؟</summary><p>چون اصلاح اشتباه در آن‌ها گران است.</p></details>
+        <details><summary>فرض در برابر شواهد؟</summary><p>فرض باوری راستی‌آزمایی‌نشده است؛ شواهد آن را تأیید یا رد می‌کند.</p></details>
+        <details><summary>سه شکل از شواهد معماری نام ببرید.</summary><p>آزمون بار، نمونه اولیه، تله‌متری، تزریق خطا، تاریخچه حوادث.</p></details>
+        <details><summary>میکروسرویس چگونه هم کوپلینگ را کم و هم زیاد می‌کند؟</summary><p>کوپلینگ انتشار و کد را کم و کوپلینگ شبکه‌ای و معنایی را زیاد می‌کند.</p></details>
+        <details><summary>حفاظ (guardrail) چیست؟</summary><p>قاعده‌ای که کیفیت‌های معماری را حفظ می‌کند و مقداری آزادی پیاده‌سازی باقی می‌گذارد.</p></details>
+        <details><summary>چرا متریک‌ها باید در زمینه تفسیر شوند؟</summary><p>یک عدد به‌تنهایی مناسب بودن معماری را اثبات نمی‌کند.</p></details>
+        <details><summary>یک Staff Engineer چگونه تصمیم‌گیری معماری را مقیاس‌پذیر می‌کند؟</summary><p>شفاف‌سازی محرک‌ها، تسهیل تصمیم‌ها، مستندسازی دلایل، ساخت حفاظ‌ها و بازخورد.</p></details>
+      </section>
+
+      <section id="miniexam">
+        <h2>آزمون کوتاه سناریویی</h2>
+
+        <p><b>پرسش ۱.</b> سازگاری تراکنشی فوری بحرانی است و ترافیک کم است.</p>
+        <ol type="A"><li>Kafka همیشه ارجح است</li><li>طراحی تراکنشی همگام بسته به سایر محرک‌ها می‌تواند مناسب باشد</li><li>میکروسرویس الزامی است</li><li>سازگاری نهایی همیشه برتر است</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>B</b> — پاسخ‌های «همیشه» محرک و زمینه را نادیده می‌گیرند.</p></details>
+
+        <p><b>پرسش ۲.</b> فروشنده باید سالانه قابل تعویض باشد. کدام کیفیت به‌طور ویژه مرتبط است؟</p>
+        <ol type="A"><li>تغییرپذیری</li><li>کاربردپذیری</li><li>دسترس‌پذیری برای معلولان</li><li>یکدستی بصری</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>A</b> — تعویض برنامه‌ریزی‌شده یک محرک تغییرپذیری است.</p></details>
+
+        <p><b>پرسش ۳.</b> قوی‌ترین استدلال معماری کدام است؟</p>
+        <ol type="A"><li>همه از Kubernetes استفاده می‌کنند</li><li>من Kafka را ترجیح می‌دهم</li><li>این گزینه دسترس‌پذیری را تأمین می‌کند اما سازگاری نهایی می‌آورد که کسب‌وکار آن را می‌پذیرد</li><li>این یک best practice است</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>C</b> — محرک، پیامد و پذیرش ذی‌نفع را نام می‌برد.</p></details>
+
+        <p><b>پرسش ۴.</b> کدام‌یک بیشترین نیاز را به اعتبارسنجی زودهنگام دارد؟</p>
+        <ol type="A"><li>نام‌گذاری متغیرها</li><li>شِمای رویداد عمومی که ۳۰ تیم مصرف می‌کنند</li><li>تم IDE</li><li>نام‌گذاری تست‌های واحد</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>B</b> — تأثیر بالا و هزینه بازگشت بالا.</p></details>
+
+        <p><b>پرسش ۵.</b> یک آزمون کارایی با یک فرض در تعارض است.</p>
+        <ol type="A"><li>نادیده بگیرید</li><li>فرض و تصمیم متأثر را بازبینی کنید</li><li>نیازمندی را حذف کنید</li><li>مستندات را فریز کنید</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>B</b> — شواهد به تصمیم بازخورد می‌دهد.</p></details>
+
+        <p><b>پرسش ۶.</b> سرویس‌های مستقل به ترتیب مستندنشده رویدادها تکیه دارند. چه کوپلینگی باقی می‌ماند؟</p>
+        <ol type="A"><li>هیچ</li><li>کوپلینگ معنایی</li><li>فقط کوپلینگ کد</li><li>کوپلینگ رابط کاربری</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>B</b> — معنای ضمنی مشترک، کوپلینگ معنایی است.</p></details>
+
+        <p><b>پرسش ۷.</b> مصالحه‌های معماری:</p>
+        <ol type="A"><li>معمار خوب آن‌ها را حذف می‌کند</li><li>نشانه معماری بد هستند</li><li>باید نسبت به اولویت‌ها و زمینه صریح شوند</li><li>فقط کارایی مصالحه دارد</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>C</b> — مصالحه صریح می‌شود، نه حذف.</p></details>
+
+        <p><b>پرسش ۸.</b> بهترین حفاظ کدام است؟</p>
+        <ol type="A"><li>نام‌گذاری یکسان متغیرها</li><li>همه فراخوانی‌های بیرونی timeout محدود داشته باشند</li><li>دقیقاً ده خط در هر متد</li><li>تعداد کلاس یکسان در هر سرویس</li></ol>
+        <details><summary>نمایش پاسخ</summary><p><b>B</b> — کیفیتی را حفظ می‌کند و پیاده‌سازی را آزاد می‌گذارد.</p></details>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource"><div><b>برنامه درسی رسمی CPSA-F 2025.1-rev2</b><div style="color:var(--muted)">معتبر از ۱ آوریل ۲۰۲۵. همان صفحه رسمی، نمونه‌پرسش‌های سطح Foundation را نیز ارائه می‌کند.</div></div>
+          <a href="https://public.isaqb.org/curriculum-foundation/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>نسخه PDF رسمی انگلیسی</b><div style="color:var(--muted)">برنامه درسی سطح Foundation، ویرایش انگلیسی.</div></div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>Mark Richards — Analyzing Tradeoffs</b><div style="color:var(--muted)">Software Architecture Monday، درس ۱۴۵ — به‌جای حفظ کردن یک سبک دلخواه، تمرین کنید توضیح دهید <i>چرا</i> یک گزینه با محرک‌های خاص سازگار است.</div></div>
+          <a href="https://developertoarchitect.com/lessons/lesson145.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a>
+<a class="day active" data-day="22" href="isaqb-cpsa-f-day-22.fa.html"><small>روز ۲۲</small><b>تحلیل مصالحه</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-21.fa.html">→ روز قبل</a></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="wrap">
+    راهنمای مطالعه iSAQB CPSA-F · روز ۲۲ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر
+  </footer>
+
+<script>
+(function(){
+  var DAY = "22";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ روز " + DAY + " تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

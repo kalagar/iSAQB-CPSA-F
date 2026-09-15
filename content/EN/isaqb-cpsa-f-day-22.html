@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 22: Advanced Scenario Drills and Architecture Trade-Off Analysis — defend decisions with drivers, evidence and consequences" />
+  <title>iSAQB CPSA-F — Day 22: Advanced Scenario Drills &amp; Trade-Off Analysis</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-22.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-22.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 22</span>
+  <h1>Advanced Scenario Drills &amp; Trade-Off Analysis</h1>
+  <p class="subtitle">Defend architecture decisions with drivers, evidence, consequences and explicit trade-offs — then practise on integration, consistency, autonomy and legacy-migration scenarios.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Trade-offs, evidence, guardrails, scenario drills</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#decision">Core decision model</a><a href="#priorities">Prioritize quality attributes</a><a href="#caching">Caching trade-off</a><a href="#async">Asynchronous messaging trade-off</a><a href="#shareddb">Shared database trade-off</a><a href="#sap">Scenario: SAP integration</a><a href="#payment">Scenario: payment provider replaceability</a><a href="#monolith">Scenario: monolith vs microservices</a><a href="#consistency">Strong consistency vs availability</a><a href="#security">Security vs usability</a><a href="#logging">Logging vs privacy</a><a href="#evidence">Evidence beats opinion</a><a href="#experiment">Assumption → experiment</a><a href="#reversibility">Reversibility</a><a href="#matrix">Decision matrix</a><a href="#buildbuy">Build vs buy</a><a href="#autonomy">Standardization vs team autonomy</a><a href="#guardrail">Guardrail vs prescription</a><a href="#verification">Decision → rule → verification</a><a href="#traps">Exam traps</a><a href="#exercise">Exercise: legacy integration</a><a href="#template">Staff Engineer review template</a><a href="#terms">Key exam terms</a><a href="#review">Review questions</a><a href="#miniexam">Mini scenario exam</a><a href="#resources">Resources</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="decision">
+<h2>Core decision model</h2>
+<p class="lead">Architecture rarely has one universally correct solution. Every choice is evaluated relative to requirements, constraints, drivers, risks, assumptions and context.</p>
+<pre><code>Need → Architecture Driver → Options → Quality Consequences
+     → Trade-Off → Decision → Validation → Feedback</code></pre>
+<p>Applied to a concrete case:</p>
+<pre><code>Need:       Checkout survives SAP outages.
+Driver:     Availability.
+Option A:   synchronous SAP call.
+Option B:   durable asynchronous integration.
+Decision:   B.
+Benefits:   temporal decoupling, availability.
+Costs:      eventual consistency, duplicates, operations.
+Validation: simulate a 30-minute SAP outage.</code></pre>
+<div class="callout exam"><strong>Exam point</strong>A decision is incomplete if its consequences and rationale are ignored.</div>
+</section>
+
+<section id="priorities"><h2>Prioritize quality attributes</h2>
+<p>Suppose a system's stakeholders agree on this ranking:</p>
+<pre><code>Availability:   critical
+Security:       critical
+Modifiability:  important
+Performance:    important
+Portability:    low priority</code></pre>
+<p>Good architecture does <b>not</b> maximize every quality. Qualities frequently conflict, so stakeholder priorities — not engineering preference — decide which one wins.</p>
+</section>
+
+<section id="caching"><h2>Caching trade-off</h2>
+<div class="grid-2">
+<div class="card"><h3>Benefits</h3><pre><code>+ latency
++ read scalability
++ lower database load</code></pre></div>
+<div class="card"><h3>Costs</h3><pre><code>- stale data
+- invalidation complexity
+- extra operations
+- harder debugging</code></pre></div>
+</div>
+<p>Caching is appropriate only when these consequences fit the drivers.</p>
+</section>
+
+<section id="async"><h2>Asynchronous messaging trade-off</h2>
+<div class="grid-2">
+<div class="card"><h3>Benefits</h3><pre><code>+ temporal decoupling
++ buffering
++ failure isolation
++ potentially better availability</code></pre></div>
+<div class="card"><h3>Costs</h3><pre><code>- eventual consistency
+- duplicate processing
+- ordering issues
+- tracing difficulty
+- operational complexity</code></pre></div>
+</div>
+<div class="callout exam"><strong>Trap</strong>Asynchronous communication does not automatically mean loose coupling. Event semantics can create strong semantic coupling.</div>
+</section>
+
+<section id="shareddb"><h2>Shared database trade-off</h2>
+<div class="grid-2">
+<div class="card"><h3>Benefits</h3><pre><code>+ easy joins
++ simple transactions
++ low initial integration effort</code></pre></div>
+<div class="card"><h3>Costs</h3><pre><code>- schema coupling
+- ownership ambiguity
+- coordinated changes
+- harder independent evolution</code></pre></div>
+</div>
+<p>The question is not “Are shared databases bad?” but whether they conflict with <i>this</i> system's drivers.</p>
+</section>
+
+<section id="sap"><h2>Scenario — SAP integration</h2>
+<p>Requirements:</p>
+<pre><code>Order acceptance availability &gt;= 99.95%
+SAP unavailable ~20 minutes/week
+Confirmation &lt; 1 second
+SAP sync may be delayed 10 minutes
+No accepted order may be lost</code></pre>
+<div class="grid-2">
+<div class="card"><h3>Option A</h3><pre><code>Order Service → synchronous REST → SAP</code></pre></div>
+<div class="card"><h3>Option B</h3><pre><code>Order Service → Persist Order
+  → Durable Queue → SAP Worker → SAP</code></pre></div>
+</div>
+<p>Dominant drivers: availability, latency, durability.</p>
+<p>B is likely stronger <b>because delayed synchronization is explicitly acceptable</b>. Its costs are real: eventual consistency, queue operations, duplicate and recovery handling.</p>
+</section>
+
+<section id="payment"><h2>Scenario — payment provider replaceability</h2>
+<p>Current coupling:</p>
+<pre><code>Checkout
+├── Vendor SDK
+├── Vendor DTOs
+├── Vendor Exceptions
+└── Vendor Webhooks</code></pre>
+<p>Requirement: add a second provider within five developer-days.</p>
+<pre><code>Checkout → Payment Port → Provider Adapter</code></pre>
+<div class="callout staff"><strong>Staff Engineer view</strong>The abstraction has a cost, but modifiability is now an architecture driver. Abstraction is justified when the expected variation is significant enough.</div>
+</section>
+
+<section id="monolith"><h2>Scenario — monolith vs microservices</h2>
+<p>Context:</p>
+<pre><code>12 developers
+One product
+Moderate load
+Deployment every 2 weeks
+Strong transactions
+Small operations team</code></pre>
+<p>Before choosing microservices, ask:</p>
+<ul>
+<li>Which components need independent deployment?</li>
+<li>Which need independent scaling?</li>
+<li>Are team boundaries causing coordination problems?</li>
+<li>Is fault isolation a major driver?</li>
+<li>Can operations support distributed systems?</li>
+</ul>
+<div class="grid-2">
+<div class="card"><h3>Potential benefits</h3><pre><code>+ deployment autonomy
++ independent scaling
++ ownership boundaries</code></pre></div>
+<div class="card"><h3>Costs</h3><pre><code>- network failure
+- distributed tracing
+- consistency complexity
+- operational overhead</code></pre></div>
+</div>
+<div class="callout exam"><strong>Trap</strong>Microservices are not inherently “better architecture.”</div>
+</section>
+
+<section id="consistency"><h2>Strong consistency vs availability</h2>
+<p>Inventory requirements:</p>
+<pre><code>Never sell the last item twice.
+Checkout should survive network partitions.</code></pre>
+<p>These conflict. The architectural work is asking:</p>
+<pre><code>Which requirement dominates?
+Can reservation be temporary?
+Can overselling be compensated?
+What is the business cost of rejection vs inconsistency?</code></pre>
+<p>Architecture cannot resolve conflicting priorities without stakeholder input.</p>
+</section>
+
+<section id="security"><h2>Security vs usability</h2>
+<p>Re-authenticating every admin action may improve security but damage usability. <b>Step-up authentication</b> for high-risk operations only is often the better trade-off.</p>
+<p>Even security architecture contains trade-offs.</p>
+</section>
+
+<section id="logging"><h2>Logging vs privacy</h2>
+<p>Operations wants full request bodies; privacy forbids exposing personal data. A cross-cutting concept reconciles both:</p>
+<pre><code>Structured logging
+Correlation IDs
+PII redaction
+Field allowlists
+Separate protected audit logs</code></pre>
+</section>
+
+<section id="evidence"><h2>Evidence beats opinion</h2>
+<p>Useful architecture evidence:</p>
+<ul>
+<li>load tests;</li>
+<li>failure injection;</li>
+<li>prototypes;</li>
+<li>production telemetry;</li>
+<li>architecture metrics;</li>
+<li>incident history;</li>
+<li>security analysis;</li>
+<li>change history.</li>
+</ul>
+<div class="grid-2">
+<div class="card"><h3>Weak</h3><pre><code>Kafka will scale.</code></pre></div>
+<div class="card"><h3>Stronger</h3><pre><code>Representative tests show the event
+pipeline handles 3× expected peak load
+within the latency target.</code></pre></div>
+</div>
+</section>
+
+<section id="experiment"><h2>Assumption → experiment</h2>
+<pre><code>Assumption:
+PostgreSQL handles 8,000 writes/sec.
+
+Experiment:
+Production-like schema, indexes, transactions and workload.
+
+Success criterion:
+p95 write latency &lt; 100 ms at 8,000 writes/sec.</code></pre>
+<p>This converts opinion into feedback.</p>
+</section>
+
+<section id="reversibility"><h2>Reversibility</h2>
+<div class="grid-2">
+<div class="card"><h3>More reversible</h3><pre><code>Internal library
+Local implementation pattern
+Monitoring dashboard</code></pre></div>
+<div class="card"><h3>Less reversible</h3><pre><code>Public API
+Data partitioning
+External event contract
+Widely consumed service boundary</code></pre></div>
+</div>
+<p>Useful heuristic:</p>
+<pre><code>Impact × Uncertainty × Reversal Cost</code></pre>
+<p>High values deserve deeper analysis and earlier validation.</p>
+</section>
+
+<section id="matrix"><h2>Decision matrix</h2>
+<table>
+<thead><tr><th>Criterion</th><th>Weight</th><th>REST</th><th>Messaging</th></tr></thead>
+<tbody>
+<tr><td>Availability</td><td>5</td><td>2</td><td>5</td></tr>
+<tr><td>Immediate consistency</td><td>2</td><td>5</td><td>2</td></tr>
+<tr><td>Operational simplicity</td><td>3</td><td>5</td><td>2</td></tr>
+<tr><td>Failure isolation</td><td>4</td><td>2</td><td>5</td></tr>
+</tbody>
+</table>
+<div class="callout info"><strong>Reading a matrix</strong>The numbers do not objectively prove the answer. A matrix exposes assumptions and priorities.</div>
+</section>
+
+<section id="buildbuy"><h2>Build vs buy</h2>
+<p>For something like document conversion, compare:</p>
+<pre><code>Time-to-market
+Privacy
+Vendor lock-in
+Reliability
+Cost
+Operations
+Customization</code></pre>
+<p>Architects should make these consequences explicit instead of arguing from engineering preference.</p>
+</section>
+
+<section id="autonomy"><h2>Standardization vs team autonomy</h2>
+<p>Six teams choose different retry, logging, tracing and authentication approaches. Maximum autonomy improves local flexibility but may reduce operability, consistency, security and knowledge sharing.</p>
+<p>Staff-level architecture often uses <b>guardrails</b>:</p>
+<pre><code>Required outcomes:
+- trace ID propagated
+- sensitive fields excluded
+- retries bounded
+- auth claims validated
+
+Implementation:
+teams retain controlled freedom</code></pre>
+</section>
+
+<section id="guardrail"><h2>Guardrail vs prescription</h2>
+<div class="grid-2">
+<div class="card"><h3>Prescription</h3><pre><code>Every service must use
+Library X version Y.</code></pre></div>
+<div class="card"><h3>Guardrail</h3><pre><code>Every outbound HTTP call must:
+- have a timeout;
+- use bounded retries only for
+  eligible failures;
+- emit latency/error metrics.</code></pre></div>
+</div>
+<p>Guardrails protect architecture qualities while preserving implementation flexibility.</p>
+</section>
+
+<section id="verification"><h2>Decision → rule → verification</h2>
+<pre><code>Decision:     Domain logic remains framework-independent.
+Rule:         Domain packages cannot import Spring, JPA
+              or infrastructure.
+Verification: Architecture test in CI.</code></pre>
+<p>The full chain:</p>
+<pre><code>Driver → Decision → Rule → Verification → Feedback</code></pre>
+</section>
+
+<section id="traps"><h2>Exam traps</h2>
+<div class="callout exam"><strong>“Always use async messaging to reduce coupling.”</strong>False. It introduces other forms of complexity and semantic coupling.</div>
+<div class="callout exam"><strong>Technology before requirement</strong>Weak. Prefer requirements → drivers → options → choice.</div>
+<div class="callout exam"><strong>One metric = verdict</strong>False. 18 dependencies is a signal requiring context.</div>
+<div class="callout exam"><strong>No trade-off</strong>Be suspicious when an option supposedly improves every quality while reducing every cost.</div>
+</section>
+
+<section id="exercise"><h2>Practical exercise — legacy integration</h2>
+<p>System:</p>
+<pre><code>Angular Frontend
+Spring Boot Backend
+PostgreSQL
+External SOAP System
+New REST API
+Batch Processing</code></pre>
+<p>Requirements:</p>
+<pre><code>R1. Existing SOAP consumers work for 18 months.
+R2. New consumers use REST.
+R3. Peak load triples.
+R4. SOAP system sometimes takes 15 seconds.
+R5. User-facing requests complete &lt; 2 seconds.
+R6. Data must not be lost.
+R7. SOAP-specific code should gradually disappear.</code></pre>
+<p>Your task:</p>
+<ol>
+<li>Identify the top four architecture drivers.</li>
+<li>Compare: backend → SOAP synchronously; backend → REST facade → SOAP synchronously; backend → durable async integration → SOAP.</li>
+<li>Compare availability, latency, modifiability, consistency, operations and migration effort.</li>
+<li>Draft one ADR.</li>
+<li>Define one measurable quality scenario.</li>
+<li>Define one automated architecture rule.</li>
+</ol>
+<details><summary>Show possible reasoning</summary>
+<p>Likely drivers:</p>
+<pre><code>User latency &lt; 2 seconds
+SOAP compatibility for 18 months
+No data loss
+Gradual SOAP removal / modifiability</code></pre>
+<p>Candidate decision:</p>
+<pre><code>Introduce a stable internal integration boundary.
+Use async processing where immediate SOAP
+confirmation is not semantically required.
+Isolate legacy adapters.</code></pre>
+<p>Benefits: legacy isolation, protected user latency, migration path.<br />
+Costs: eventual consistency, more operations, migration complexity.</p>
+<p><b>Important:</b> if immediate SOAP confirmation is functionally required, asynchronous processing may be invalid.</p>
+</details>
+</section>
+
+<section id="template"><h2>Staff Engineer review template</h2>
+<pre><code>1.  Context
+2.  Architecture Drivers
+3.  Assumptions
+4.  Options
+5.  Quality Consequences
+6.  Risks
+7.  Decision
+8.  Rationale
+9.  Validation Plan
+10. Conformance / Guardrails</code></pre>
+</section>
+
+<section id="terms"><h2>Key exam terms</h2>
+<table>
+<thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Architecture driver</td><td>Factor with significant architectural influence.</td></tr>
+<tr><td>Trade-off</td><td>A choice where benefits in one area have consequences elsewhere.</td></tr>
+<tr><td>Quality requirement</td><td>Requirement concerning qualities such as performance, security, reliability, modifiability or usability.</td></tr>
+<tr><td>Constraint</td><td>Restriction on architecture or solution space.</td></tr>
+<tr><td>Assumption</td><td>Something treated as true but not necessarily verified.</td></tr>
+<tr><td>Risk</td><td>Potential negative consequence arising from uncertainty.</td></tr>
+<tr><td>Feedback</td><td>Evidence used to validate or refine architecture.</td></tr>
+<tr><td>Architecture decision</td><td>Significant architecture choice.</td></tr>
+<tr><td>Conformance</td><td>Alignment between implementation and intended architecture.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>Why is there rarely a universally best architecture?</summary><p>Choices depend on requirements, constraints, drivers, risks, assumptions and context.</p></details>
+<details><summary>What should precede technology selection?</summary><p>Clarifying requirements and drivers.</p></details>
+<details><summary>Why can async communication improve availability?</summary><p>It can remove temporal dependence on downstream availability.</p></details>
+<details><summary>What problems can async communication introduce?</summary><p>Eventual consistency, duplicates, ordering, tracing, operations.</p></details>
+<details><summary>Why is a shared database not automatically wrong?</summary><p>Strong transactions and simplicity may outweigh its coupling costs in some contexts.</p></details>
+<details><summary>When is abstraction architecturally justified?</summary><p>When expected variation or another driver justifies its cost.</p></details>
+<details><summary>Why prioritize quality attributes?</summary><p>Qualities conflict.</p></details>
+<details><summary>What is the purpose of a decision matrix?</summary><p>To expose priorities and consequences, not to mathematically prove a decision.</p></details>
+<details><summary>Why validate hard-to-reverse decisions early?</summary><p>Mistakes are expensive to reverse.</p></details>
+<details><summary>Assumption vs evidence?</summary><p>An assumption is unverified belief; evidence supports or refutes it.</p></details>
+<details><summary>Name three forms of architecture evidence.</summary><p>Load tests, prototypes, telemetry, failure injection, incident history.</p></details>
+<details><summary>How can microservices reduce and increase coupling?</summary><p>They can reduce deployment and source coupling while increasing network and semantic coupling.</p></details>
+<details><summary>What is a guardrail?</summary><p>A rule protecting architecture qualities while preserving some implementation freedom.</p></details>
+<details><summary>Why must metrics be interpreted contextually?</summary><p>A number alone does not establish architectural appropriateness.</p></details>
+<details><summary>How does a Staff Engineer scale architecture decision-making?</summary><p>Clarify drivers, facilitate decisions, document rationale, create guardrails and feedback.</p></details>
+</section>
+
+<section id="miniexam"><h2>Mini scenario exam</h2>
+
+<p><b>Q1.</b> Immediate transactional consistency is critical and traffic is low.</p>
+<ol type="A"><li>Kafka is always preferable</li><li>A synchronous transactional design may be appropriate depending on other drivers</li><li>Microservices are mandatory</li><li>Eventual consistency is always superior</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — “always” answers ignore drivers and context.</p></details>
+
+<p><b>Q2.</b> A vendor must be replaceable yearly. Which quality is particularly relevant?</p>
+<ol type="A"><li>Modifiability</li><li>Usability</li><li>Accessibility</li><li>Visual consistency</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — planned replacement is a modifiability driver.</p></details>
+
+<p><b>Q3.</b> Which is the strongest architecture argument?</p>
+<ol type="A"><li>Everyone uses Kubernetes</li><li>I prefer Kafka</li><li>This option meets availability but introduces eventual consistency, which the business accepts</li><li>This is a best practice</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — it names driver, consequence and stakeholder acceptance.</p></details>
+
+<p><b>Q4.</b> Which deserves the most early validation?</p>
+<ol type="A"><li>Variable naming</li><li>Public event schema consumed by 30 teams</li><li>IDE theme</li><li>Unit-test naming</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — high impact and high reversal cost.</p></details>
+
+<p><b>Q5.</b> A performance test contradicts an assumption.</p>
+<ol type="A"><li>Ignore it</li><li>Reassess the assumption and the affected decision</li><li>Remove the requirement</li><li>Freeze documentation</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — evidence feeds back into decisions.</p></details>
+
+<p><b>Q6.</b> Independent services rely on undocumented event ordering. What coupling remains?</p>
+<ol type="A"><li>None</li><li>Semantic coupling</li><li>Only source coupling</li><li>UI coupling</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — shared implicit meaning is semantic coupling.</p></details>
+
+<p><b>Q7.</b> Architecture trade-offs:</p>
+<ol type="A"><li>Good architects eliminate them</li><li>They prove bad architecture</li><li>Make them explicit relative to priorities and context</li><li>Only performance has trade-offs</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — trade-offs are made explicit, not removed.</p></details>
+
+<p><b>Q8.</b> Which is the best guardrail?</p>
+<ol type="A"><li>Identical variable naming</li><li>All external calls have bounded timeouts</li><li>Exactly ten lines per method</li><li>Same number of classes per service</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — it protects a quality while leaving implementation free.</p></details>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official CPSA-F curriculum 2025.1-rev2</b><div style="color:var(--muted)">Valid since April 1, 2025. The official page also provides Foundation Level sample exam questions.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official English PDF</b><div style="color:var(--muted)">Curriculum Foundation Level, English edition.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Analyzing Tradeoffs</b><div style="color:var(--muted)">Software Architecture Monday, Lesson 145 — practise explaining <i>why</i> an option fits particular drivers instead of memorizing a preferred style.</div></div>
+<a href="https://developertoarchitect.com/lessons/lesson145.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a>
+<a class="day active" data-day="22" href="isaqb-cpsa-f-day-22.html"><small>Day 22</small><b>Trade-Off Analysis</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-21.html">← Previous day</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 22 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "22";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
