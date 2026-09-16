@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 23: Mock Exam II — 40 scenario-heavy questions with answer key, explanations and a Staff Engineer review drill" />
+  <title>iSAQB CPSA-F — Day 23: Mock Exam II</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-23.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-23.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 23</span>
+  <h1>Mock Exam II — Scenario-Heavy Exam Practice</h1>
+  <p class="subtitle">Forty original scenario questions where several options look plausible. The skill being tested is choosing the <i>most architecturally appropriate</i> answer under ambiguity — not recalling a definition.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Format:</strong> 40 questions · 75 minutes</span><span><strong>Pass reference:</strong> 60% of achievable points</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#how">Exam setup</a><a href="#partA">Part A — Drivers, requirements &amp; constraints</a><a href="#partB">Part B — Design, coupling &amp; cohesion</a><a href="#partC">Part C — Patterns, styles &amp; trade-offs</a><a href="#partD">Part D — Interfaces &amp; cross-cutting concepts</a><a href="#partE">Part E — Decisions &amp; feedback</a><a href="#partF">Part F — Documentation &amp; views</a><a href="#partG">Part G — Analysis &amp; conformance</a><a href="#partH">Part H — Staff Engineer scenario</a><a href="#key">Answer key</a><a href="#scoring">Scoring</a><a href="#explanations">Key explanations</a><a href="#traps">Common exam traps</a><a href="#exercise">Practical exercise</a><a href="#review">Review questions</a><a href="#resources">Resources</a><a href="#next">Next — Day 24</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="how">
+<h2>Exam setup</h2>
+<p class="lead">The official CPSA-F exam is about <b>75 minutes</b> with roughly <b>40 multiple-choice questions</b>; the exact number can vary because questions have different point values. Passing requires <b>60% of achievable points</b>. This mock contains <b>40 original practice questions</b>.</p>
+<pre><code>Time: 75 minutes
+Questions: 40
+Practice score: 1 point/question
+Practice pass: 24/40
+Strong readiness target: &gt;= 32/40 consistently</code></pre>
+<div class="callout exam"><strong>Discipline</strong>Do not open a single answer until you have finished all forty. Several questions here have two answers that look correct; revealing early destroys exactly the calibration you came for.</div>
+</section>
+
+<section id="partA"><h2>Part A — Drivers, requirements &amp; constraints</h2>
+
+<p><b>Q1.</b> A marketplace has these requirements: (1) product names must be at most 200 characters, (2) checkout availability must be at least 99.95%, (3) the logo goes in the upper left, (4) products are sorted alphabetically. Which is most likely to be an architecture driver?</p>
+<ol type="A"><li>Requirement 1</li><li>Requirement 2</li><li>Requirement 3</li><li>Requirement 4</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — A 99.95% availability target shapes redundancy, failover, deployment and integration decisions. The other three are satisfied inside a single component without changing the structure.</p></details>
+
+<p><b>Q2.</b> “All customer data must remain within Germany.” What is this?</p>
+<ol type="A"><li>A functional requirement</li><li>A quality scenario</li><li>An architecture constraint</li><li>A runtime view</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — It restricts the solution space (hosting regions, providers, replication topology) rather than describing a function or a measurable quality response.</p></details>
+
+<p><b>Q3.</b> The team assumes peak traffic stays below 2,000 requests per second. What is the strongest response?</p>
+<ol type="A"><li>Treat it permanently as an established fact</li><li>Make the assumption explicit and validate it if significant decisions depend on it</li><li>Ignore it until production fails</li><li>Turn it directly into an ADR</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Assumptions are legitimate, but they must be written down and validated in proportion to what depends on them.</p></details>
+
+<p><b>Q4.</b> Which statement about architecture drivers is most accurate?</p>
+<ol type="A"><li>Every requirement is a driver</li><li>Only quality requirements can be drivers</li><li>Drivers are those influences that significantly shape architecture decisions</li><li>Constraints can never be drivers</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — Drivers are defined by influence, not by category. Functional requirements, quality requirements and constraints can all be drivers.</p></details>
+
+<p><b>Q5.</b> Which is the strongest quality requirement?</p>
+<ol type="A"><li>The system should be fast</li><li>The API should perform well</li><li>Under peak load, 95% of searches complete within 400 ms</li><li>Developers should optimize their code</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — It names the stimulus (peak load), the measure (400 ms) and the coverage (95%), so it can be tested. The others are unmeasurable wishes.</p></details>
+</section>
+
+<section id="partB"><h2>Part B — Design, coupling &amp; cohesion</h2>
+
+<p><b>Q6.</b> A class named <code>CustomerUtils</code> contains address validation, PDF generation, tax calculation, authentication and email templates. What is the main problem?</p>
+<ol type="A"><li>Excessive cohesion</li><li>Low cohesion</li><li>Too few deployment nodes</li><li>Too few interfaces</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Unrelated responsibilities live in one element. Every unrelated change reaches the same place.</p></details>
+
+<p><b>Q7.</b> Adding a new payment provider requires changes in eight unrelated modules. Which quality is most directly threatened?</p>
+<ol type="A"><li>Modifiability</li><li>Accessibility</li><li>Portability</li><li>Learnability</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — The cost of a foreseeable change is the definition of modifiability.</p></details>
+
+<p><b>Q8.</b> A developer proposes an abstraction layer around a stable library that is unlikely to change. What is the best response?</p>
+<ol type="A"><li>Every dependency needs an abstraction</li><li>Abstraction is valuable only when its benefits justify the added complexity</li><li>Abstraction always improves architecture</li><li>All third-party libraries must be hidden</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Abstraction has a real cost. Without expected variation or another driver, that cost buys nothing.</p></details>
+
+<p><b>Q9.</b> Which statement about coupling is best?</p>
+<ol type="A"><li>Good architecture eliminates coupling</li><li>Coupling is always undesirable</li><li>Dependencies should be appropriate and deliberately controlled</li><li>Coupling exists only between microservices</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — A system with no coupling does nothing. The goal is intentional, visible, justified dependencies.</p></details>
+
+<p><b>Q10.</b> A service is independently deployable, but its consumers rely on undocumented event ordering. This is:</p>
+<ol type="A"><li>No coupling</li><li>Semantic coupling</li><li>Only deployment coupling</li><li>Only source coupling</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — The dependency is on meaning and ordering, not on code or deployment. Independent deployability hides it without removing it.</p></details>
+</section>
+
+<section id="partC"><h2>Part C — Patterns, styles &amp; trade-offs</h2>
+
+<p><b>Q11.</b> A ten-person team has moderate load, strong transactional requirements and little operational experience. Which statement is strongest?</p>
+<ol type="A"><li>Microservices are automatically preferable</li><li>A modular monolith may fit well if independent deployment and scaling are weak drivers</li><li>Event-driven architecture is mandatory</li><li>Every capability needs its own process</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — With weak distribution drivers and strong transactional ones, distribution mostly adds cost. Drivers decide the style.</p></details>
+
+<p><b>Q12.</b> What is a typical consequence of asynchronous messaging?</p>
+<ol type="A"><li>It eliminates all coupling</li><li>It guarantees immediate consistency</li><li>It can improve temporal decoupling while adding eventual consistency and operational complexity</li><li>It removes the need to handle duplicates</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — Asynchrony trades immediate consistency and simple operations for temporal decoupling and buffering.</p></details>
+
+<p><b>Q13.</b> Before adding a cache, what is the most important architectural question?</p>
+<ol type="A"><li>Which cache product has the nicest logo?</li><li>What staleness is acceptable, and what latency and load target must be achieved?</li><li>Which product is most popular?</li><li>Can everything be cached indefinitely?</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Quality target and acceptable freshness come first; technology selection is downstream of them.</p></details>
+
+<p><b>Q14.</b> Patterns are:</p>
+<ol type="A"><li>Context-independent best practices</li><li>Reusable solution approaches with both benefits and consequences</li><li>Replacements for architecture decisions</li><li>Guarantees of quality</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — A pattern documents a solution together with the trade-off it imposes. It never removes the need to decide.</p></details>
+
+<p><b>Q15.</b> A shared database gives simple transactions but creates schema coupling. This is:</p>
+<ol type="A"><li>Proof that shared databases are always wrong</li><li>An architecture trade-off</li><li>A conformance violation by definition</li><li>Only a documentation problem</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Benefit and cost together, evaluated against this system's drivers, is precisely a trade-off.</p></details>
+</section>
+
+<section id="partD"><h2>Part D — Interfaces &amp; cross-cutting concepts</h2>
+
+<p><b>Q16.</b> Which is the strongest interface description?</p>
+<ol type="A"><li><code>POST /payment</code></li><li>The method name and schema only</li><li>Semantics, inputs, outputs, errors, timing, security, idempotency and versioning where relevant</li><li>The implementation language</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — A contract is what a consumer may rely on. Syntax alone leaves every failure mode undefined.</p></details>
+
+<p><b>Q17.</b> A consumer interprets HTTP 404 as “permanently deleted,” but the provider only guarantees “currently not found.” This is:</p>
+<ol type="A"><li>Deployment coupling</li><li>Semantic coupling</li><li>Visual coupling</li><li>Hardware coupling</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — The syntax matches; the meaning does not. Mismatched meaning is semantic coupling.</p></details>
+
+<p><b>Q18.</b> Six teams use incompatible retry strategies. What is the best response?</p>
+<ol type="A"><li>Allow unlimited retries everywhere</li><li>Define a coherent cross-cutting resilience and communication concept</li><li>Add runtime diagrams only</li><li>Rename the services</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Retry, timeout and backoff behaviour is a system-wide concern and needs one coherent concept, not six local inventions.</p></details>
+
+<p><b>Q19.</b> Which statement is correct?</p>
+<ol type="A"><li>Every cross-cutting concern needs its own service</li><li>A cross-cutting concept provides a coherent solution across multiple elements</li><li>Cross-cutting concepts are only implementation details</li><li>Logging cannot be cross-cutting</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — The concern is the topic; the concept is the one coherent way the system addresses it everywhere.</p></details>
+
+<p><b>Q20.</b> Detailed request logging improves debugging but risks exposing personal data. This is:</p>
+<ol type="A"><li>An observability versus privacy and security trade-off</li><li>A context-view error</li><li>Proof that logging should be disabled</li><li>Proof that qualities are independent of each other</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Two legitimate qualities pull in opposite directions, so the decision must be explicit rather than accidental.</p></details>
+</section>
+
+<section id="partE"><h2>Part E — Decisions &amp; feedback</h2>
+
+<p><b>Q21.</b> Which decision most deserves an ADR?</p>
+<ol type="A"><li>Renaming a private variable</li><li>Integrating SAP asynchronously because SAP outages must not block order acceptance</li><li>Reformatting a test</li><li>Changing an IDE setting</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — It is architecturally significant, costly to reverse, and its rationale will not be obvious from the code later.</p></details>
+
+<p><b>Q22.</b> Why record the alternatives considered in an ADR?</p>
+<ol type="A"><li>To make the document longer</li><li>To preserve why the selected option beat credible alternatives</li><li>To ensure the decision can never change</li><li>To replace the requirements</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Without the rejected options, a future reader cannot tell whether the decision was reasoned or accidental.</p></details>
+
+<p><b>Q23.</b> Which needs the strongest early validation?</p>
+<ol type="A"><li>A local code formatting choice</li><li>A public event schema consumed by 30 teams</li><li>A test class name</li><li>A local log message</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Widely consumed public contracts are the most expensive things to reverse, so validate them before they spread.</p></details>
+
+<p><b>Q24.</b> A performance test disproves a key assumption. What comes next?</p>
+<ol type="A"><li>Ignore it, because the architecture was already approved</li><li>Reassess the assumption and every decision that depended on it</li><li>Remove the requirement</li><li>Stop testing</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Feedback that invalidates an assumption invalidates the decisions resting on it. That is the point of testing early.</p></details>
+
+<p><b>Q25.</b> Which is the best iterative sequence?</p>
+<ol type="A"><li>Decision → never revisit</li><li>Assumption → decision → validation → evidence → refinement</li><li>Technology → requirement → stakeholder</li><li>Code → driver → ignore feedback</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Architecture work is a feedback loop: decide under uncertainty, validate, then refine on evidence.</p></details>
+</section>
+
+<section id="partF"><h2>Part F — Documentation &amp; views</h2>
+
+<p><b>Q26.</b> Which view shows that an external identity provider communicates with the system?</p>
+<ol type="A"><li>Context view</li><li>Runtime view</li><li>Deployment view</li><li>Class view</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — System boundary and external communication partners belong to the context view.</p></details>
+
+<p><b>Q27.</b> Which view shows which internal components belong to the Claims subsystem?</p>
+<ol type="A"><li>Context view</li><li>Building block view</li><li>Deployment view</li><li>Runtime view only</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Static internal decomposition is the building block view.</p></details>
+
+<p><b>Q28.</b> Which view shows where the Claims Service runs and which database instance it uses?</p>
+<ol type="A"><li>Context view</li><li>Building block view</li><li>Deployment view</li><li>Glossary</li></ol>
+<details><summary>Show answer</summary><p><b>C</b> — Mapping software to infrastructure is the deployment view.</p></details>
+
+<p><b>Q29.</b> Which view explains what happens when the Fraud Service times out during claim submission?</p>
+<ol type="A"><li>Runtime view</li><li>Context view</li><li>Deployment view</li><li>Static view only</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Interaction over time, including failure and timeout behaviour, is the runtime view.</p></details>
+
+<p><b>Q30.</b> Which statement is correct?</p>
+<ol type="A"><li>Every runtime view must use UML</li><li>A view is an architectural perspective; a notation is a means of expressing it</li><li>C4 and the runtime view are identical</li><li>A diagram is always a complete view</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Perspective and expression language are separate concerns. A diagram is one artefact inside a view, not the view itself.</p></details>
+</section>
+
+<section id="partG"><h2>Part G — Analysis &amp; conformance</h2>
+
+<p><b>Q31.</b> A load test shows p95 checkout latency of 1.4 s against a requirement of 700 ms. This is primarily:</p>
+<ol type="A"><li>Architecture quality analysis</li><li>Conformance checking only</li><li>Context documentation</li><li>Requirements elicitation only</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — It measures whether the architecture meets a quality goal. Conformance would ask whether the implementation follows the intended architecture.</p></details>
+
+<p><b>Q32.</b> A component has 18 outbound dependencies. What is the strongest conclusion?</p>
+<ol type="A"><li>It is definitely bad</li><li>It is a signal that requires architectural context</li><li>It must be split immediately</li><li>Such numbers must always be reduced below five</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — A metric is evidence, not a verdict. An orchestrating component may legitimately have many outbound dependencies.</p></details>
+
+<p><b>Q33.</b> A rule forbids <code>Domain → Infrastructure</code> dependencies, and an automated test detects a violation. This is:</p>
+<ol type="A"><li>Architecture conformance checking</li><li>Business analysis</li><li>Usability evaluation</li><li>Requirements prioritization</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Comparing the implementation against an intended architecture rule is conformance checking.</p></details>
+
+<p><b>Q34.</b> One team bypasses the Customer API and reads the Customer database directly, despite an explicit rule. Initially this is:</p>
+<ol type="A"><li>Architecture drift</li><li>An architecture style</li><li>A quality scenario</li><li>A deployment optimization</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — A single deliberate deviation from the intended architecture is drift.</p></details>
+
+<p><b>Q35.</b> Years later, many teams access each other's databases directly and independent evolution has become difficult. This is:</p>
+<ol type="A"><li>Architecture erosion</li><li>Context refinement</li><li>Runtime modeling</li><li>Increased cohesion</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Accumulated, unaddressed drift that has degraded the structure is erosion.</p></details>
+</section>
+
+<section id="partH"><h2>Part H — Staff Engineer scenario</h2>
+<p>The last five questions share one context.</p>
+<pre><code>Online Claims Platform
+
+Claims API
+  ├── Fraud Provider
+  ├── Payment Provider
+  ├── Customer DB
+  └── Document Vendor SDK
+
+Evidence:
+- Fraud Provider sometimes takes 12 seconds.
+- Claims availability target: 99.95%.
+- User response target: &lt; 2 seconds.
+- 17 classes import Document Vendor SDK.
+- Second document vendor planned.
+- Multiple services query Customer DB directly.
+- Teams use different timeout/retry rules.</code></pre>
+
+<p><b>Q36.</b> What is the strongest architecture driver in this evidence?</p>
+<ol type="A"><li>The number of Java classes</li><li>The availability and response-time targets</li><li>The IDE in use</li><li>DTO naming</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — 99.95% availability and a sub-2-second response target directly constrain how the slow Fraud Provider may be integrated.</p></details>
+
+<p><b>Q37.</b> What is the best change for document-vendor modifiability?</p>
+<ol type="A"><li>Add more direct SDK imports</li><li>Introduce a stable document-provider port with vendor-specific adapters</li><li>Move the document code into the UI</li><li>Duplicate the vendor logic per caller</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Here the abstraction is justified: a second vendor is planned, and 17 direct imports make that change expensive.</p></details>
+
+<p><b>Q38.</b> What is the first question to ask about the 12-second Fraud Provider latency?</p>
+<ol type="A"><li>Is synchronous fraud confirmation required before acknowledging a claim?</li><li>Which font should the diagram use?</li><li>Does the provider use Java?</li><li>Should the service be renamed?</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Business semantics decide whether asynchronous evaluation is even permissible. Mechanism comes after that answer.</p></details>
+
+<p><b>Q39.</b> Different timeout and retry behaviour across teams indicates the need for:</p>
+<ol type="A"><li>A cross-cutting resilience and communication concept</li><li>More database tables</li><li>A new UI framework</li><li>A larger context diagram</li></ol>
+<details><summary>Show answer</summary><p><b>A</b> — Inconsistent resilience behaviour is a missing cross-cutting concept, not a missing component.</p></details>
+
+<p><b>Q40.</b> What is the highest-leverage Staff Engineer response to this situation?</p>
+<ol type="A"><li>Personally implement every integration</li><li>Clarify drivers, facilitate decisions, define guardrails, automate conformance and enable teams</li><li>Personally approve every method</li><li>Avoid documenting trade-offs</li></ol>
+<details><summary>Show answer</summary><p><b>B</b> — Leverage comes from shared drivers, guardrails and automated feedback, not from becoming the bottleneck.</p></details>
+</section>
+
+<section id="key"><h2>Answer key</h2>
+<pre><code>01 B   02 C   03 B   04 C   05 C
+06 B   07 A   08 B   09 C   10 B
+11 B   12 C   13 B   14 B   15 B
+16 C   17 B   18 B   19 B   20 A
+21 B   22 B   23 B   24 B   25 B
+26 A   27 B   28 C   29 A   30 B
+31 A   32 B   33 A   34 A   35 A
+36 B   37 B   38 A   39 A   40 B</code></pre>
+</section>
+
+<section id="scoring"><h2>Scoring</h2>
+<pre><code>36–40  Excellent readiness
+32–35  Strong
+28–31  Good; revise weak areas
+24–27  Practice pass; more preparation recommended
+20–23  Near threshold
+&lt;20    Revisit major areas</code></pre>
+<p>Official questions can have different point values, so this one-point scoring is only a diagnostic.</p>
+</section>
+
+<section id="explanations"><h2>Key explanations</h2>
+<div class="grid-2">
+<div class="card"><h3>Q8 — Abstraction</h3><p>Abstraction has a cost. Introduce it when expected variation or another driver justifies that cost.</p></div>
+<div class="card"><h3>Q10 / Q17 — Semantic coupling</h3><p>Components can be source-independent yet tightly coupled through assumptions about meaning, timing, ordering or behaviour.</p></div>
+<div class="card"><h3>Q11 — Architecture style</h3><p>Microservices are not synonymous with good architecture. Drivers determine suitability.</p></div>
+<div class="card"><h3>Q13 — Caching</h3><p>First define the quality target and acceptable freshness; technology comes later.</p></div>
+<div class="card"><h3>Q23 — Reversibility</h3><p>Widely consumed public contracts are costly to reverse, so validate them carefully.</p></div>
+<div class="card"><h3>Q32 — Metrics</h3><p>Metrics are evidence, not verdicts. Architectural context determines their meaning.</p></div>
+</div>
+<div class="callout staff"><strong>Q38 — Staff-level reasoning</strong>Understand the business semantics before introducing queues or other mechanisms. If fraud approval must happen before acceptance, asynchronous processing is simply invalid — no matter how good the latency numbers look.</div>
+</section>
+
+<section id="traps"><h2>Common exam traps</h2>
+<ol>
+<li>Absolute claims such as “always” and “never”.</li>
+<li>Fashion-driven technology choices.</li>
+<li>Treating patterns as universal solutions.</li>
+<li>Treating a metric as a conclusion.</li>
+<li>Confusing a diagram with an architectural view.</li>
+<li>Assuming asynchronous means uncoupled.</li>
+<li>Assuming abstraction is automatically good.</li>
+<li>Assuming more documentation is always better.</li>
+<li>Treating architecture as immutable.</li>
+<li>Treating the architect or Staff Engineer as the central approver of everything.</li>
+</ol>
+</section>
+
+<section id="exercise"><h2>Practical exercise</h2>
+<p>For the Claims Platform in Part H, prepare:</p>
+<pre><code>1. Five architecture drivers
+2. Five risks
+3. Two explicit assumptions
+4. Three candidate decisions
+5. Consequences of each
+6. One availability scenario
+7. One modifiability scenario
+8. Three architecture rules
+9. One automated conformance/fitness check
+10. One ADR title + rationale</code></pre>
+<p>Use this chain throughout:</p>
+<pre><code>Evidence → Driver → Option → Trade-Off → Decision → Validation</code></pre>
+<p>Worked example:</p>
+<pre><code>Evidence:
+Fraud provider sometimes takes 12 seconds.
+
+Driver:
+Response &lt; 2 seconds; availability &gt;= 99.95%.
+
+Assumption:
+Fraud approval may happen after durable claim acceptance.
+
+Option:
+Persist claim, acknowledge it, evaluate fraud asynchronously.
+
+Benefit:
+Fraud latency no longer blocks acknowledgement.
+
+Cost:
+Eventual consistency and retry/failure handling.
+
+Validation:
+Simulate provider outage and verify availability + no lost claims.</code></pre>
+<div class="callout exam"><strong>The hinge</strong>If the assumption is false, reconsider the decision. The assumption — not the queue — is what the design rests on.</div>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<ol>
+<li>What makes a requirement an architecture driver?</li>
+<li>Why make assumptions explicit?</li>
+<li>Quality requirement versus constraint?</li>
+<li>Cohesion versus coupling?</li>
+<li>What is semantic coupling?</li>
+<li>Why are patterns context-dependent?</li>
+<li>What are the trade-offs of messaging?</li>
+<li>When is abstraction justified?</li>
+<li>Why validate hard-to-reverse decisions early?</li>
+<li>Decision versus ADR?</li>
+<li>Context view versus building block view?</li>
+<li>Runtime view versus deployment view?</li>
+<li>View versus notation?</li>
+<li>Concern versus cross-cutting concept?</li>
+<li>Analysis versus conformance?</li>
+<li>Metric versus conclusion?</li>
+<li>Drift versus erosion?</li>
+<li>Why can asynchronous communication improve availability?</li>
+<li>Why can asynchronous communication still be invalid?</li>
+<li>How does a Staff Engineer scale architecture quality?</li>
+</ol>
+<details><summary>Show compact answers</summary>
+<pre><code>1.  It materially influences architecture.
+2.  To expose and validate uncertainty.
+3.  Quality = how well; constraint = restricted solution space.
+4.  Cohesion = inside; coupling = between.
+5.  Dependency on meaning/behaviour.
+6.  Benefits/costs depend on drivers and context.
+7.  Eventual consistency, duplicates, ordering, tracing, operations.
+8.  When benefits against drivers justify complexity.
+9.  Errors are costly to reverse.
+10. Choice vs documented record.
+11. Environment/boundary vs static internal structure.
+12. Dynamic behaviour vs infrastructure mapping.
+13. Perspective vs expression language.
+14. Problem/topic vs coherent system-wide solution.
+15. Meets goals? vs follows intended architecture?
+16. Metric is evidence requiring context.
+17. Deviation vs accumulated degradation.
+18. Removes temporal dependence on downstream availability.
+19. Business semantics may require immediate confirmation.
+20. Shared drivers, decisions, guardrails, automation, feedback.</code></pre>
+</details>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<p>The current official Foundation Level curriculum is <b>2025.1</b>, valid since <b>April 1, 2025</b>. The official iSAQB mock currently contains <b>38 questions</b> and is based on the real exam — use it after Day 24 as external calibration.</p>
+<div class="resource"><div><b>Official Foundation Level curriculum (EN, PDF)</b><div style="color:var(--muted)">Curriculum 2025.1, valid since April 1, 2025.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official curriculum portal</b><div style="color:var(--muted)">All language versions and revisions.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official Foundation Level exam page</b><div style="color:var(--muted)">Exam format, duration and passing threshold.</div></div>
+<a href="https://www.isaqb.org/certifications/cpsa-exams/foundation-level-exam/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official mock exam downloads</b><div style="color:var(--muted)">38 official practice questions — save these for after Day 24.</div></div>
+<a href="https://www.isaqb.org/downloads/foundation-level-exam/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — How to Think Like an Architect</b><div style="color:var(--muted)">Business drivers → architecture characteristics → trade-off analysis.</div></div>
+<a href="https://www.youtube.com/watch?v=W7Krz__jJUg" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Translate business needs into architecture characteristics, avoid context-free best practices, broaden your technical range, and compare trade-offs instead of evangelizing one technology.</div>
+</section>
+
+<section id="next"><h2>Next — Day 24</h2>
+<p>Day 24 targets the distinctions that separate terminology recall from reliable exam reasoning:</p>
+<pre><code>Driver identification
+Quality scenarios
+Semantic coupling
+Trade-off reasoning
+Architecture views
+Decision rationale
+Analysis vs conformance
+Architecture evolution</code></pre>
+<p>It includes harder “two answers look correct” questions and a final Staff Engineer architecture-review drill before the official iSAQB mock.</p>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a>
+<a class="day" data-day="22" href="isaqb-cpsa-f-day-22.html"><small>Day 22</small><b>Trade-Off Analysis</b></a>
+<a class="day active" data-day="23" href="isaqb-cpsa-f-day-23.html"><small>Day 23</small><b>Mock Exam II</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-22.html">← Previous day</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 23 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "23";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
