@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="iSAQB CPSA-F Day 24: Mock II Review and Final Weakness Remediation — hard distinctions, two-answers-look-correct drills and a Staff Engineer architecture review" />
+  <title>iSAQB CPSA-F — Day 24: Mock II Review &amp; Final Remediation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+
+  <link rel="stylesheet" href="../../style.css" />
+
+  <script src="../../lang-switch.js" defer></script>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <a href="isaqb-cpsa-f-day-24.html" data-lang-switch="en" class="lang-link active">EN</a>
+    <a href="../FA/isaqb-cpsa-f-day-24.fa.html" data-lang-switch="fa" class="lang-link">FA</a>
+  </nav>
+  <a href="index.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">← Course home</a>
+      <span class="eyebrow">iSAQB CPSA-F · Day 24</span>
+  <h1>Mock II Review &amp; Final Weakness Remediation</h1>
+  <p class="subtitle">The hard distinctions and the “two answers look correct” reasoning you need before the official iSAQB mock — plus one last full Staff Engineer architecture review.</p>
+  <div class="meta"><span><strong>Level:</strong> Foundation</span><span><strong>Focus:</strong> Hard distinctions, ambiguity drills, review case</span><span><strong>Curriculum:</strong> CPSA-F 2025.1-rev2</span></div>
+<div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">Mark day complete</button></div>
+</div></header>
+
+<div class="wrap layout">
+<aside class="toc" aria-label="Table of contents"><strong>On this page</strong>
+<a href="#skill">The core exam skill</a><a href="#significance">Driver significance test</a><a href="#quality">Attribute vs requirement vs scenario</a><a href="#constraint">Constraint vs decision</a><a href="#interface">Interface syntax vs semantics</a><a href="#semantic">Semantic coupling</a><a href="#cohesion">Cohesion &amp; change locality</a><a href="#pattern">Pattern vs decision</a><a href="#views">Views — hard mapping</a><a href="#rationale">Decision, rationale, consequence</a><a href="#adr">ADR evolution</a><a href="#analysis">Analysis vs validation vs conformance</a><a href="#qualquant">Qualitative vs quantitative</a><a href="#metric">The metric trap</a><a href="#drift">Drift, evolution &amp; erosion</a><a href="#fitness">Rule vs fitness function</a><a href="#drills">“Two answers look correct” drills</a><a href="#case">Staff Engineer architecture review</a><a href="#exercise">Your exercise</a><a href="#suggested">Suggested solution</a><a href="#table">Final distinction table</a><a href="#review">Review questions</a><a href="#official">Official iSAQB material</a><a href="#resources">Resources</a><a href="#memorize">Memorize vs understand</a><a href="#next">Next — Day 25</a><a href="#progress">Progress</a>
+</aside>
+
+<main>
+<section id="skill">
+<h2>The core exam skill</h2>
+<p class="lead">Days 1–23 are complete. Today is the last theory-driven remediation: when several answers seem plausible, the exam is testing a reasoning procedure, not a definition.</p>
+<pre><code>1. What concept is actually being tested?
+2. What are the architecture drivers?
+3. What constraints apply?
+4. Which answer addresses the concern most directly?
+5. Which makes fewer unsupported assumptions?
+6. Which avoids unjustified absolutes?</code></pre>
+<p>Prefer the reasoning chain:</p>
+<pre><code>Concern → Driver → Options → Trade-off → Decision → Evidence</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>This is not an exam trick. It is exactly how a credible architecture review is argued in front of teams who disagree.</div>
+</section>
+
+<section id="significance"><h2>Architecture driver — significance test</h2>
+<div class="grid-2">
+<div class="card"><h3>R1</h3><pre><code>Users can sort claims by date.</code></pre><p>Feature-level. Architecture is unlikely to change.</p></div>
+<div class="card"><h3>R2</h3><pre><code>Claims remain available when
+Fraud Provider fails.</code></pre><p>Can alter runtime interaction, failure handling, persistence, communication, timeout/retry policy and consistency.</p></div>
+</div>
+<p>Useful test:</p>
+<div class="callout info"><strong>The question to ask</strong>If this requirement changed substantially, would our architecture likely change? If yes, it is probably an architecture driver.</div>
+<div class="callout exam"><strong>Trap</strong>Measurable does not automatically mean architecturally significant.</div>
+</section>
+
+<section id="quality"><h2>Quality attribute vs requirement vs scenario</h2>
+<div class="grid-2">
+<div class="card"><h3>Attribute</h3><pre><code>Availability</code></pre></div>
+<div class="card"><h3>Requirement</h3><pre><code>Checkout availability &gt;= 99.95%.</code></pre></div>
+</div>
+<p>Scenario:</p>
+<pre><code>Source:      Payment provider
+Stimulus:    Provider unavailable
+Environment: Peak traffic
+Artifact:    Checkout
+Response:    Orders follow defined fallback behavior
+Measure:     Availability remains &gt;= 99.95%</code></pre>
+<div class="callout info"><strong>Shortcut</strong>Attribute = category. Requirement = desired level. Scenario = concrete evaluable situation.</div>
+</section>
+
+<section id="constraint"><h2>Constraint vs decision</h2>
+<div class="grid-2">
+<div class="card"><h3>Constraint</h3><pre><code>Customer data must remain
+in Germany.</code></pre></div>
+<div class="card"><h3>Decision</h3><pre><code>Deploy customer-data workloads
+in two German cloud regions.</code></pre></div>
+</div>
+<p>The same technology can be either:</p>
+<div class="grid-2">
+<div class="card"><h3>As constraint</h3><pre><code>Company policy mandates
+PostgreSQL.</code></pre></div>
+<div class="card"><h3>As decision</h3><pre><code>Alternatives were evaluated and
+PostgreSQL was selected.</code></pre></div>
+</div>
+<div class="callout info"><strong>Shortcut</strong>The difference is <i>why</i> the choice is fixed — imposed on you, or chosen by you.</div>
+</section>
+
+<section id="interface"><h2>Interface syntax vs semantics</h2>
+<p>Event:</p>
+<pre><code>claimId: string
+status:  APPROVED</code></pre>
+<p>Syntax describes fields, types, schema and serialization. Semantics answers:</p>
+<pre><code>What exactly does APPROVED mean?
+Can it later change?
+Can delivery duplicate?
+Does ordering matter?
+When is the event final?</code></pre>
+<div class="callout info"><strong>Shortcut</strong>Stable interfaces require shared meaning, not merely compatible JSON.</div>
+</section>
+
+<section id="semantic"><h2>Semantic coupling</h2>
+<p>Service B assumes:</p>
+<pre><code>CustomerUpdated always arrives
+before InvoiceCreated.</code></pre>
+<p>No contract guarantees it. This is semantic / behavioral coupling through an undocumented ordering assumption.</p>
+<div class="callout exam"><strong>Trap</strong>Changing REST to Kafka does not remove it. Transport is not the coupling — the assumption is.</div>
+</section>
+
+<section id="cohesion"><h2>Cohesion and change locality</h2>
+<p>If adding one document vendor changes Claims, Billing, Customer, Notification and Reporting, predictable change is poorly localized.</p>
+<pre><code>Document Port
+     ↓
+Vendor A Adapter
+Vendor B Adapter</code></pre>
+<div class="callout info"><strong>The point</strong>The goal is not “more interfaces.” The goal is localizing related change.</div>
+</section>
+
+<section id="pattern"><h2>Pattern vs decision</h2>
+<div class="grid-2">
+<div class="card"><h3>Pattern</h3><pre><code>Ports and Adapters</code></pre><p>Reusable knowledge.</p></div>
+<div class="card"><h3>Decision</h3><pre><code>Isolate the document vendor behind
+a domain-owned port because a
+second vendor must be introduced
+this year.</code></pre><p>Reasoning applied to a specific context.</p></div>
+</div>
+</section>
+
+<section id="views"><h2>Architecture views — hard mapping</h2>
+<table>
+<thead><tr><th>Question</th><th>View</th></tr></thead>
+<tbody>
+<tr><td>Which external systems participate?</td><td>Context</td></tr>
+<tr><td>What internal software parts exist?</td><td>Building Block</td></tr>
+<tr><td>What happens when Fraud times out?</td><td>Runtime</td></tr>
+<tr><td>Where is Fraud Adapter deployed?</td><td>Deployment</td></tr>
+</tbody>
+</table>
+<div class="callout info"><strong>Shortcut</strong>A view is a stakeholder-oriented architectural perspective. A diagram is only one possible representation of it.</div>
+</section>
+
+<section id="rationale"><h2>Decision, rationale, consequence</h2>
+<pre><code>Decision:
+Use durable asynchronous SAP synchronization.
+
+Rationale:
+Order acceptance must survive SAP outages and
+delayed sync is acceptable.
+
+Positive consequence:
+Temporal decoupling.
+
+Negative consequence:
+Eventual consistency and duplicate handling.</code></pre>
+<p>These are different pieces of architectural knowledge — an exam option that merges them is usually the weaker answer.</p>
+</section>
+
+<section id="adr"><h2>ADR evolution</h2>
+<pre><code>Proposed → Accepted → Deprecated/Superseded</code></pre>
+<div class="callout info"><strong>Why it matters</strong>When a decision changes, preserve history rather than silently rewriting the old rationale. The superseded record explains why the system looks the way it does today.</div>
+</section>
+
+<section id="analysis"><h2>Analysis vs validation vs conformance</h2>
+<pre><code>Analysis:
+Will the architecture satisfy required qualities?
+
+Validation:
+Does observed evidence support our assumptions?
+
+Conformance:
+Does implementation follow intended architecture?</code></pre>
+<p>Examples:</p>
+<pre><code>Analyze synchronous Fraud dependency  → analysis
+Inject Fraud outage                   → validation/evidence
+Check domain cannot import vendor SDK → conformance</code></pre>
+</section>
+
+<section id="qualquant"><h2>Qualitative vs quantitative analysis</h2>
+<div class="grid-2">
+<div class="card"><h3>Qualitative</h3><pre><code>Scenario walkthrough indicates
+shared DB creates change coupling.</code></pre></div>
+<div class="card"><h3>Quantitative</h3><pre><code>p95 = 1.4 s
+Availability = 99.7%
+17 classes import Vendor SDK</code></pre></div>
+</div>
+<div class="callout exam"><strong>Trap</strong>Quantitative evidence is not automatically superior; a precise number can measure the wrong thing.</div>
+</section>
+
+<section id="metric"><h2>The metric trap</h2>
+<pre><code>Component X has 18 dependencies.</code></pre>
+<p>Correct chain:</p>
+<pre><code>Metric → Signal → Contextual interpretation → Possible action</code></pre>
+<p>Not:</p>
+<pre><code>Metric → Automatic verdict</code></pre>
+</section>
+
+<section id="drift"><h2>Drift, evolution and erosion</h2>
+<ul>
+<li><b>Intentional evolution</b> changes architecture intent through an explicit decision.</li>
+<li><b>Drift</b> is divergence between implementation and current architecture intent.</li>
+<li><b>Erosion</b> is accumulated harmful drift that degrades architecture properties.</li>
+</ul>
+<pre><code>One unauthorized direct DB access → drift
+
+Years of cross-DB access causing
+coordinated releases             → erosion</code></pre>
+</section>
+
+<section id="fitness"><h2>Architecture rule vs fitness function</h2>
+<div class="grid-2">
+<div class="card"><h3>Rule + check</h3><pre><code>Only document adapters may
+import vendor SDK.
+
+Check: CI dependency test.</code></pre></div>
+<div class="card"><h3>Runtime fitness function</h3><pre><code>During simulated downstream outage,
+claim acceptance remains above
+target.</code></pre></div>
+</div>
+<div class="callout info"><strong>Shortcut</strong>Fitness functions can evaluate runtime architecture characteristics, not only static dependencies.</div>
+</section>
+
+<section id="drills"><h2>Hard “two answers look correct” drills</h2>
+<div class="question-set">
+<details class="question"><summary>Requirement <code>p95 &lt; 500 ms</code>, observed <code>p95 = 900 ms</code>. What now?</summary><div class="answer"><p>A. Replace PostgreSQL immediately · <b>B. Requirement is violated; analyze contributors before selecting a remedy</b> · C. Add Redis · D. Split into microservices</p><p><b>Answer: B.</b> Evidence identifies the problem, not its root cause.</p></div></details>
+<details class="question"><summary>Fraud API takes 15 seconds; the user target is &lt; 2 seconds. First question?</summary><div class="answer"><p>A. Which queue? · <b>B. Can fraud evaluation complete after durable claim acceptance?</b> · C. Kafka or RabbitMQ? · D. How many replicas?</p><p><b>Answer: B.</b> Business semantics precede mechanism.</p></div></details>
+<details class="question"><summary>Twenty classes import a vendor SDK and a new vendor is planned. Which quality dominates?</summary><div class="answer"><p>A. Performance · <b>B. Change localization / modifiability</b> · C. Accessibility · D. UI consistency</p><p><b>Answer: B.</b></p></div></details>
+<details class="question"><summary>The organization mandates Java 21. Which statement holds?</summary><div class="answer"><p>A. Java 21 is automatically optimal · <b>B. Java 21 is a constraint even if architects would otherwise choose it</b> · C. It is a quality requirement · D. It is a runtime view</p><p><b>Answer: B.</b> What makes it a constraint is that the choice is imposed, not its quality.</p></div></details>
+<details class="question"><summary>A Product Owner needs the system boundary and neighboring systems. What do you produce?</summary><div class="answer"><p>A. Detailed class diagram · <b>B. Stakeholder-tailored context view</b> · C. Kubernetes manifests · D. DDL</p><p><b>Answer: B.</b></p></div></details>
+<details class="question"><summary>An ADR says: <code>Decision: Kafka. Reason: Kafka is scalable.</code> Main weakness?</summary><div class="answer"><p>A. ADRs cannot name technology · <b>B. Rationale is insufficiently tied to drivers, alternatives and consequences</b> · C. Kafka cannot scale · D. An ADR needs source code</p><p><b>Answer: B.</b></p></div></details>
+<details class="question"><summary>Teams use different retry policies. What is the right cross-cutting concept?</summary><div class="answer"><p>A. Same retry count for every operation · <b>B. Shared principles for eligible failures, limits, backoff, idempotency and exceptions</b> · C. Disable all retries · D. Developer choice only</p><p><b>Answer: B.</b></p></div></details>
+<details class="question"><summary>Rule: <code>Domain → Infrastructure forbidden</code>. The build detects a violation. What is it?</summary><div class="answer"><p>A. Quality scenario failure · <b>B. Conformance violation</b> · C. Context-view problem · D. Requirement conflict</p><p><b>Answer: B.</b></p></div></details>
+<details class="question"><summary>Which statement about pattern selection is defensible?</summary><div class="answer"><p>A. Event-driven is best for scalable systems · B. Layered is always easiest · <b>C. Evaluate patterns against drivers and consequences</b> · D. Microservices maximize modifiability</p><p><b>Answer: C.</b> The other three are unjustified absolutes.</p></div></details>
+<details class="question"><summary>Five teams repeatedly make incompatible architecture decisions. Staff Engineer response?</summary><div class="answer"><p>A. Personally approve every PR · <b>B. Establish shared drivers, decision records, principles, review mechanisms and automated guardrails</b> · C. Put all code in one team · D. Ban local decisions</p><p><b>Answer: B.</b> Leverage scales; personal review does not.</p></div></details>
+</div>
+</section>
+
+<section id="case"><h2>Practical Staff Engineer architecture review</h2>
+<pre><code>Angular Web
+    ↓
+Spring Boot
+ ├── PostgreSQL
+ ├── Legacy SOAP
+ ├── New REST
+ ├── Document Service
+ └── Kafka</code></pre>
+<p>Evidence:</p>
+<pre><code> 1. SOAP sometimes takes 20 seconds.
+ 2. User-facing p95 target &lt; 2 seconds.
+ 3. Some operations need immediate external confirmation.
+ 4. Others may synchronize within 15 minutes.
+ 5. Four teams use different timeout/retry policies.
+ 6. 23 classes know SOAP-generated types.
+ 7. SOAP retires within two years.
+ 8. No accepted transaction may be lost.
+ 9. Async troubleshooting is difficult.
+10. Teams want independent feature delivery.</code></pre>
+</section>
+
+<section id="exercise"><h2>Your exercise</h2>
+<p>Prepare your own answer before opening the suggested solution below.</p>
+<pre><code>A. Five architecture drivers
+B. Five risks
+C. Three assumptions to validate
+D. Immediate-confirmation vs delayed-sync operations
+E. Three architecture decisions
+F. One negative consequence per decision
+G. Two quality scenarios
+H. Three architecture rules
+I. One runtime fitness function
+J. Views for Product Owner, Developers and Operations</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Doing this from a blank page — not recognizing it when shown — is the difference between passing the exam and running the review.</div>
+</section>
+
+<section id="suggested"><h2>Suggested solution</h2>
+
+<h3>Drivers</h3>
+<pre><code>D1. User-facing p95 &lt; 2 seconds
+D2. Zero loss of accepted transactions
+D3. SOAP retirement within two years
+D4. Different consistency semantics by operation
+D5. Independent team delivery
+D6. Operability of async flows</code></pre>
+
+<h3>Risks</h3>
+<pre><code>R1. Slow SOAP violates latency.
+R2. SOAP types across 23 classes increase migration cost.
+R3. Inconsistent retries create duplicate effects/retry storms.
+R4. Async flows are hard to troubleshoot.
+R5. Making immediate-confirmation operations async
+    may violate semantics.</code></pre>
+
+<h3>Assumptions to validate</h3>
+<pre><code>A1. Which operations can legally/business-wise
+    complete asynchronously?
+A2. Can external operations be idempotent?
+A3. Can persistence/queue meet no-loss requirements?
+A4. Is 15-minute sync acceptable to all consumers?
+A5. Can correlation IDs propagate across SOAP/REST/Kafka?</code></pre>
+
+<h3>Decisions and their costs</h3>
+<div class="grid-2">
+<div class="card"><h3>1 — Legacy integration boundary</h3><pre><code>Create a domain-oriented
+integration port.
+Keep SOAP-generated types
+inside legacy adapters.</code></pre><p><b>Benefits:</b> migration locality, reduced vendor coupling, easier REST transition.</p><p><b>Costs:</b> migration effort, mapping code, extra abstraction.</p></div>
+<div class="card"><h3>2 — Selective asynchrony</h3><pre><code>Use durable async
+synchronization only where
+business semantics allow
+delayed confirmation.</code></pre><p><b>Benefits:</b> protected latency, temporal decoupling, failure buffering.</p><p><b>Costs:</b> eventual consistency, duplicate/retry handling, harder observability.</p></div>
+<div class="card"><h3>3 — Shared resilience concept</h3><pre><code>timeouts
+retry eligibility
+retry limits
+backoff/jitter
+idempotency
+circuit-breaking criteria
+metrics</code></pre><p><b>Benefits:</b> consistent failure behavior, reduced retry storms, easier operations.</p><p><b>Cost:</b> governance and managed exceptions.</p></div>
+</div>
+
+<h3>Quality scenarios</h3>
+<div class="grid-2">
+<div class="card"><h3>Performance</h3><pre><code>Source:      Interactive user
+Stimulus:    Submit operation
+             whose external sync
+             may be delayed
+Environment: Peak load
+Artifact:    Application +
+             integration subsystem
+Response:    Persist transaction
+             and acknowledge
+             without slow SOAP
+Measure:     p95 &lt; 2 seconds</code></pre></div>
+<div class="card"><h3>Reliability</h3><pre><code>Source:      SOAP provider
+Stimulus:    Provider unavailable
+             30 minutes
+Environment: Production
+Artifact:    Delayed-sync workflow
+Response:    Accepted transactions
+             remain durable and
+             retry per policy
+Measure:     0 accepted
+             transactions lost</code></pre></div>
+</div>
+
+<h3>Architecture rules</h3>
+<pre><code>1. SOAP-generated types only inside legacy adapters.
+2. Every outbound remote call defines a timeout.
+3. Retries only for classified transient failures
+   and are bounded.
+4. Async messages carry correlation IDs.
+5. Domain code cannot depend on vendor/transport classes.</code></pre>
+
+<h3>Runtime fitness function</h3>
+<p>Nightly:</p>
+<pre><code>1. Disable SOAP provider in test.
+2. Submit 1,000 delayed-sync transactions.
+3. Verify user-facing p95 &lt; 2 s.
+4. Restore provider.
+5. Verify all accepted transactions synchronize.
+6. Verify duplicate business effects = 0.</code></pre>
+<p>This evaluates performance, resilience, durability and recovery together.</p>
+
+<h3>Views by stakeholder</h3>
+<table>
+<thead><tr><th>Stakeholder</th><th>What they get</th></tr></thead>
+<tbody>
+<tr><td>Product Owner</td><td>Context + important runtime scenarios + quality scenarios</td></tr>
+<tr><td>Developers</td><td>Building blocks + runtime + interfaces + ADRs</td></tr>
+<tr><td>Operations</td><td>Deployment + failure/recovery runtime views + observability concept</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="table"><h2>Final exam distinction table</h2>
+<table>
+<thead><tr><th>Question asks…</th><th>Think…</th></tr></thead>
+<tbody>
+<tr><td>What significantly shapes architecture?</td><td>Architecture driver</td></tr>
+<tr><td>What restricts choices?</td><td>Constraint</td></tr>
+<tr><td>How well must it behave?</td><td>Quality requirement</td></tr>
+<tr><td>How can quality be evaluated concretely?</td><td>Quality scenario</td></tr>
+<tr><td>What exists outside the system?</td><td>Context</td></tr>
+<tr><td>What software parts exist?</td><td>Building block</td></tr>
+<tr><td>What happens during execution?</td><td>Runtime</td></tr>
+<tr><td>Where does it run?</td><td>Deployment</td></tr>
+<tr><td>What choice did we make?</td><td>Decision</td></tr>
+<tr><td>Why was it chosen?</td><td>Rationale</td></tr>
+<tr><td>Where is reasoning recorded?</td><td>ADR</td></tr>
+<tr><td>Does architecture meet quality goals?</td><td>Analysis / evaluation</td></tr>
+<tr><td>Does implementation follow architecture?</td><td>Conformance</td></tr>
+<tr><td>Has implementation deviated?</td><td>Drift</td></tr>
+<tr><td>Has accumulated deviation caused damage?</td><td>Erosion</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="review"><h2>Review questions</h2>
+<details><summary>Best test for architecture significance?</summary><p>Ask whether changing it would materially alter architecture.</p></details>
+<details><summary>Quality attribute vs requirement vs scenario?</summary><p>Category vs desired level vs evaluable scenario.</p></details>
+<details><summary>Constraint vs decision?</summary><p>Restriction vs selected solution.</p></details>
+<details><summary>Interface syntax vs semantics?</summary><p>Format vs meaning/behavior.</p></details>
+<details><summary>Example of semantic coupling?</summary><p>An undocumented event-order dependency.</p></details>
+<details><summary>What does change locality reveal?</summary><p>Whether predictable changes are localized.</p></details>
+<details><summary>Pattern vs decision?</summary><p>Reusable knowledge vs context-specific choice.</p></details>
+<details><summary>Which view explains timeout interaction?</summary><p>Runtime.</p></details>
+<details><summary>Which view maps software to infrastructure?</summary><p>Deployment.</p></details>
+<details><summary>View vs diagram?</summary><p>Perspective vs one representation.</p></details>
+<details><summary>Decision vs rationale vs consequence?</summary><p>Choice vs why vs resulting effects.</p></details>
+<details><summary>Why preserve superseded ADRs?</summary><p>To preserve architectural history and reasoning.</p></details>
+<details><summary>Analysis vs conformance?</summary><p>Meets goals vs follows intent.</p></details>
+<details><summary>Qualitative vs quantitative analysis?</summary><p>Reasoned judgment vs numerical evidence.</p></details>
+<details><summary>Why is a metric not a verdict?</summary><p>Context determines significance.</p></details>
+<details><summary>Drift vs intentional evolution?</summary><p>Evolution changes intent; drift diverges from intent.</p></details>
+<details><summary>Drift vs erosion?</summary><p>Deviation vs accumulated degradation.</p></details>
+<details><summary>Rule vs runtime fitness function?</summary><p>Structural rule vs executable ongoing quality evaluation.</p></details>
+<details><summary>When two answers look correct, which reasoning chain helps?</summary><p>Concern → Driver → Options → Trade-off → Decision → Evidence.</p></details>
+<details><summary>What makes Staff-level architecture leadership scalable?</summary><p>Shared drivers, decisions, principles, guardrails, automation and feedback.</p></details>
+</section>
+
+<section id="official"><h2>Official iSAQB material</h2>
+<p>As of September 2026, the official iSAQB repository still identifies <b>Foundation Level 2025.1</b> as the current version, valid since <b>April 1, 2025</b>. The English curriculum document is <b>2025.1-rev2-EN-20250427</b>.</p>
+<p>The current official exam is approximately:</p>
+<pre><code>Duration:       ~75 minutes
+Questions:      ~40
+Format:         multiple choice
+Pass threshold: 60% of maximum achievable points</code></pre>
+<p>The official Foundation Level example exam contains <b>38 questions</b> and is modeled on the real exam.</p>
+</section>
+
+<section id="resources"><h2>Recommended resources</h2>
+<div class="resource"><div><b>Official Foundation Level curriculum (EN, PDF)</b><div style="color:var(--muted)">Curriculum 2025.1-rev2, valid since April 1, 2025.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official curriculum portal</b><div style="color:var(--muted)">All language versions and revisions.</div></div>
+<a href="https://public.isaqb.org/curriculum-foundation/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Official Foundation Level exam page</b><div style="color:var(--muted)">Exam format, duration and passing threshold.</div></div>
+<a href="https://www.isaqb.org/certifications/cpsa-exams/foundation-level-exam/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Foundation Level certification page</b><div style="color:var(--muted)">Certification scope and prerequisites.</div></div>
+<a href="https://www.isaqb.org/certifications/cpsa-certifications/cpsa-foundation-level/" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<div class="resource" style="margin-top:12px"><div><b>Mark Richards — Analyzing Trade-offs (Lesson 145)</b><div style="color:var(--muted)">Software Architecture Monday.</div></div>
+<a href="https://developertoarchitect.com/lessons/lesson145.html" target="_blank" rel="noopener noreferrer">Open ↗</a></div>
+<p style="margin-top:14px">While watching, write down:</p>
+<pre><code>1. Which architecture characteristics compete?
+2. What context changes the preferred answer?
+3. What evidence would validate it?
+4. Which negative consequence is accepted?</code></pre>
+<div class="callout staff"><strong>Staff Engineer lens</strong>Do not memorize a preferred architecture style. Practice the reasoning.</div>
+</section>
+
+<section id="memorize"><h2>What to memorize vs understand</h2>
+<div class="grid-2">
+<div class="card"><h3>Memorize precisely</h3><pre><code>Architecture driver
+Constraint
+Quality requirement
+Quality scenario
+Black box / white box
+Building block
+Context / runtime / deployment view
+Provided / required interface
+Cross-cutting concern / concept
+Architecture decision / rationale
+Qualitative / quantitative analysis
+Conformance
+Drift
+Erosion</code></pre></div>
+<div class="card"><h3>Understand deeply</h3><pre><code>When a pattern fits
+How qualities trade off
+When abstraction is justified
+How to select views
+How to evaluate risk
+How to validate assumptions
+How to evolve decisions
+How to establish guardrails</code></pre></div>
+</div>
+<p>The exam rewards both. The Staff Engineer path especially depends on the second group.</p>
+</section>
+
+<section id="next"><h2>Next — Day 25</h2>
+<p>The final structured Foundation-Level readiness lesson will include:</p>
+<pre><code>Full curriculum readiness checklist
+Exam-day strategy
+High-value definitions
+Final distinction drills
+Official mock-exam strategy
+Weakness scoring framework
+Last Staff Engineer transfer exercise
+CPSA-A bridge</code></pre>
+<p>After Day 25, further Foundation-Level preparation should be driven mainly by your results on the official iSAQB example exam rather than by adding more theory.</p>
+</section>
+
+<section id="progress"><h2>Course progress</h2>
+<p>Keep all course files in the same folder. Every day links directly to every other lesson.</p>
+<div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.html"><small>Day 01</small><b>Architecture Fundamentals</b></a>
+<a class="day" data-day="02" href="isaqb-cpsa-f-day-02.html"><small>Day 02</small><b>Architect Responsibilities</b></a>
+<a class="day" data-day="03" href="isaqb-cpsa-f-day-03.html"><small>Day 03</small><b>Long-term Impact</b></a>
+<a class="day" data-day="04" href="isaqb-cpsa-f-day-04.html"><small>Day 04</small><b>Stakeholders &amp; Concerns</b></a>
+<a class="day" data-day="05" href="isaqb-cpsa-f-day-05.html"><small>Day 05</small><b>Requirements &amp; Constraints</b></a>
+<a class="day" data-day="06" href="isaqb-cpsa-f-day-06.html"><small>Day 06</small><b>Architecture Drivers</b></a>
+<a class="day" data-day="07" href="isaqb-cpsa-f-day-07.html"><small>Day 07</small><b>Decomposition</b></a>
+<a class="day" data-day="08" href="isaqb-cpsa-f-day-08.html"><small>Day 08</small><b>Design Approaches</b></a>
+<a class="day" data-day="09" href="isaqb-cpsa-f-day-09.html"><small>Day 09</small><b>Design Principles</b></a>
+<a class="day" data-day="10" href="isaqb-cpsa-f-day-10.html"><small>Day 10</small><b>Dependencies &amp; Interfaces</b></a>
+<a class="day" data-day="11" href="isaqb-cpsa-f-day-11.html"><small>Day 11</small><b>Revision &amp; Mock Exam</b></a>
+<a class="day" data-day="12" href="isaqb-cpsa-f-day-12.html"><small>Day 12</small><b>Architectural Patterns</b></a>
+<a class="day" data-day="13" href="isaqb-cpsa-f-day-13.html"><small>Day 13</small><b>Feedback Loops &amp; Risk</b></a>
+<a class="day" data-day="14" href="isaqb-cpsa-f-day-14.html"><small>Day 14</small><b>Cross-Cutting Concerns</b></a>
+<a class="day" data-day="15" href="isaqb-cpsa-f-day-15.html"><small>Day 15</small><b>Documentation &amp; Views</b></a>
+<a class="day" data-day="16" href="isaqb-cpsa-f-day-16.html"><small>Day 16</small><b>Interfaces, Decisions &amp; ADRs</b></a>
+<a class="day" data-day="17" href="isaqb-cpsa-f-day-17.html"><small>Day 17</small><b>Analysis &amp; Evaluation</b></a>
+<a class="day" data-day="18" href="isaqb-cpsa-f-day-18.html"><small>Day 18</small><b>Conformance &amp; Fitness Functions</b></a>
+<a class="day" data-day="19" href="isaqb-cpsa-f-day-19.html"><small>Day 19</small><b>Full Revision I</b></a>
+<a class="day" data-day="20" href="isaqb-cpsa-f-day-20.html"><small>Day 20</small><b>Mock Exam I</b></a>
+<a class="day" data-day="21" href="isaqb-cpsa-f-day-21.html"><small>Day 21</small><b>Mock Review &amp; Remediation</b></a>
+<a class="day" data-day="22" href="isaqb-cpsa-f-day-22.html"><small>Day 22</small><b>Trade-Off Analysis</b></a>
+<a class="day" data-day="23" href="isaqb-cpsa-f-day-23.html"><small>Day 23</small><b>Mock Exam II</b></a>
+<a class="day active" data-day="24" href="isaqb-cpsa-f-day-24.html"><small>Day 24</small><b>Mock II Review &amp; Final Remediation</b></a></div>
+<div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-23.html">← Previous day</a></div>
+</section>
+</main>
+</div>
+<footer class="wrap">iSAQB CPSA-F Study Guide · Day 24 · Designed for local browser reading and printing</footer>
+
+<script>
+(function(){
+  var DAY = "24";
+  var KEY = "isaqb-cpsaf-progress";
+  function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+  function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+  function render(){
+    var done = getDone();
+    var btn = document.getElementById("complete-toggle");
+    var mine = done.indexOf(DAY) !== -1;
+    btn.textContent = mine ? "✓ Day " + DAY + " completed" : "Mark day complete";
+    btn.classList.toggle("done", mine);
+    document.querySelectorAll(".progress .day").forEach(function(a){
+      var d = a.getAttribute("data-day");
+      a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+    });
+  }
+  document.getElementById("complete-toggle").addEventListener("click", function(){
+    var done = getDone();
+    var i = done.indexOf(DAY);
+    if (i === -1) done.push(DAY); else done.splice(i, 1);
+    setDone(done);
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

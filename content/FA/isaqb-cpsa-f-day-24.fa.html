@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۲۴ دوره iSAQB CPSA-F: بازبینی آزمون آزمایشی II و ترمیم نهایی نقاط ضعف — تمایزهای دشوار، تمرین‌های «دو گزینه درست به‌نظر می‌رسند» و یک بازبینی معماری Staff Engineer" />
+  <title>iSAQB CPSA-F — روز ۲۴: بازبینی آزمون II و ترمیم نهایی</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-24.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-24.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۲۴</span>
+      <h1>بازبینی آزمون II و ترمیم نهایی نقاط ضعف</h1>
+      <p class="subtitle">
+        تمایزهای دشوار و استدلال «دو گزینه درست به‌نظر می‌رسند» — چیزی که پیش از آزمون آزمایشی رسمی iSAQB لازم دارید — به‌همراه یک بازبینی کامل معماری در نقش Staff Engineer.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>تمرکز:</strong> تمایزهای دشوار، تمرین ابهام، مطالعه موردی بازبینی</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#skill">مهارت اصلی آزمون</a>
+      <a href="#significance">آزمون اهمیت محرک</a>
+      <a href="#quality">ویژگی، نیازمندی و سناریوی کیفی</a>
+      <a href="#constraint">محدودیت در برابر تصمیم</a>
+      <a href="#interface">نحو در برابر معنای رابط</a>
+      <a href="#semantic">جفت‌شدگی معنایی</a>
+      <a href="#cohesion">انسجام و محلی‌بودن تغییر</a>
+      <a href="#pattern">الگو در برابر تصمیم</a>
+      <a href="#views">نماهای معماری — نگاشت دشوار</a>
+      <a href="#rationale">تصمیم، دلیل، پیامد</a>
+      <a href="#adr">تکامل ADR</a>
+      <a href="#analysis">تحلیل، اعتبارسنجی و انطباق</a>
+      <a href="#qualquant">تحلیل کیفی در برابر کمی</a>
+      <a href="#metric">تله متریک</a>
+      <a href="#drift">انحراف، تکامل و فرسایش</a>
+      <a href="#fitness">قاعده در برابر تابع تناسب</a>
+      <a href="#drills">تمرین‌های «دو گزینه درست»</a>
+      <a href="#case">بازبینی معماری Staff Engineer</a>
+      <a href="#exercise">تمرین شما</a>
+      <a href="#suggested">پاسخ پیشنهادی</a>
+      <a href="#table">جدول نهایی تمایزها</a>
+      <a href="#review">پرسش‌های مرور</a>
+      <a href="#official">منابع رسمی iSAQB</a>
+      <a href="#resources">منابع پیشنهادی</a>
+      <a href="#memorize">حفظ کردن در برابر درک کردن</a>
+      <a href="#next">بعدی — روز ۲۵</a>
+      <a href="#progress">پیشرفت</a>
+    </aside>
+
+    <main>
+      <section id="skill">
+        <h2>مهارت اصلی آزمون</h2>
+        <p class="lead">روزهای ۱ تا ۲۳ کامل شده‌اند. امروز آخرین ترمیم مبتنی بر تئوری است: وقتی چند گزینه محتمل به‌نظر می‌رسند، آزمون یک «رویه استدلال» را می‌سنجد، نه یک تعریف را.</p>
+        <pre><code>1. What concept is actually being tested?
+2. What are the architecture drivers?
+3. What constraints apply?
+4. Which answer addresses the concern most directly?
+5. Which makes fewer unsupported assumptions?
+6. Which avoids unjustified absolutes?</code></pre>
+        <p>این زنجیره استدلال را ترجیح دهید:</p>
+        <pre><code>Concern → Driver → Options → Trade-off → Decision → Evidence</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>این یک ترفند آزمون نیست. دقیقاً همان شکلی است که یک بازبینی معماری معتبر در برابر تیم‌هایی که اختلاف‌نظر دارند استدلال می‌شود.</div>
+      </section>
+
+      <section id="significance">
+        <h2>محرک معماری — آزمون اهمیت</h2>
+        <div class="grid-2">
+          <div class="card"><h3>R1</h3><pre><code>Users can sort claims by date.</code></pre><p>در سطح قابلیت. بعید است معماری را تغییر دهد.</p></div>
+          <div class="card"><h3>R2</h3><pre><code>Claims remain available when
+Fraud Provider fails.</code></pre><p>می‌تواند تعامل زمان اجرا، مدیریت خطا، پایداری، ارتباط، سیاست تایم‌اوت/تلاش مجدد و سازگاری داده را تغییر دهد.</p></div>
+        </div>
+        <div class="callout info"><strong>پرسشی که باید پرسید</strong>اگر این نیازمندی به‌طور اساسی تغییر کند، آیا معماری ما احتمالاً تغییر می‌کند؟ اگر بله، احتمالاً یک محرک معماری است.</div>
+        <div class="callout exam"><strong>تله</strong>قابل اندازه‌گیری بودن به‌طور خودکار به معنای اهمیت معماری نیست.</div>
+      </section>
+
+      <section id="quality">
+        <h2>ویژگی کیفی در برابر نیازمندی و سناریو</h2>
+        <div class="grid-2">
+          <div class="card"><h3>ویژگی (Attribute)</h3><pre><code>Availability</code></pre></div>
+          <div class="card"><h3>نیازمندی</h3><pre><code>Checkout availability &gt;= 99.95%.</code></pre></div>
+        </div>
+        <p>سناریو:</p>
+        <pre><code>Source:      Payment provider
+Stimulus:    Provider unavailable
+Environment: Peak traffic
+Artifact:    Checkout
+Response:    Orders follow defined fallback behavior
+Measure:     Availability remains &gt;= 99.95%</code></pre>
+        <div class="callout info"><strong>میان‌بر</strong>ویژگی = دسته‌بندی. نیازمندی = سطح مطلوب. سناریو = موقعیت مشخص و قابل ارزیابی.</div>
+      </section>
+
+      <section id="constraint">
+        <h2>محدودیت در برابر تصمیم</h2>
+        <div class="grid-2">
+          <div class="card"><h3>محدودیت</h3><pre><code>Customer data must remain
+in Germany.</code></pre></div>
+          <div class="card"><h3>تصمیم</h3><pre><code>Deploy customer-data workloads
+in two German cloud regions.</code></pre></div>
+        </div>
+        <p>یک فناوری می‌تواند هر دو باشد:</p>
+        <div class="grid-2">
+          <div class="card"><h3>به‌عنوان محدودیت</h3><pre><code>Company policy mandates
+PostgreSQL.</code></pre></div>
+          <div class="card"><h3>به‌عنوان تصمیم</h3><pre><code>Alternatives were evaluated and
+PostgreSQL was selected.</code></pre></div>
+        </div>
+        <div class="callout info"><strong>میان‌بر</strong>تفاوت در <i>چرایی</i> ثابت بودن انتخاب است — بر شما تحمیل شده، یا شما آن را انتخاب کرده‌اید.</div>
+      </section>
+
+      <section id="interface">
+        <h2>نحو در برابر معنای رابط</h2>
+        <p>رویداد:</p>
+        <pre><code>claimId: string
+status:  APPROVED</code></pre>
+        <p>نحو، فیلدها، انواع، اسکیما و سریال‌سازی را توصیف می‌کند. معنا به این پرسش‌ها پاسخ می‌دهد:</p>
+        <pre><code>What exactly does APPROVED mean?
+Can it later change?
+Can delivery duplicate?
+Does ordering matter?
+When is the event final?</code></pre>
+        <div class="callout info"><strong>میان‌بر</strong>رابط پایدار نیازمند «معنای مشترک» است، نه صرفاً JSON سازگار.</div>
+      </section>
+
+      <section id="semantic">
+        <h2>جفت‌شدگی معنایی</h2>
+        <p>سرویس B فرض می‌کند:</p>
+        <pre><code>CustomerUpdated always arrives
+before InvoiceCreated.</code></pre>
+        <p>هیچ قراردادی این را تضمین نمی‌کند. این جفت‌شدگی معنایی/رفتاری از راه یک فرض ترتیبی مستندنشده است.</p>
+        <div class="callout exam"><strong>تله</strong>تغییر REST به Kafka آن را از بین نمی‌برد. جفت‌شدگی در پروتکل نیست، در همان فرض است.</div>
+      </section>
+
+      <section id="cohesion">
+        <h2>انسجام و محلی‌بودن تغییر</h2>
+        <p>اگر افزودن یک تأمین‌کننده سند باعث تغییر در Claims، Billing، Customer، Notification و Reporting شود، تغییرِ قابل پیش‌بینی به‌خوبی محلی نشده است.</p>
+        <pre><code>Document Port
+     ↓
+Vendor A Adapter
+Vendor B Adapter</code></pre>
+        <div class="callout info"><strong>نکته</strong>هدف «رابط بیشتر» نیست. هدف محلی کردن تغییرهای مرتبط است.</div>
+      </section>
+
+      <section id="pattern">
+        <h2>الگو در برابر تصمیم</h2>
+        <div class="grid-2">
+          <div class="card"><h3>الگو</h3><pre><code>Ports and Adapters</code></pre><p>دانش قابل استفاده مجدد.</p></div>
+          <div class="card"><h3>تصمیم</h3><pre><code>Isolate the document vendor behind
+a domain-owned port because a
+second vendor must be introduced
+this year.</code></pre><p>استدلال اعمال‌شده بر یک زمینه مشخص.</p></div>
+        </div>
+      </section>
+
+      <section id="views">
+        <h2>نماهای معماری — نگاشت دشوار</h2>
+        <table>
+          <thead><tr><th>پرسش</th><th>نما</th></tr></thead>
+          <tbody>
+            <tr><td>چه سیستم‌های بیرونی مشارکت دارند؟</td><td>زمینه (Context)</td></tr>
+            <tr><td>چه بخش‌های نرم‌افزاری داخلی وجود دارند؟</td><td>بلوک ساختمانی</td></tr>
+            <tr><td>وقتی Fraud تایم‌اوت می‌شود چه رخ می‌دهد؟</td><td>زمان اجرا</td></tr>
+            <tr><td>Fraud Adapter کجا مستقر شده است؟</td><td>استقرار</td></tr>
+          </tbody>
+        </table>
+        <div class="callout info"><strong>میان‌بر</strong>نما یک منظر معماری ذی‌نفع‌محور است. نمودار تنها یکی از بازنمایی‌های ممکن آن است.</div>
+      </section>
+
+      <section id="rationale">
+        <h2>تصمیم، دلیل، پیامد</h2>
+        <pre><code>Decision:
+Use durable asynchronous SAP synchronization.
+
+Rationale:
+Order acceptance must survive SAP outages and
+delayed sync is acceptable.
+
+Positive consequence:
+Temporal decoupling.
+
+Negative consequence:
+Eventual consistency and duplicate handling.</code></pre>
+        <p>اینها سه قطعه متفاوت از دانش معماری‌اند — گزینه‌ای که آنها را در هم می‌آمیزد معمولاً پاسخ ضعیف‌تر است.</p>
+      </section>
+
+      <section id="adr">
+        <h2>تکامل ADR</h2>
+        <pre><code>Proposed → Accepted → Deprecated/Superseded</code></pre>
+        <div class="callout info"><strong>چرا مهم است</strong>وقتی تصمیمی تغییر می‌کند، تاریخچه را حفظ کنید و دلیل قدیمی را بی‌سروصدا بازنویسی نکنید. رکورد جایگزین‌شده توضیح می‌دهد چرا سیستم امروز این شکلی است.</div>
+      </section>
+
+      <section id="analysis">
+        <h2>تحلیل، اعتبارسنجی و انطباق</h2>
+        <pre><code>Analysis:
+Will the architecture satisfy required qualities?
+
+Validation:
+Does observed evidence support our assumptions?
+
+Conformance:
+Does implementation follow intended architecture?</code></pre>
+        <p>نمونه‌ها:</p>
+        <pre><code>Analyze synchronous Fraud dependency  → analysis
+Inject Fraud outage                   → validation/evidence
+Check domain cannot import vendor SDK → conformance</code></pre>
+      </section>
+
+      <section id="qualquant">
+        <h2>تحلیل کیفی در برابر کمی</h2>
+        <div class="grid-2">
+          <div class="card"><h3>کیفی</h3><pre><code>Scenario walkthrough indicates
+shared DB creates change coupling.</code></pre></div>
+          <div class="card"><h3>کمی</h3><pre><code>p95 = 1.4 s
+Availability = 99.7%
+17 classes import Vendor SDK</code></pre></div>
+        </div>
+        <div class="callout exam"><strong>تله</strong>شواهد کمی به‌طور خودکار برتر نیستند؛ یک عدد دقیق می‌تواند چیز اشتباهی را اندازه بگیرد.</div>
+      </section>
+
+      <section id="metric">
+        <h2>تله متریک</h2>
+        <pre><code>Component X has 18 dependencies.</code></pre>
+        <p>زنجیره درست:</p>
+        <pre><code>Metric → Signal → Contextual interpretation → Possible action</code></pre>
+        <p>نه:</p>
+        <pre><code>Metric → Automatic verdict</code></pre>
+      </section>
+
+      <section id="drift">
+        <h2>انحراف، تکامل و فرسایش</h2>
+        <ul>
+          <li><b>تکامل عمدی</b> نیت معماری را از راه یک تصمیم صریح تغییر می‌دهد.</li>
+          <li><b>انحراف (Drift)</b> واگرایی میان پیاده‌سازی و نیت فعلی معماری است.</li>
+          <li><b>فرسایش (Erosion)</b> انحراف مضرِ انباشته است که ویژگی‌های معماری را تضعیف می‌کند.</li>
+        </ul>
+        <pre><code>One unauthorized direct DB access → drift
+
+Years of cross-DB access causing
+coordinated releases             → erosion</code></pre>
+      </section>
+
+      <section id="fitness">
+        <h2>قاعده معماری در برابر تابع تناسب</h2>
+        <div class="grid-2">
+          <div class="card"><h3>قاعده + بررسی</h3><pre><code>Only document adapters may
+import vendor SDK.
+
+Check: CI dependency test.</code></pre></div>
+          <div class="card"><h3>تابع تناسب زمان اجرا</h3><pre><code>During simulated downstream outage,
+claim acceptance remains above
+target.</code></pre></div>
+        </div>
+        <div class="callout info"><strong>میان‌بر</strong>توابع تناسب می‌توانند ویژگی‌های معماری در زمان اجرا را ارزیابی کنند، نه فقط وابستگی‌های ایستا را.</div>
+      </section>
+
+      <section id="drills">
+        <h2>تمرین‌های دشوار «دو گزینه درست به‌نظر می‌رسند»</h2>
+        <div class="question-set">
+          <details class="question"><summary>نیازمندی <code>p95 &lt; 500 ms</code> و مشاهده <code>p95 = 900 ms</code>. حالا چه؟</summary><div class="answer"><p>الف. فوراً PostgreSQL را جایگزین کن · <b>ب. نیازمندی نقض شده است؛ پیش از انتخاب راه‌حل، عوامل مؤثر را تحلیل کن</b> · ج. Redis اضافه کن · د. به میکروسرویس بشکن</p><p><b>پاسخ: ب.</b> شواهد مسئله را مشخص می‌کنند، نه ریشه آن را.</p></div></details>
+          <details class="question"><summary>Fraud API ۱۵ ثانیه طول می‌کشد؛ هدف کاربر کمتر از ۲ ثانیه است. اولین پرسش؟</summary><div class="answer"><p>الف. کدام صف؟ · <b>ب. آیا ارزیابی تقلب می‌تواند پس از پذیرش پایدارِ ادعا کامل شود؟</b> · ج. Kafka یا RabbitMQ؟ · د. چند replica؟</p><p><b>پاسخ: ب.</b> معنای کسب‌وکاری بر مکانیزم مقدم است.</p></div></details>
+          <details class="question"><summary>بیست کلاس یک SDK فروشنده را import می‌کنند و فروشنده جدیدی در راه است. کدام کیفیت غالب است؟</summary><div class="answer"><p>الف. کارایی · <b>ب. محلی‌سازی تغییر / تغییرپذیری</b> · ج. دسترس‌پذیری برای معلولان · د. یکدستی رابط کاربری</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>سازمان استفاده از Java 21 را الزامی کرده است. کدام گزاره درست است؟</summary><div class="answer"><p>الف. Java 21 خودبه‌خود بهینه است · <b>ب. Java 21 یک محدودیت است، حتی اگر معماران هم همان را انتخاب می‌کردند</b> · ج. یک نیازمندی کیفی است · د. یک نمای زمان اجراست</p><p><b>پاسخ: ب.</b> آنچه آن را محدودیت می‌کند تحمیلی بودن انتخاب است، نه کیفیت آن.</p></div></details>
+          <details class="question"><summary>Product Owner مرز سیستم و سیستم‌های همسایه را می‌خواهد. چه تولید می‌کنید؟</summary><div class="answer"><p>الف. نمودار کلاس تفصیلی · <b>ب. نمای زمینه متناسب با ذی‌نفع</b> · ج. مانیفست‌های Kubernetes · د. DDL</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>یک ADR می‌گوید: <code>Decision: Kafka. Reason: Kafka is scalable.</code> ضعف اصلی؟</summary><div class="answer"><p>الف. ADR نمی‌تواند نام فناوری ببرد · <b>ب. دلیل به‌اندازه کافی به محرک‌ها، جایگزین‌ها و پیامدها گره نخورده است</b> · ج. Kafka مقیاس‌پذیر نیست · د. ADR به کد منبع نیاز دارد</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>تیم‌ها سیاست‌های تلاش مجدد متفاوتی دارند. مفهوم فراگیر درست چیست؟</summary><div class="answer"><p>الف. تعداد تلاش یکسان برای هر عملیات · <b>ب. اصول مشترک برای خطاهای واجد شرایط، سقف‌ها، backoff، idempotency و استثناها</b> · ج. غیرفعال کردن همه تلاش‌های مجدد · د. فقط انتخاب توسعه‌دهنده</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>قاعده: <code>Domain → Infrastructure forbidden</code>. بیلد یک نقض را تشخیص می‌دهد. این چیست؟</summary><div class="answer"><p>الف. شکست سناریوی کیفی · <b>ب. نقض انطباق</b> · ج. مشکل نمای زمینه · د. تعارض نیازمندی</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>کدام گزاره درباره انتخاب الگو قابل دفاع است؟</summary><div class="answer"><p>الف. رویدادمحور برای سیستم‌های مقیاس‌پذیر بهترین است · ب. لایه‌ای همیشه ساده‌ترین است · <b>ج. الگوها را در برابر محرک‌ها و پیامدها ارزیابی کن</b> · د. میکروسرویس تغییرپذیری را بیشینه می‌کند</p><p><b>پاسخ: ج.</b> سه گزینه دیگر مطلق‌گویی بی‌پشتوانه‌اند.</p></div></details>
+          <details class="question"><summary>پنج تیم مکرراً تصمیم‌های معماری ناسازگار می‌گیرند. پاسخ Staff Engineer؟</summary><div class="answer"><p>الف. شخصاً هر PR را تأیید کن · <b>ب. محرک‌های مشترک، رکوردهای تصمیم، اصول، سازوکار بازبینی و حفاظ‌های خودکار را برقرار کن</b> · ج. همه کد را به یک تیم بده · د. تصمیم محلی را ممنوع کن</p><p><b>پاسخ: ب.</b> اهرم مقیاس می‌گیرد؛ بازبینی شخصی نه.</p></div></details>
+        </div>
+      </section>
+
+      <section id="case">
+        <h2>بازبینی عملی معماری در نقش Staff Engineer</h2>
+        <pre><code>Angular Web
+    ↓
+Spring Boot
+ ├── PostgreSQL
+ ├── Legacy SOAP
+ ├── New REST
+ ├── Document Service
+ └── Kafka</code></pre>
+        <p>شواهد:</p>
+        <pre><code> 1. SOAP sometimes takes 20 seconds.
+ 2. User-facing p95 target &lt; 2 seconds.
+ 3. Some operations need immediate external confirmation.
+ 4. Others may synchronize within 15 minutes.
+ 5. Four teams use different timeout/retry policies.
+ 6. 23 classes know SOAP-generated types.
+ 7. SOAP retires within two years.
+ 8. No accepted transaction may be lost.
+ 9. Async troubleshooting is difficult.
+10. Teams want independent feature delivery.</code></pre>
+      </section>
+
+      <section id="exercise">
+        <h2>تمرین شما</h2>
+        <p>پیش از باز کردن پاسخ پیشنهادی، پاسخ خودتان را آماده کنید.</p>
+        <pre><code>A. Five architecture drivers
+B. Five risks
+C. Three assumptions to validate
+D. Immediate-confirmation vs delayed-sync operations
+E. Three architecture decisions
+F. One negative consequence per decision
+G. Two quality scenarios
+H. Three architecture rules
+I. One runtime fitness function
+J. Views for Product Owner, Developers and Operations</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>انجام این کار از صفحه سفید — نه تشخیص آن وقتی نشانتان می‌دهند — تفاوت میان قبولی در آزمون و اداره کردن یک بازبینی است.</div>
+      </section>
+
+      <section id="suggested">
+        <h2>پاسخ پیشنهادی</h2>
+
+        <h3>محرک‌ها</h3>
+        <pre><code>D1. User-facing p95 &lt; 2 seconds
+D2. Zero loss of accepted transactions
+D3. SOAP retirement within two years
+D4. Different consistency semantics by operation
+D5. Independent team delivery
+D6. Operability of async flows</code></pre>
+
+        <h3>ریسک‌ها</h3>
+        <pre><code>R1. Slow SOAP violates latency.
+R2. SOAP types across 23 classes increase migration cost.
+R3. Inconsistent retries create duplicate effects/retry storms.
+R4. Async flows are hard to troubleshoot.
+R5. Making immediate-confirmation operations async
+    may violate semantics.</code></pre>
+
+        <h3>فرض‌هایی که باید اعتبارسنجی شوند</h3>
+        <pre><code>A1. Which operations can legally/business-wise
+    complete asynchronously?
+A2. Can external operations be idempotent?
+A3. Can persistence/queue meet no-loss requirements?
+A4. Is 15-minute sync acceptable to all consumers?
+A5. Can correlation IDs propagate across SOAP/REST/Kafka?</code></pre>
+
+        <h3>تصمیم‌ها و هزینه‌هایشان</h3>
+        <div class="grid-2">
+          <div class="card"><h3>۱ — مرز یکپارچه‌سازی قدیمی</h3><pre><code>Create a domain-oriented
+integration port.
+Keep SOAP-generated types
+inside legacy adapters.</code></pre><p><b>مزایا:</b> محلی شدن مهاجرت، کاهش جفت‌شدگی با فروشنده، گذار آسان‌تر به REST.</p><p><b>هزینه‌ها:</b> تلاش مهاجرت، کد نگاشت، لایه انتزاعی اضافی.</p></div>
+          <div class="card"><h3>۲ — ناهم‌زمانی انتخابی</h3><pre><code>Use durable async
+synchronization only where
+business semantics allow
+delayed confirmation.</code></pre><p><b>مزایا:</b> حفاظت از تأخیر، جداسازی زمانی، بافر کردن خطا.</p><p><b>هزینه‌ها:</b> سازگاری نهایی، مدیریت تکرار/تلاش مجدد، رصدپذیری دشوارتر.</p></div>
+          <div class="card"><h3>۳ — مفهوم مشترک تاب‌آوری</h3><pre><code>timeouts
+retry eligibility
+retry limits
+backoff/jitter
+idempotency
+circuit-breaking criteria
+metrics</code></pre><p><b>مزایا:</b> رفتار خطای یکدست، کاهش طوفان تلاش مجدد، عملیات آسان‌تر.</p><p><b>هزینه:</b> حاکمیت و مدیریت استثناها.</p></div>
+        </div>
+
+        <h3>سناریوهای کیفی</h3>
+        <div class="grid-2">
+          <div class="card"><h3>کارایی</h3><pre><code>Source:      Interactive user
+Stimulus:    Submit operation
+             whose external sync
+             may be delayed
+Environment: Peak load
+Artifact:    Application +
+             integration subsystem
+Response:    Persist transaction
+             and acknowledge
+             without slow SOAP
+Measure:     p95 &lt; 2 seconds</code></pre></div>
+          <div class="card"><h3>قابلیت اطمینان</h3><pre><code>Source:      SOAP provider
+Stimulus:    Provider unavailable
+             30 minutes
+Environment: Production
+Artifact:    Delayed-sync workflow
+Response:    Accepted transactions
+             remain durable and
+             retry per policy
+Measure:     0 accepted
+             transactions lost</code></pre></div>
+        </div>
+
+        <h3>قواعد معماری</h3>
+        <pre><code>1. SOAP-generated types only inside legacy adapters.
+2. Every outbound remote call defines a timeout.
+3. Retries only for classified transient failures
+   and are bounded.
+4. Async messages carry correlation IDs.
+5. Domain code cannot depend on vendor/transport classes.</code></pre>
+
+        <h3>تابع تناسب زمان اجرا</h3>
+        <p>هر شب:</p>
+        <pre><code>1. Disable SOAP provider in test.
+2. Submit 1,000 delayed-sync transactions.
+3. Verify user-facing p95 &lt; 2 s.
+4. Restore provider.
+5. Verify all accepted transactions synchronize.
+6. Verify duplicate business effects = 0.</code></pre>
+        <p>این کار کارایی، تاب‌آوری، پایداری و بازیابی را با هم ارزیابی می‌کند.</p>
+
+        <h3>نماها بر اساس ذی‌نفع</h3>
+        <table>
+          <thead><tr><th>ذی‌نفع</th><th>چه چیزی دریافت می‌کند</th></tr></thead>
+          <tbody>
+            <tr><td>Product Owner</td><td>زمینه + سناریوهای مهم زمان اجرا + سناریوهای کیفی</td></tr>
+            <tr><td>توسعه‌دهندگان</td><td>بلوک‌های ساختمانی + زمان اجرا + رابط‌ها + ADRها</td></tr>
+            <tr><td>عملیات</td><td>استقرار + نماهای زمان اجرای خطا/بازیابی + مفهوم رصدپذیری</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="table">
+        <h2>جدول نهایی تمایزها برای آزمون</h2>
+        <table>
+          <thead><tr><th>پرسش درباره…</th><th>فکر کنید به…</th></tr></thead>
+          <tbody>
+            <tr><td>چه چیزی معماری را به‌طور معنادار شکل می‌دهد؟</td><td>محرک معماری</td></tr>
+            <tr><td>چه چیزی انتخاب‌ها را محدود می‌کند؟</td><td>محدودیت</td></tr>
+            <tr><td>چقدر خوب باید رفتار کند؟</td><td>نیازمندی کیفی</td></tr>
+            <tr><td>کیفیت چگونه به‌طور مشخص ارزیابی می‌شود؟</td><td>سناریوی کیفی</td></tr>
+            <tr><td>بیرون از سیستم چه چیزی وجود دارد؟</td><td>زمینه</td></tr>
+            <tr><td>چه بخش‌های نرم‌افزاری وجود دارند؟</td><td>بلوک ساختمانی</td></tr>
+            <tr><td>در حین اجرا چه رخ می‌دهد؟</td><td>زمان اجرا</td></tr>
+            <tr><td>کجا اجرا می‌شود؟</td><td>استقرار</td></tr>
+            <tr><td>چه انتخابی کردیم؟</td><td>تصمیم</td></tr>
+            <tr><td>چرا انتخاب شد؟</td><td>دلیل (Rationale)</td></tr>
+            <tr><td>استدلال کجا ثبت می‌شود؟</td><td>ADR</td></tr>
+            <tr><td>آیا معماری اهداف کیفی را برآورده می‌کند؟</td><td>تحلیل / ارزیابی</td></tr>
+            <tr><td>آیا پیاده‌سازی از معماری پیروی می‌کند؟</td><td>انطباق</td></tr>
+            <tr><td>آیا پیاده‌سازی منحرف شده است؟</td><td>انحراف (Drift)</td></tr>
+            <tr><td>آیا انحراف انباشته آسیب زده است؟</td><td>فرسایش (Erosion)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="review">
+        <h2>پرسش‌های مرور</h2>
+        <details><summary>بهترین آزمون برای اهمیت معماری چیست؟</summary><p>بپرسید آیا تغییر آن معماری را به‌طور مادی دگرگون می‌کند.</p></details>
+        <details><summary>ویژگی، نیازمندی و سناریوی کیفی؟</summary><p>دسته‌بندی در برابر سطح مطلوب در برابر سناریوی قابل ارزیابی.</p></details>
+        <details><summary>محدودیت در برابر تصمیم؟</summary><p>محدودسازی در برابر راه‌حل انتخاب‌شده.</p></details>
+        <details><summary>نحو در برابر معنای رابط؟</summary><p>قالب در برابر معنا/رفتار.</p></details>
+        <details><summary>نمونه‌ای از جفت‌شدگی معنایی؟</summary><p>وابستگی مستندنشده به ترتیب رویدادها.</p></details>
+        <details><summary>محلی‌بودن تغییر چه چیزی را آشکار می‌کند؟</summary><p>اینکه آیا تغییرهای قابل پیش‌بینی محلی شده‌اند.</p></details>
+        <details><summary>الگو در برابر تصمیم؟</summary><p>دانش قابل استفاده مجدد در برابر انتخاب وابسته به زمینه.</p></details>
+        <details><summary>کدام نما تعامل تایم‌اوت را توضیح می‌دهد؟</summary><p>زمان اجرا.</p></details>
+        <details><summary>کدام نما نرم‌افزار را به زیرساخت نگاشت می‌کند؟</summary><p>استقرار.</p></details>
+        <details><summary>نما در برابر نمودار؟</summary><p>منظر در برابر یک بازنمایی.</p></details>
+        <details><summary>تصمیم، دلیل و پیامد؟</summary><p>انتخاب، چرایی، و اثرهای حاصل.</p></details>
+        <details><summary>چرا ADRهای جایگزین‌شده را نگه داریم؟</summary><p>برای حفظ تاریخچه و استدلال معماری.</p></details>
+        <details><summary>تحلیل در برابر انطباق؟</summary><p>برآورده کردن اهداف در برابر پیروی از نیت.</p></details>
+        <details><summary>تحلیل کیفی در برابر کمی؟</summary><p>قضاوت مستدل در برابر شواهد عددی.</p></details>
+        <details><summary>چرا یک متریک حکم نهایی نیست؟</summary><p>زمینه است که اهمیت را تعیین می‌کند.</p></details>
+        <details><summary>انحراف در برابر تکامل عمدی؟</summary><p>تکامل نیت را تغییر می‌دهد؛ انحراف از نیت فاصله می‌گیرد.</p></details>
+        <details><summary>انحراف در برابر فرسایش؟</summary><p>واگرایی در برابر تخریب انباشته.</p></details>
+        <details><summary>قاعده در برابر تابع تناسب زمان اجرا؟</summary><p>قاعده ساختاری در برابر ارزیابی کیفی اجراشدنی و مستمر.</p></details>
+        <details><summary>وقتی دو گزینه درست به‌نظر می‌رسند، کدام زنجیره استدلال کمک می‌کند؟</summary><p>Concern → Driver → Options → Trade-off → Decision → Evidence.</p></details>
+        <details><summary>چه چیزی رهبری معماری در سطح Staff را مقیاس‌پذیر می‌کند؟</summary><p>محرک‌ها، تصمیم‌ها، اصول، حفاظ‌ها، خودکارسازی و بازخورد مشترک.</p></details>
+      </section>
+
+      <section id="official">
+        <h2>منابع رسمی iSAQB</h2>
+        <p>تا سپتامبر ۲۰۲۶، مخزن رسمی iSAQB همچنان <b>Foundation Level 2025.1</b> را نسخه جاری معرفی می‌کند که از <b>۱ آوریل ۲۰۲۵</b> معتبر است. سند انگلیسی برنامه درسی <b>2025.1-rev2-EN-20250427</b> است.</p>
+        <p>آزمون رسمی فعلی تقریباً چنین است:</p>
+        <pre><code>Duration:       ~75 minutes
+Questions:      ~40
+Format:         multiple choice
+Pass threshold: 60% of maximum achievable points</code></pre>
+        <p>آزمون نمونه رسمی Foundation Level شامل <b>۳۸ پرسش</b> است و بر اساس آزمون واقعی ساخته شده است.</p>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource"><div><b>برنامه درسی رسمی Foundation Level (انگلیسی، PDF)</b><div style="color:var(--muted)">نسخه 2025.1-rev2، معتبر از ۱ آوریل ۲۰۲۵.</div></div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>پورتال رسمی برنامه درسی</b><div style="color:var(--muted)">همه نسخه‌های زبانی و بازنگری‌ها.</div></div>
+          <a href="https://public.isaqb.org/curriculum-foundation/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>صفحه رسمی آزمون Foundation Level</b><div style="color:var(--muted)">قالب، مدت و حد نصاب قبولی.</div></div>
+          <a href="https://www.isaqb.org/certifications/cpsa-exams/foundation-level-exam/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>صفحه گواهینامه Foundation Level</b><div style="color:var(--muted)">دامنه گواهینامه و پیش‌نیازها.</div></div>
+          <a href="https://www.isaqb.org/certifications/cpsa-certifications/cpsa-foundation-level/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>Mark Richards — تحلیل مصالحه‌ها (درس ۱۴۵)</b><div style="color:var(--muted)">Software Architecture Monday.</div></div>
+          <a href="https://developertoarchitect.com/lessons/lesson145.html" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <p style="margin-top:14px">هنگام تماشا این‌ها را یادداشت کنید:</p>
+        <pre><code>1. Which architecture characteristics compete?
+2. What context changes the preferred answer?
+3. What evidence would validate it?
+4. Which negative consequence is accepted?</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>یک سبک معماری محبوب را حفظ نکنید. استدلال کردن را تمرین کنید.</div>
+      </section>
+
+      <section id="memorize">
+        <h2>چه چیزی را حفظ کنیم و چه چیزی را عمیق بفهمیم</h2>
+        <div class="grid-2">
+          <div class="card"><h3>دقیق حفظ کنید</h3><pre><code>Architecture driver
+Constraint
+Quality requirement
+Quality scenario
+Black box / white box
+Building block
+Context / runtime / deployment view
+Provided / required interface
+Cross-cutting concern / concept
+Architecture decision / rationale
+Qualitative / quantitative analysis
+Conformance
+Drift
+Erosion</code></pre></div>
+          <div class="card"><h3>عمیق بفهمید</h3><pre><code>When a pattern fits
+How qualities trade off
+When abstraction is justified
+How to select views
+How to evaluate risk
+How to validate assumptions
+How to evolve decisions
+How to establish guardrails</code></pre></div>
+        </div>
+        <p>آزمون هر دو را پاداش می‌دهد. مسیر Staff Engineer به‌ویژه به گروه دوم وابسته است.</p>
+      </section>
+
+      <section id="next">
+        <h2>بعدی — روز ۲۵</h2>
+        <p>آخرین درس ساختاریافته آمادگی Foundation Level شامل این‌ها خواهد بود:</p>
+        <pre><code>Full curriculum readiness checklist
+Exam-day strategy
+High-value definitions
+Final distinction drills
+Official mock-exam strategy
+Weakness scoring framework
+Last Staff Engineer transfer exercise
+CPSA-A bridge</code></pre>
+        <p>پس از روز ۲۵، ادامه آمادگی Foundation Level باید عمدتاً بر اساس نتایج شما در آزمون نمونه رسمی iSAQB هدایت شود، نه با افزودن تئوری بیشتر.</p>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a>
+          <a class="day" data-day="22" href="isaqb-cpsa-f-day-22.fa.html"><small>روز ۲۲</small><b>تحلیل مصالحه</b></a>
+          <a class="day" data-day="23" href="isaqb-cpsa-f-day-23.fa.html"><small>روز ۲۳</small><b>آزمون آزمایشی II</b></a>
+          <a class="day active" data-day="24" href="isaqb-cpsa-f-day-24.fa.html"><small>روز ۲۴</small><b>بازبینی آزمون II و ترمیم نهایی</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-23.fa.html">→ روز قبل</a></div>
+      </section>
+    </main>
+  </div>
+  <footer class="wrap">راهنمای مطالعه iSAQB CPSA-F · روز ۲۴ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر</footer>
+
+  <script>
+  (function(){
+    var DAY = "24";
+    var KEY = "isaqb-cpsaf-progress";
+    function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+    function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+    function render(){
+      var done = getDone();
+      var btn = document.getElementById("complete-toggle");
+      var mine = done.indexOf(DAY) !== -1;
+      btn.textContent = mine ? "✓ روز ۲۴ تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+      btn.classList.toggle("done", mine);
+      document.querySelectorAll(".progress .day").forEach(function(a){
+        var d = a.getAttribute("data-day");
+        a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+      });
+    }
+    document.getElementById("complete-toggle").addEventListener("click", function(){
+      var done = getDone();
+      var i = done.indexOf(DAY);
+      if (i === -1) done.push(DAY); else done.splice(i, 1);
+      setDone(done);
+      render();
+    });
+    render();
+  })();
+  </script>
+</body>
+</html>
