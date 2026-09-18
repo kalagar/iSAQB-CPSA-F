@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-fa-available="true">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="آموزش روز ۲۵ دوره iSAQB CPSA-F: آمادگی نهایی آزمون، راهبرد آزمون آزمایشی رسمی، تمرین انتقال به نقش Staff Engineer و پل CPSA-F به CPSA-A" />
+  <title>iSAQB CPSA-F — روز ۲۵: آمادگی نهایی و پل CPSA-A</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>" />
+  <link rel="stylesheet" href="../../fonts/iransans.css" />
+  <script src="../../lang-switch.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <nav class="lang-switch" aria-label="زبان">
+        <a href="../EN/isaqb-cpsa-f-day-25.html" data-lang-switch="en" class="lang-link">EN</a>
+        <a href="isaqb-cpsa-f-day-25.fa.html" data-lang-switch="fa" class="lang-link active">FA</a>
+      </nav>
+      <a href="index.fa.html" style="display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:600">→ صفحه اصلی دوره</a>
+      <span class="eyebrow">iSAQB CPSA-F · روز ۲۵</span>
+      <h1>آمادگی نهایی آزمون، راهبرد آزمون آزمایشی رسمی و پل CPSA-A</h1>
+      <p class="subtitle">
+        آخرین درس ساختاریافته: همه چیز را در یک زنجیره استدلال یکپارچه کنید، آزمون آزمایشی رسمی را درست برنامه‌ریزی کنید و دانش سطح Foundation را به عمل روزمره Staff Engineer تبدیل کنید.
+      </p>
+      <div class="meta">
+        <span><strong>سطح:</strong> پایه (Foundation)</span>
+        <span><strong>تمرکز:</strong> آمادگی، راهبرد آزمون آزمایشی، انتقال به عمل</span>
+        <span><strong>برنامه درسی:</strong> CPSA-F 2025.1-rev2</span>
+      </div>
+      <div class="complete-row"><button id="complete-toggle" class="btn-complete" type="button">علامت‌گذاری روز به‌عنوان تکمیل‌شده</button></div>
+    </div>
+  </header>
+
+  <div class="wrap layout">
+    <aside class="toc" aria-label="فهرست مطالب">
+      <strong>در این صفحه</strong>
+      <a href="#model">مدل ذهنی نهایی</a>
+      <a href="#driver">آزمون محرک معماری</a>
+      <a href="#quality">مدل کیفیت</a>
+      <a href="#coupling">جفت‌شدگی و انسجام</a>
+      <a href="#pattern">انتخاب الگو</a>
+      <a href="#interface">چک‌لیست رابط</a>
+      <a href="#crosscutting">دغدغه در برابر مفهوم</a>
+      <a href="#decision">چک‌لیست تصمیم</a>
+      <a href="#views">انتخاب نما</a>
+      <a href="#analysis">تحلیل در برابر انطباق</a>
+      <a href="#drift">انحراف در برابر فرسایش</a>
+      <a href="#tradeoff">قاعده مصالحه</a>
+      <a href="#ambiguity">«دو گزینه محتمل»</a>
+      <a href="#drills">تمرین تمایز نهایی</a>
+      <a href="#mock">راهبرد آزمون آزمایشی رسمی</a>
+      <a href="#transfer">تمرین انتقال Staff Engineer</a>
+      <a href="#bridge">پل CPSA-F به CPSA-A</a>
+      <a href="#checklist">چک‌لیست تسلط</a>
+      <a href="#terms">اصطلاحات کلیدی</a>
+      <a href="#questions">پنج پرسش</a>
+      <a href="#official">منابع رسمی iSAQB</a>
+      <a href="#resources">منابع پیشنهادی</a>
+      <a href="#next">جلسه مطالعه بعدی</a>
+      <a href="#progress">پیشرفت دوره</a>
+    </aside>
+
+    <main>
+      <section id="model">
+        <h2>مدل ذهنی نهایی معماری</h2>
+        <p class="lead">روزهای ۱ تا ۲۴ کامل شده‌اند. از این مرحله به بعد، انباشتن تئوری پراکنده را متوقف کنید. به‌جای آن، حرکت در یک زنجیره واحد را تمرین کنید.</p>
+        <pre><code>Context → Stakeholders → Requirements + Constraints
+→ Architecture Drivers → Quality Goals → Options
+→ Trade-Offs → Decisions → Views/Documentation
+→ Implementation → Analysis + Conformance
+→ Feedback → Evolution</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>هر استدلال معماری قدرتمندی که در محل کار ارائه می‌کنید، بخشی از همین زنجیره را با صدای بلند طی می‌کند. آزمون فقط می‌سنجد که آیا می‌توانید آن را زیر فشار زمان طی کنید.</div>
+      </section>
+
+      <section id="driver">
+        <h2>آزمون محرک معماری</h2>
+        <p>فقط یک پرسش بپرسید:</p>
+        <div class="callout info"><strong>پرسشی که باید بپرسید</strong>اگر این نیازمندی به‌طور اساسی تغییر کند، آیا معماری ما احتمالاً تغییر می‌کند؟</div>
+        <div class="grid-2">
+          <div class="card"><h3>احتمالاً محرک نیست</h3><pre><code>The button is blue.</code></pre><p>اهمیت معماری اندکی دارد.</p></div>
+          <div class="card"><h3>احتمالاً محرک است</h3><pre><code>Order acceptance survives a
+30-minute SAP outage.</code></pre><p>می‌تواند بر ارتباطات، پایداری داده، مدیریت خطا، رفتار زمان اجرا و سازگاری اثر بگذارد.</p></div>
+        </div>
+        <div class="callout exam"><strong>دام</strong>یک نیازمندی قابل اندازه‌گیری، خودبه‌خود محرک معماری نیست.</div>
+      </section>
+
+      <section id="quality">
+        <h2>مدل کیفیت</h2>
+        <pre><code>Quality Attribute → Quality Requirement → Quality Scenario
+→ Architecture Mechanism → Evidence</code></pre>
+        <p>نمونه کارشده:</p>
+        <pre><code>Attribute:   Availability
+Requirement: Order acceptance &gt;= 99.95%
+Scenario:    SAP unavailable 30 min during peak load
+Mechanism:   Durable local acceptance + async synchronization
+Evidence:    Failure-injection test</code></pre>
+        <div class="callout exam"><strong>دام</strong>مستقیماً از «دسترس‌پذیری» به یک فناوری نپرید.</div>
+        <p>یک سناریوی کیفی مفید شامل این اجزاست:</p>
+        <pre><code>Source
+Stimulus
+Environment
+Artifact
+Response
+Response Measure</code></pre>
+      </section>
+
+      <section id="coupling">
+        <h2>جفت‌شدگی و انسجام</h2>
+        <p>جفت‌شدگی انواع مختلفی دارد:</p>
+        <pre><code>source-code
+runtime
+data/schema
+temporal
+semantic
+deployment
+organizational/change</code></pre>
+        <div class="callout info"><strong>نکته کلیدی</strong>دو سرویس می‌توانند مستقل کامپایل شوند و همچنان به‌شکل معنایی جفت باشند، اگر یکی به ترتیب رویدادهای مستندنشده تکیه کند.</div>
+        <p>انسجام می‌پرسد آیا مسئولیت‌های درون یک بلوک ساختمانی به یکدیگر تعلق دارند. انسجام بالا معمولاً فهم‌پذیری، مالکیت، محلی‌سازی تغییر و تغییرپذیری را بهبود می‌دهد.</p>
+      </section>
+
+      <section id="pattern">
+        <h2>انتخاب الگو</h2>
+        <p>هرگز این‌گونه فکر نکنید:</p>
+        <pre><code>Pattern X = good architecture</code></pre>
+        <p>به‌جای آن:</p>
+        <pre><code>Driver → Pattern/Option → Benefits → Costs → Contextual fit</code></pre>
+        <div class="grid-2">
+          <div class="card"><h3>میکروسرویس — فواید</h3><pre><code>Independent deployment
+Independent scaling
+Clear ownership</code></pre></div>
+          <div class="card"><h3>میکروسرویس — هزینه‌ها</h3><pre><code>Network failure modes
+Distributed consistency
+Tracing
+Operational complexity</code></pre></div>
+        </div>
+      </section>
+
+      <section id="interface">
+        <h2>چک‌لیست رابط</h2>
+        <p>توصیف رابطی که از نظر معماری مهم است ممکن است به این موارد نیاز داشته باشد:</p>
+        <pre><code>Purpose / semantics
+Inputs / outputs
+Errors
+Behavior
+Timing
+Security
+Idempotency
+Versioning
+Compatibility</code></pre>
+        <div class="callout exam"><strong>نحو، معنا نیست</strong><code>HTTP 202</code> به‌تنهایی به فراخوان‌کننده نمی‌گوید چه چیزی به‌شکل پایدار پذیرفته شده، چه چیزی ممکن است بعداً شکست بخورد، یا وضعیت نهایی چگونه به‌دست می‌آید.</div>
+      </section>
+
+      <section id="crosscutting">
+        <h2>دغدغه فراگیر در برابر مفهوم فراگیر</h2>
+        <div class="grid-2">
+          <div class="card"><h3>دغدغه</h3><pre><code>How should remote failures
+be handled?</code></pre></div>
+          <div class="card"><h3>مفهوم</h3><pre><code>Explicit timeouts
+Retries for transient failures only
+Bounded retry count
+Backoff + jitter
+Idempotency rules
+Circuit-breaking criteria
+Metrics</code></pre></div>
+        </div>
+        <div class="callout info"><strong>نکته کلیدی</strong>یک مفهوم فراگیر لزوماً به یک سرویس مشترک یا پیاده‌سازی یکسان در همه‌جا نیاز ندارد.</div>
+      </section>
+
+      <section id="decision">
+        <h2>چک‌لیست تصمیم معماری</h2>
+        <p>برای هر تصمیم مهم، این موارد را بدانید:</p>
+        <pre><code>Context
+Driver
+Alternatives
+Decision
+Rationale
+Consequences
+Risks
+Validation
+Status</code></pre>
+        <div class="grid-2">
+          <div class="card"><h3>ضعیف</h3><pre><code>Use Kafka because Kafka scales.</code></pre></div>
+          <div class="card"><h3>قوی‌تر</h3><pre><code>Use durable async synchronization
+where delayed confirmation is
+acceptable, because order acceptance
+must survive SAP outages.
+Accept eventual consistency and
+operational complexity.
+Validate with outage/recovery testing.</code></pre></div>
+        </div>
+      </section>
+
+      <section id="views">
+        <h2>انتخاب نما</h2>
+        <pre><code>Context:        What surrounds the system?
+Building Block: What static software parts make it up?
+Runtime:        How do parts interact in important scenarios?
+Deployment:     Where does software execute?</code></pre>
+        <p>نگاشت سریع:</p>
+        <pre><code>External systems?               → Context
+Internal modules?               → Building Block
+What happens on payment timeout? → Runtime
+Which service runs on which node? → Deployment</code></pre>
+        <div class="callout exam"><strong>نما ≠ نمادگذاری</strong>یک نمای زمان اجرا می‌تواند از نمودار توالی UML، نمودار پویای C4، BPMN، متن ساده یا هر نمادگذاری مناسب دیگری استفاده کند.</div>
+      </section>
+
+      <section id="analysis">
+        <h2>تحلیل در برابر انطباق</h2>
+        <div class="grid-2">
+          <div class="card"><h3>تحلیل / ارزیابی</h3><pre><code>Is the architecture suitable
+for the required qualities?</code></pre></div>
+          <div class="card"><h3>انطباق</h3><pre><code>Does the implementation follow
+the intended architecture?</code></pre></div>
+        </div>
+        <pre><code>Load/failure test           → quality analysis/evidence
+Forbidden dependency check  → conformance</code></pre>
+        <div class="callout info"><strong>میان‌بر</strong>تحلیل → آیا به‌اندازه کافی خوب است؟ انطباق → آیا از آن پیروی می‌کنیم؟</div>
+      </section>
+
+      <section id="drift">
+        <h2>انحراف در برابر فرسایش</h2>
+        <div class="grid-2">
+          <div class="card"><h3>انحراف (Drift)</h3><pre><code>Deviation from the
+intended architecture.</code></pre></div>
+          <div class="card"><h3>فرسایش (Erosion)</h3><pre><code>Accumulated deviations that
+weaken architecture qualities.</code></pre></div>
+        </div>
+        <p>یک دسترسی مستقیم غیرمجاز به پایگاه داده ممکن است انحراف باشد. سال‌ها دسترسی بین‌سرویسی به پایگاه داده که انتشار هماهنگ را تحمیل می‌کند، می‌تواند به فرسایش تبدیل شود.</p>
+        <div class="callout exam"><strong>دام</strong>تکامل عامدانه و مستندشده خودبه‌خود انحراف نیست.</div>
+      </section>
+
+      <section id="tradeoff">
+        <h2>قاعده مصالحه</h2>
+        <p>وقتی گزینه‌ای ادعا می‌کند یک انتخاب هم‌زمان این‌ها را می‌دهد، مشکوک شوید:</p>
+        <pre><code>better performance
+better security
+better modifiability
+less complexity
+lower cost</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>استدلال معماری قوی همیشه فایده <b>و</b> هزینه <b>و</b> زمینه را نام می‌برد.</div>
+      </section>
+
+      <section id="ambiguity">
+        <h2>الگوریتم «دو گزینه محتمل»</h2>
+        <pre><code>1. Remove unjustified absolutes such as always and never.
+2. Prefer requirements before mechanisms.
+3. Prefer explicit trade-off reasoning.
+4. Prefer stakeholder/context-aware communication.
+5. Prefer evidence over opinion.
+6. Answer the exact question.</code></pre>
+        <div class="grid-2">
+          <div class="card"><h3>الف</h3><pre><code>Add retries.</code></pre></div>
+          <div class="card"><h3>ب</h3><pre><code>Clarify failure semantics and
+required resilience, then select
+a strategy.</code></pre></div>
+        </div>
+        <p>گزینه «ب» معمولاً از نظر معماری قوی‌تر است، چون این زنجیره را حفظ می‌کند:</p>
+        <pre><code>Concern → Driver → Options → Trade-Off → Decision → Evidence</code></pre>
+      </section>
+
+      <section id="drills">
+        <h2>تمرین تمایز نهایی</h2>
+        <div class="question-set">
+          <details class="question"><summary>«سیستم باید از پلتفرم Kubernetes سازمانی استفاده کند.»</summary><div class="answer"><p>الف. نیازمندی کیفی · <b>ب. محدودیت</b> · ج. سناریوی زمان اجرا · د. معیار</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>«در بار اوج، ۹۵٪ درخواست‌ها ظرف ۵۰۰ میلی‌ثانیه کامل می‌شوند.»</summary><div class="answer"><p>الف. محدودیت · <b>ب. نیازمندی کیفی</b> · ج. تصمیم · د. نمای زمینه</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>«ارائه‌دهنده پرداخت ده دقیقه در ترافیک اوج در دسترس نیست؛ فرایند تسویه با دسترس‌پذیری ≥ ۹۹٫۹۵٪ به پذیرش سفارش ادامه می‌دهد.»</summary><div class="answer"><p><b>الف. سناریوی کیفی</b> · ب. قاعده استقرار · ج. سبک · د. محدودیت</p><p><b>پاسخ: الف.</b></p></div></details>
+          <details class="question"><summary>یک مؤلفه شامل احراز هویت، مالیات، تولید PDF و قالب‌های ایمیل است.</summary><div class="answer"><p>الف. جفت‌شدگی · <b>ب. انسجام پایین</b> · ج. استقرار · د. دسترس‌پذیری</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>دو سرویس به ترتیب مستندنشده رویدادها وابسته‌اند.</summary><div class="answer"><p>الف. بدون جفت‌شدگی · <b>ب. جفت‌شدگی معنایی</b> · ج. فقط جفت‌شدگی کد منبع · د. فقط جفت‌شدگی استقرار</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>«وقتی SAP دچار وقفه زمانی می‌شود چه اتفاقی می‌افتد؟»</summary><div class="answer"><p>الف. زمینه · <b>ب. زمان اجرا</b> · ج. استقرار · د. بلوک ساختمانی</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>«کارگر (worker) کجا اجرا می‌شود؟»</summary><div class="answer"><p><b>الف. استقرار</b> · ب. زمینه · ج. فقط زمان اجرا · د. سناریوی کیفی</p><p><b>پاسخ: الف.</b></p></div></details>
+          <details class="question"><summary>یک آزمون بار نشان می‌دهد هدف تأخیر محقق نشده است.</summary><div class="answer"><p>الف. فقط انطباق · <b>ب. تحلیل/شواهد کیفیت معماری</b> · ج. مستندسازی زمینه · د. وضعیت ADR</p><p><b>پاسخ: ب.</b></p></div></details>
+          <details class="question"><summary>یک آزمون ایستا یک وابستگی ممنوع را تشخیص می‌دهد.</summary><div class="answer"><p><b>الف. بررسی انطباق</b> · ب. تحلیل کاربردپذیری · ج. تحلیل زمینه · د. استخراج نیازمندی</p><p><b>پاسخ: الف.</b></p></div></details>
+          <details class="question"><summary>سال‌ها دسترسی برنامه‌ریزی‌نشده بین پایگاه‌های داده، استقرار مستقل را دشوار کرده است.</summary><div class="answer"><p><b>الف. فرسایش معماری</b> · ب. پالایش زمینه · ج. انسجام · د. سناریوی کیفی</p><p><b>پاسخ: الف.</b></p></div></details>
+        </div>
+      </section>
+
+      <section id="mock">
+        <h2>راهبرد آزمون آزمایشی رسمی</h2>
+        <p>آزمون نمونه رسمی سطح Foundation در حال حاضر <b>۳۸ پرسش</b> دارد و بر اساس آزمون واقعی طراحی شده است.</p>
+        <p>تلاش اول:</p>
+        <pre><code>75 minutes
+No notes
+No searching
+Mark uncertain answers</code></pre>
+        <p>برای هر پرسش، پاسخ <b>و</b> میزان اطمینان را ثبت کنید:</p>
+        <pre><code>H = high
+M = medium
+L = low
+
+Example:
+Q17: B / L</code></pre>
+        <h3>چرا اطمینان مهم است</h3>
+        <p>اولویت ترمیم را مشخص می‌کند:</p>
+        <pre><code>1. Wrong + High confidence
+2. Wrong + Medium confidence
+3. Wrong + Low confidence
+4. Correct + Low confidence</code></pre>
+        <div class="callout info"><strong>نکته کلیدی</strong>«غلط با اطمینان بالا» نشانه یک کج‌فهمی است، نه صرفاً فراموشی. این‌ها پرهزینه‌ترین خطاها هستند.</div>
+        <p>هر پاسخ ضعیف را دسته‌بندی کنید:</p>
+        <pre><code>A. Definition problem
+B. Distinction problem
+C. Scenario interpretation problem
+D. Trade-off problem
+E. Question-reading problem
+F. Knowledge gap</code></pre>
+        <h3>هدف آمادگی</h3>
+        <p>آستانه قبولی رسمی ۶۰٪ امتیاز قابل کسب است. برای تمرین، بالاتر را هدف بگیرید:</p>
+        <pre><code>&gt;= 80% consistently</code></pre>
+        <p>با تعداد بسیار کمی خطای «با اطمینان بالا».</p>
+        <h3>مدیریت زمان</h3>
+        <pre><code>Pass 1:     Answer clear questions quickly.
+Pass 2:     Return to uncertain questions.
+Final pass: Check NOT/EXCEPT, answer-count
+            instructions, absolutes and blanks.</code></pre>
+      </section>
+
+      <section id="transfer">
+        <h2>تمرین انتقال Staff Engineer</h2>
+        <p>به پلتفرمی با هشت تیم می‌پیوندید:</p>
+        <pre><code>- each team has a different timeout/retry policy
+- three services share a database
+- architecture diagrams are outdated
+- public events have undocumented semantics
+- teams disagree about service boundaries
+- incidents are difficult to trace
+- architecture decisions happen in meetings and are forgotten</code></pre>
+        <div class="callout exam"><strong>پاسخ نادرست</strong>«معماری را از نو بنویسیم.»</div>
+        <p>پاسخ با اهرم بالاتر:</p>
+        <pre><code>1. Establish shared architecture drivers.
+2. Expose the current architecture with lightweight views.
+3. Record significant decisions with ADRs.
+4. Define cross-cutting resilience, observability,
+   security and interface concepts.
+5. Establish guardrails.
+6. Automate objective rules.
+7. Build feedback loops through reviews, incidents,
+   metrics and fitness functions.</code></pre>
+        <p>نمونه حفاظ‌ها (guardrails):</p>
+        <pre><code>All remote calls have explicit timeouts.
+Public events have ownership and compatibility rules.
+New direct cross-service DB access is forbidden.
+Correlation IDs cross service boundaries.</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>رهبری معماری در سطح Staff یعنی کنترل مرکزی کمتر، شفافیت مشترک بیشتر، محدودیت‌های مقیاس‌پذیرتر و شواهد بیشتر.</div>
+      </section>
+
+      <section id="bridge">
+        <h2>پل CPSA-F به CPSA-A</h2>
+        <p>سطح Foundation واژگان مشترک و استدلال معماری منضبط به شما می‌دهد. سطح Advanced ماژولار است و عمیق‌تر می‌رود.</p>
+        <pre><code>CPSA-F
+→ real architecture responsibility
+→ CPSA-A modules aligned with your work
+→ apply them in projects
+→ broaden technical, methodological and communication skills</code></pre>
+        <p>برای مسیر Staff Engineer، جهت‌های مفید در سطح Advanced می‌تواند شامل ارزیابی معماری، مستندسازی، نیازمندی‌ها برای معماران، تکامل و بهبود معماری، DDD، ابر و زیرساخت، معماری وب و مهارت‌های ارتباطی باشد.</p>
+        <div class="callout info"><strong>نکته کلیدی</strong>ماژول‌ها را بر اساس مسئولیت‌هایی که می‌خواهید در آن‌ها رشد کنید انتخاب کنید، نه با جمع‌آوری تصادفی گواهی‌نامه.</div>
+      </section>
+
+      <section id="checklist">
+        <h2>چک‌لیست تسلط بر سطح Foundation</h2>
+        <p>اکنون باید بتوانید همه این‌ها را بدون یادداشت توضیح دهید.</p>
+        <div class="grid-2">
+          <div class="card"><h3>مبانی</h3><pre><code>What software architecture is
+Why it matters
+Architect roles/responsibilities
+Architecture ↔ requirements
+Architecture ↔ implementation</code></pre></div>
+          <div class="card"><h3>نیازمندی‌ها</h3><pre><code>Functional vs quality requirements
+Constraints
+Architecture drivers
+Quality scenarios</code></pre></div>
+          <div class="card"><h3>طراحی</h3><pre><code>Coupling and cohesion
+Abstraction/decomposition
+Interfaces
+Patterns/styles and consequences
+Cross-cutting concepts
+Decisions and trade-offs</code></pre></div>
+          <div class="card"><h3>ارتباطات</h3><pre><code>Stakeholder-oriented documentation
+Context, building-block,
+runtime and deployment views
+Black box / white box
+Interface descriptions
+Decisions and rationale</code></pre></div>
+          <div class="card"><h3>تحلیل</h3><pre><code>Qualitative/quantitative analysis
+Quality evaluation and risks
+Metrics and their limits
+Conformance
+Drift and erosion
+Feedback and evolution</code></pre></div>
+          <div class="card"><h3>نحوه استفاده</h3><pre><code>Flag anything you cannot explain
+in your own words, and revise
+only that.</code></pre></div>
+        </div>
+      </section>
+
+      <section id="terms">
+        <h2>اصطلاحاتی که باید دقیق بدانید</h2>
+        <pre><code>Software Architecture
+Architecture Driver
+Quality Requirement
+Quality Scenario
+Constraint
+Stakeholder
+Concern
+Building Block
+Black Box / White Box
+Provided / Required Interface
+Coupling / Cohesion
+Architecture Pattern / Style
+Cross-Cutting Concern / Concept
+Architecture Decision / Rationale
+ADR
+Context / Building Block / Runtime / Deployment View
+Qualitative / Quantitative Analysis
+Architecture Conformance
+Architecture Drift
+Architecture Erosion</code></pre>
+        <div class="callout exam"><strong>خودآزمایی</strong>برای هر اصطلاح باید بتوانید مثال خودتان را بسازید، نه مثال اسلایدها را.</div>
+      </section>
+
+      <section id="questions">
+        <h2>پنج پرسش Staff Engineer</h2>
+        <p>این‌ها را مکرراً در محل کار بپرسید:</p>
+        <pre><code>1. What are the real architecture drivers?
+2. What assumptions are hidden?
+3. What trade-off are we making?
+4. How will we know whether the decision works?
+5. How can the architecture remain understandable
+   and enforceable without me?</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>پرسش پنجم همان چیزی است که Senior را از Staff جدا می‌کند. چهار پرسش اول تصمیم خوبی می‌سازند؛ پرسش پنجم باعث می‌شود آن تصمیم بدون شما دوام بیاورد.</div>
+      </section>
+
+      <section id="official">
+        <h2>منابع رسمی iSAQB</h2>
+        <p>تا سپتامبر ۲۰۲۶، مخزن انتشارات رسمی iSAQB همچنان <b>Foundation Level 2025.1</b> را نسخه جاری معرفی می‌کند که از <b>۱ آوریل ۲۰۲۵</b> معتبر است.</p>
+        <p>آزمون رسمی فعلی تقریباً این‌گونه است:</p>
+        <pre><code>Duration:       ~75 minutes
+Questions:      ~40
+Format:         multiple choice
+Pass threshold: 60% of maximum achievable points</code></pre>
+        <p>آزمون نمونه رسمی سطح Foundation شامل <b>۳۸ پرسش</b> است و بر اساس آزمون واقعی طراحی شده. پرسش‌ها و پاسخ‌های آزمایشی در صفحه دانلودهای رسمی منتشر شده‌اند.</p>
+      </section>
+
+      <section id="resources">
+        <h2>منابع پیشنهادی</h2>
+        <div class="resource"><div><b>پورتال رسمی برنامه درسی</b><div style="color:var(--muted)">Foundation Level 2025.1، همه نسخه‌های زبانی و بازنگری‌ها.</div></div>
+          <a href="https://public.isaqb.org/curriculum-foundation/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>برنامه درسی رسمی سطح Foundation (انگلیسی، PDF)</b><div style="color:var(--muted)">نسخه 2025.1-rev2، معتبر از ۱ آوریل ۲۰۲۵.</div></div>
+          <a href="https://public.isaqb.org/curriculum-foundation/curriculum-foundation-en.pdf" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>دانلودهای رسمی iSAQB</b><div style="color:var(--muted)">پرسش‌ها و پاسخ‌های آزمون آزمایشی سطح Foundation.</div></div>
+          <a href="https://www.isaqb.org/downloads/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>سایت رسمی iSAQB</b><div style="color:var(--muted)">دامنه گواهی‌نامه، قالب آزمون و ماژول‌های سطح Advanced.</div></div>
+          <a href="https://www.isaqb.org/" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <div class="resource" style="margin-top:12px"><div><b>Mark Richards — How to Think Like an Architect</b><div style="color:var(--muted)">پلی از آماده‌سازی گواهی‌نامه به تفکر Staff Engineer.</div></div>
+          <a href="https://www.youtube.com/watch?v=W7Krz__jJUg" target="_blank" rel="noopener noreferrer">باز کردن ↗</a></div>
+        <p style="margin-top:14px">هنگام تماشا روی این موارد تمرکز کنید:</p>
+        <pre><code>business drivers
+architecture characteristics
+trade-offs
+technical breadth
+decision reasoning</code></pre>
+        <div class="callout staff"><strong>نگاه Staff Engineer</strong>نپرسید «او کدام معماری را توصیه می‌کند؟» بلکه بپرسید «کدام فرایند استدلال در حال نمایش است؟»</div>
+      </section>
+
+      <section id="next">
+        <h2>جلسه مطالعه بعدی شما</h2>
+        <p>فصل تئوری بزرگ دیگری از CPSA-F را شروع <b>نکنید</b>. به‌جای آن:</p>
+        <pre><code>1. Take the official iSAQB mock under timed conditions.
+2. Record answer + confidence for every question.
+3. Score it.
+4. Classify every wrong/uncertain answer.
+5. Re-study only weak areas.
+6. Retest those distinctions with new scenarios.</code></pre>
+        <p>این کار اکنون ارزش بیشتری از ادامه خطی تئوری سطح Foundation دارد.</p>
+        <div class="callout info"><strong>نقطه عطف برنامه</strong>توالی ۲۵ روزه ساختاریافته تئوری و بازبینی CPSA-F کامل شد. فاز بعدی تطبیقی است: آزمون آزمایشی رسمی ← تحلیل خطا ← ترمیم هدفمند ← تمرین سناریوهای جدید ← آمادگی آزمون.</div>
+        <p>پس از CPSA-F، با تکیه بر تصمیم‌های واقعی، ارزیابی‌ها، مستندسازی و رهبری فنی بین‌تیمی، به‌سمت عمل معماری در نقش Staff Engineer و آماده‌سازی CPSA-A حرکت کنید.</p>
+      </section>
+
+      <section id="progress">
+        <h2>پیشرفت دوره</h2>
+        <p>تمام فایل‌های دوره را در یک پوشه نگه دارید. هر روز مستقیماً به تمام درس‌های دیگر لینک می‌شود.</p>
+        <div class="progress"><a class="day" data-day="01" href="isaqb-cpsa-f-day-01.fa.html"><small>روز ۰۱</small><b>مبانی معماری</b></a>
+          <a class="day" data-day="02" href="isaqb-cpsa-f-day-02.fa.html"><small>روز ۰۲</small><b>مسئولیت‌های معمار</b></a>
+          <a class="day" data-day="03" href="isaqb-cpsa-f-day-03.fa.html"><small>روز ۰۳</small><b>تأثیر بلندمدت</b></a>
+          <a class="day" data-day="04" href="isaqb-cpsa-f-day-04.fa.html"><small>روز ۰۴</small><b>ذی‌نفعان و دغدغه‌ها</b></a>
+          <a class="day" data-day="05" href="isaqb-cpsa-f-day-05.fa.html"><small>روز ۰۵</small><b>نیازمندی‌ها و محدودیت‌ها</b></a>
+          <a class="day" data-day="06" href="isaqb-cpsa-f-day-06.fa.html"><small>روز ۰۶</small><b>محرک‌های معماری</b></a>
+          <a class="day" data-day="07" href="isaqb-cpsa-f-day-07.fa.html"><small>روز ۰۷</small><b>تجزیه (Decomposition)</b></a>
+          <a class="day" data-day="08" href="isaqb-cpsa-f-day-08.fa.html"><small>روز ۰۸</small><b>رویکردهای طراحی</b></a>
+          <a class="day" data-day="09" href="isaqb-cpsa-f-day-09.fa.html"><small>روز ۰۹</small><b>اصول طراحی</b></a>
+          <a class="day" data-day="10" href="isaqb-cpsa-f-day-10.fa.html"><small>روز ۱۰</small><b>وابستگی‌ها و رابط‌ها</b></a>
+          <a class="day" data-day="11" href="isaqb-cpsa-f-day-11.fa.html"><small>روز ۱۱</small><b>بازبینی و آزمون آزمایشی</b></a>
+          <a class="day" data-day="12" href="isaqb-cpsa-f-day-12.fa.html"><small>روز ۱۲</small><b>الگوهای معماری</b></a>
+          <a class="day" data-day="13" href="isaqb-cpsa-f-day-13.fa.html"><small>روز ۱۳</small><b>حلقه‌های بازخورد و ریسک</b></a>
+          <a class="day" data-day="14" href="isaqb-cpsa-f-day-14.fa.html"><small>روز ۱۴</small><b>دغدغه‌های فراگیر</b></a>
+          <a class="day" data-day="15" href="isaqb-cpsa-f-day-15.fa.html"><small>روز ۱۵</small><b>مستندسازی و نماها</b></a>
+          <a class="day" data-day="16" href="isaqb-cpsa-f-day-16.fa.html"><small>روز ۱۶</small><b>رابط‌ها، تصمیم‌ها و ADR</b></a>
+          <a class="day" data-day="17" href="isaqb-cpsa-f-day-17.fa.html"><small>روز ۱۷</small><b>تحلیل و ارزیابی</b></a>
+          <a class="day" data-day="18" href="isaqb-cpsa-f-day-18.fa.html"><small>روز ۱۸</small><b>انطباق و توابع تناسب</b></a>
+          <a class="day" data-day="19" href="isaqb-cpsa-f-day-19.fa.html"><small>روز ۱۹</small><b>بازبینی کامل I</b></a>
+          <a class="day" data-day="20" href="isaqb-cpsa-f-day-20.fa.html"><small>روز ۲۰</small><b>آزمون آزمایشی I</b></a>
+          <a class="day" data-day="21" href="isaqb-cpsa-f-day-21.fa.html"><small>روز ۲۱</small><b>بازبینی آزمون و ترمیم</b></a>
+          <a class="day" data-day="22" href="isaqb-cpsa-f-day-22.fa.html"><small>روز ۲۲</small><b>تحلیل مصالحه</b></a>
+          <a class="day" data-day="23" href="isaqb-cpsa-f-day-23.fa.html"><small>روز ۲۳</small><b>آزمون آزمایشی II</b></a>
+          <a class="day" data-day="24" href="isaqb-cpsa-f-day-24.fa.html"><small>روز ۲۴</small><b>بازبینی آزمون II و ترمیم نهایی</b></a>
+          <a class="day active" data-day="25" href="isaqb-cpsa-f-day-25.fa.html"><small>روز ۲۵</small><b>آمادگی نهایی و پل CPSA-A</b></a></div>
+        <div class="navrow"><a class="navbtn" href="isaqb-cpsa-f-day-24.fa.html">→ روز قبل</a></div>
+      </section>
+    </main>
+  </div>
+  <footer class="wrap">راهنمای مطالعه iSAQB CPSA-F · روز ۲۵ · طراحی‌شده برای مطالعه و چاپ محلی در مرورگر</footer>
+
+  <script>
+  (function(){
+    var DAY = "25";
+    var KEY = "isaqb-cpsaf-progress";
+    function getDone(){ try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e) { return []; } }
+    function setDone(a){ localStorage.setItem(KEY, JSON.stringify(a)); }
+    function render(){
+      var done = getDone();
+      var btn = document.getElementById("complete-toggle");
+      var mine = done.indexOf(DAY) !== -1;
+      btn.textContent = mine ? "✓ روز ۲۵ تکمیل شد" : "علامت‌گذاری روز به‌عنوان تکمیل‌شده";
+      btn.classList.toggle("done", mine);
+      document.querySelectorAll(".progress .day").forEach(function(a){
+        var d = a.getAttribute("data-day");
+        a.classList.toggle("done", !!d && done.indexOf(d) !== -1);
+      });
+    }
+    document.getElementById("complete-toggle").addEventListener("click", function(){
+      var done = getDone();
+      var i = done.indexOf(DAY);
+      if (i === -1) done.push(DAY); else done.splice(i, 1);
+      setDone(done);
+      render();
+    });
+    render();
+  })();
+  </script>
+</body>
+</html>
